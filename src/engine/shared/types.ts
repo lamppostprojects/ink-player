@@ -105,7 +105,7 @@ export type WidgetProcessTextLineProps = {
 
 export type WidgetTextLineProps = {
     children: React.ReactNode;
-    context: "game" | "history" | "history-choice";
+    context: "game" | "history" | "choice" | "history-choice";
 };
 
 export type WidgetHandleStoryLoadProps = {

@@ -132,7 +132,7 @@ const TextLine = ({ children, context }: WidgetTextLineProps) => {
             }, [anchor]);
 
             return (
-                <Popover {...props} id={id}>
+                <Popover {...props} id={id} className="glossary-popover">
                     <Popover.Body>
                         {lines.map((line) => (
                             <div
@@ -165,7 +165,12 @@ const TextLine = ({ children, context }: WidgetTextLineProps) => {
             {anchors.map(
                 (anchor) =>
                     anchor === currentElement && (
-                        <Overlay target={anchor} placement="bottom" show={true}>
+                        <Overlay
+                            target={anchor}
+                            placement="bottom"
+                            flip={true}
+                            show={true}
+                        >
                             {(props) => renderPopover(props, anchor)}
                         </Overlay>
                     ),

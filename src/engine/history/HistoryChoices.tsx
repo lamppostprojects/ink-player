@@ -1,9 +1,6 @@
+import { ProcessedTextLine } from "../shared/process-text";
 import type { GameState } from "../shared/types";
-import {
-    historyWidgets,
-    processTextLineWidgets,
-    textLineWidgets,
-} from "../shared/widgets";
+import { historyWidgets } from "../shared/widgets";
 
 export default function HistoryChoices({
     currentState,
@@ -17,27 +14,16 @@ export default function HistoryChoices({
     const { choice } = currentState.choices[currentState.selectedChoice];
 
     if (typeof choice === "string") {
-        let processedText = choice;
-
-        for (const processTextLine of processTextLineWidgets.values()) {
-            processedText = processTextLine({
-                line: processedText,
-                context: "history-choice",
-            });
-        }
-
-        let contents = (
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: ...
-            <span dangerouslySetInnerHTML={{ __html: processedText }} />
-        );
-
-        for (const TextLine of textLineWidgets.values()) {
-            contents = <TextLine context="history-choice">{contents}</TextLine>;
-        }
-
         return (
             <p>
-                <strong>&raquo; {contents}</strong>
+                <strong>
+                    &raquo;{" "}
+                    <ProcessedTextLine
+                        text={choice}
+                        context="history-choice"
+                        tag="span"
+                    />
+                </strong>
             </p>
         );
     }

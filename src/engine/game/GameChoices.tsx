@@ -8,9 +8,10 @@ import type { TransitionStatus } from "react-transition-state";
 import { downloadHTMLLog } from "../history/download-log";
 import { LoadModal } from "../saves/LoadModal";
 import { useStoryStore } from "../shared/game-state";
+import { ProcessedTextLine } from "../shared/process-text";
 import { useSavedGamesStore } from "../shared/saved-games";
 import type { GameState, Widget } from "../shared/types";
-import { gameChoiceWidgets, processTextLineWidgets } from "../shared/widgets";
+import { gameChoiceWidgets } from "../shared/widgets";
 
 const handleAutoFocus = (element: HTMLButtonElement | null) => {
     element?.focus({ preventScroll: true });
@@ -41,19 +42,10 @@ const Choice = ({
     }
 
     if (typeof choice === "string") {
-        let processedText = choice;
-
-        for (const processTextLine of processTextLineWidgets.values()) {
-            processedText = processTextLine({
-                line: processedText,
-                context: "choice",
-            });
-        }
-
         let contents = (
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: We want to render the HTML
-            <span dangerouslySetInnerHTML={{ __html: processedText }} />
+            <ProcessedTextLine text={choice} context="choice" tag="span" />
         );
+
         if (disabled) {
             contents = (
                 <span>

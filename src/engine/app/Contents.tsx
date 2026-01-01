@@ -86,10 +86,9 @@ const Contents = (props: ScreenProps) => {
                                     eventKey={screen.id}
                                     active={page === screen.id}
                                 >
-                                    {page === screen.id &&
-                                        getPageComponent({
-                                            component: screen.component,
-                                        })?.(props)}
+                                    {getPageComponent({
+                                        component: screen.component,
+                                    })?.(props)}
                                 </Tab.Pane>
                             ))}
                         </Tab.Content>
