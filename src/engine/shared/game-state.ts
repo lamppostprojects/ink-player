@@ -9,6 +9,7 @@ export const useStoryStore = create<{
     id: string;
     story: Story | null;
     storyJSON: { inkVersion: number } | null;
+    storyData: any;
     Story: typeof Story | null;
     error: string | null;
     _initializing: boolean;
@@ -17,6 +18,7 @@ export const useStoryStore = create<{
     previousState: GameState | null;
     loadStoryData: () => Promise<void>;
     loadSavedGame: (savedGame: SavedGame) => void;
+    getSaveState: ({ title }: { title: string }) => SavedGame | null;
     startNewGame: () => void;
     selectChoice: ({
         index,
@@ -31,6 +33,7 @@ export const useStoryStore = create<{
     id: "",
     story: null,
     storyJSON: null,
+    storyData: null,
     Story: null,
     error: null,
     _initializing: false,
@@ -79,6 +82,7 @@ export const useStoryStore = create<{
             set({
                 id: crypto.randomUUID(),
                 story,
+                storyData: story.state.toJson(),
                 gameState: [newState],
                 currentState: newState,
                 previousState: null,
@@ -87,7 +91,7 @@ export const useStoryStore = create<{
         }
     },
     loadSavedGame: (savedGame: SavedGame) => {
-        const { storyJSON, Story } = get();
+        const { storyJSON, Story, selectChoice } = get();
         if (!storyJSON || !Story) {
             return;
         }
@@ -100,14 +104,56 @@ export const useStoryStore = create<{
             handleStoryLoad({ story });
         }
         story.state.LoadJson(storyData);
-        set({
+
+        const currentState = gameState[gameState.length - 1] ?? null;
+        const previousState = gameState[gameState.length - 2] ?? null;
+
+        if (previousState?.selectedChoice !== undefined) {
+            set({
+                id: crypto.randomUUID(),
+                story,
+                gameState: gameState.slice(0, -1) ?? [],
+                storyData,
+                currentState: previousState,
+                previousState: null,
+                error: null,
+            });
+
+            const selectedChoice =
+                previousState.choices[previousState.selectedChoice];
+
+            selectChoice({
+                index: previousState.selectedChoice,
+                output:
+                    typeof selectedChoice.choice === "string"
+                        ? undefined
+                        : selectedChoice.choice.output,
+            });
+        } else {
+            set({
+                id: crypto.randomUUID(),
+                story,
+                gameState,
+                storyData,
+                currentState,
+                previousState,
+                error: null,
+            });
+        }
+    },
+    getSaveState: ({ title }: { title: string }) => {
+        const { story, currentState, gameState, storyData } = get();
+        if (!story || !currentState) {
+            return null;
+        }
+        return {
             id: crypto.randomUUID(),
-            story,
+            title,
+            steps: Math.max(gameState.length - 1, 1),
+            date: new Date().toLocaleString(),
             gameState,
-            currentState: gameState[gameState.length - 1],
-            previousState: null,
-            error: null,
-        });
+            storyData,
+        };
     },
     selectChoice: ({
         index,
@@ -138,11 +184,13 @@ export const useStoryStore = create<{
             }
         }
 
+        const storyData = story.state.toJson();
         story.ChooseChoiceIndex(index);
         const newState = getStoryState({ story, currentState });
         if (newState) {
             const newGameState = [...(gameState || []), newState];
             set({
+                storyData,
                 gameState: newGameState,
                 currentState: newState,
                 previousState: currentState,

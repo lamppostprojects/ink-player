@@ -98,6 +98,7 @@ function GameChoices({
         (state) => state.deleteSavedGame,
     );
     const addSavedGame = useSavedGamesStore((state) => state.addSavedGame);
+    const getSaveState = useStoryStore((state) => state.getSaveState);
     const localSaveOnly = useSavedGamesStore(
         (state) => !state.canSaveInLocalStorage(),
     );
@@ -121,21 +122,17 @@ function GameChoices({
                 const results = selectChoice({ index, output, variables });
 
                 if (results && !localSaveOnly) {
-                    const { gameState, story, error } = results;
+                    const { error } = results;
 
                     if (error) {
                         return;
                     }
 
                     deleteSavedGame("autosave");
-                    addSavedGame({
-                        id: "autosave",
-                        title: "Autosave",
-                        steps: Math.max(gameState.length - 1, 1),
-                        date: new Date().toLocaleString(),
-                        gameState,
-                        storyData: story.state.toJson(),
-                    });
+                    const saveState = getSaveState({ title: "Autosave" });
+                    if (saveState) {
+                        addSavedGame(saveState);
+                    }
                 }
 
                 window.scrollTo({ top: 0, behavior: "smooth" });

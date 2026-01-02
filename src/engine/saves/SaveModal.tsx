@@ -22,7 +22,10 @@ export function SaveModal({
     const story = useStoryStore((state) => state.story);
     const gameState = useStoryStore((state) => state.gameState);
     const addSavedGame = useSavedGamesStore((state) => state.addSavedGame);
-    const localSaveOnly = useSavedGamesStore((state) => !state.canSaveInLocalStorage());
+    const getSaveState = useStoryStore((state) => state.getSaveState);
+    const localSaveOnly = useSavedGamesStore(
+        (state) => !state.canSaveInLocalStorage(),
+    );
     const currentState = useStoryStore((state) => state.currentState);
     const { shortGameName, gameName } = settings;
 
@@ -30,14 +33,12 @@ export function SaveModal({
         if (!gameState || !story) {
             return;
         }
-        addSavedGame({
-            id: crypto.randomUUID(),
+        const saveState = getSaveState({
             title: saveNameRef.current?.value ?? "",
-            steps: gameState.length,
-            date: new Date().toLocaleString(),
-            gameState: gameState,
-            storyData: story.state.toJson(),
         });
+        if (saveState) {
+            addSavedGame(saveState);
+        }
         onSave?.();
         handleClose();
     };
@@ -46,19 +47,15 @@ export function SaveModal({
         if (!gameState || !story) {
             return;
         }
-        const blob = new Blob(
-            [
-                JSON.stringify({
-                    id: crypto.randomUUID(),
-                    title: saveNameRef.current?.value ?? "",
-                    steps: Math.max(gameState.length - 1, 1),
-                    date: new Date().toLocaleString(),
-                    gameState: gameState,
-                    storyData: story.state.toJson(),
-                }),
-            ],
-            { type: "application/json" },
-        );
+        const saveState = getSaveState({
+            title: saveNameRef.current?.value ?? "",
+        });
+        if (!saveState) {
+            return;
+        }
+        const blob = new Blob([JSON.stringify(saveState)], {
+            type: "application/json",
+        });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
