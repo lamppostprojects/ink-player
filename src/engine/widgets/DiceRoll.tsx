@@ -2,9 +2,9 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 import BootstrapImage from "react-bootstrap/Image";
 
 import type {
-    WidgetGameTextProps,
-    WidgetHistoryProps,
+    WidgetLogProps,
     WidgetRegistry,
+    WidgetTextProps,
 } from "../shared/types";
 import { getWidgetSettings } from "../shared/widgets";
 
@@ -17,7 +17,7 @@ const getAlt = (input: Record<string, string>) => {
     );
 };
 
-function DiceRoll({ input }: WidgetGameTextProps) {
+function DiceRoll({ input, context }: WidgetTextProps) {
     const diceSettings = getWidgetSettings("dice-roll");
     const die = input.die as string;
     const value = input.value as string;
@@ -45,6 +45,14 @@ function DiceRoll({ input }: WidgetGameTextProps) {
         return alt ? <p>{alt}</p> : null;
     }
 
+    if (context === "history") {
+        return (
+            <p>
+                [<strong>Dice Roll:</strong> {getAlt(input)}]
+            </p>
+        );
+    }
+
     return (
         <p>
             <BootstrapImage
@@ -57,15 +65,7 @@ function DiceRoll({ input }: WidgetGameTextProps) {
     );
 }
 
-function DiceRollHistory({ input }: WidgetHistoryProps) {
-    return (
-        <p>
-            [<strong>Dice Roll:</strong> {getAlt(input)}]
-        </p>
-    );
-}
-
-const log = ({ input }: WidgetHistoryProps) => {
+const log = ({ input }: WidgetLogProps) => {
     return `<p>[<strong>Dice Roll:</strong> ${getAlt(input)}]</p>`;
 };
 
@@ -91,8 +91,7 @@ const preload = async () => {
 
 export const diceRollWidget = {
     type: "dice-roll",
-    gameText: DiceRoll,
-    history: DiceRollHistory,
+    text: DiceRoll,
     log,
     preload,
 } satisfies WidgetRegistry;

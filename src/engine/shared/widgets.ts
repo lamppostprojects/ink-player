@@ -2,36 +2,29 @@ import settings from "../../story/settings";
 import type {
     ScreenProps,
     WidgetChoiceProps,
-    WidgetGameTextProps,
     WidgetHandleStoryLoadProps,
     WidgetHeaderProps,
-    WidgetHistoryProps,
     WidgetKeyProps,
     WidgetKnotProps,
+    WidgetLogProps,
     WidgetProcessTextLineProps,
     WidgetRegistry,
     WidgetTextLineProps,
+    WidgetTextProps,
     WidgetToastFn,
 } from "./types";
 
-export const logWidgets = new Map<
-    string,
-    (props: WidgetHistoryProps) => string
->();
+export const logWidgets = new Map<string, (props: WidgetLogProps) => string>();
 export const toastWidgets = new Map<string, WidgetToastFn>();
 export const screenWidgets = new Map<
     string,
     (props: ScreenProps) => React.ReactNode
 >();
-export const historyWidgets = new Map<
+export const textWidgets = new Map<
     string,
-    (props: WidgetHistoryProps) => React.ReactNode
+    (props: WidgetTextProps) => React.ReactNode
 >();
-export const gameTextWidgets = new Map<
-    string,
-    (props: WidgetGameTextProps) => React.ReactNode
->();
-export const gameChoiceWidgets = new Map<
+export const choiceWidgets = new Map<
     string,
     (props: WidgetChoiceProps) => React.ReactNode
 >();
@@ -71,14 +64,11 @@ export const registerWidget = (widget: WidgetRegistry) => {
     if (widget.screen) {
         screenWidgets.set(widget.type, widget.screen);
     }
-    if (widget.history) {
-        historyWidgets.set(widget.type, widget.history);
+    if (widget.text) {
+        textWidgets.set(widget.type, widget.text);
     }
-    if (widget.gameText) {
-        gameTextWidgets.set(widget.type, widget.gameText);
-    }
-    if (widget.gameChoice) {
-        gameChoiceWidgets.set(widget.type, widget.gameChoice);
+    if (widget.choice) {
+        choiceWidgets.set(widget.type, widget.choice);
     }
     if (widget.header) {
         headerWidgets.set(widget.type, widget.header);

@@ -1,4 +1,3 @@
-import SlashCircleIcon from "bootstrap-icons/icons/slash-circle.svg?react";
 import { memo, useCallback, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
@@ -10,76 +9,7 @@ import { LoadModal } from "../saves/LoadModal";
 import { useStoryStore } from "../shared/game-state";
 import { ProcessedTextLine } from "../shared/process-text";
 import { useSavedGamesStore } from "../shared/saved-games";
-import type { GameState, Widget } from "../shared/types";
-import { gameChoiceWidgets } from "../shared/widgets";
-
-const handleAutoFocus = (element: HTMLButtonElement | null) => {
-    element?.focus({ preventScroll: true });
-};
-
-const Choice = ({
-    choice,
-    onCompletion,
-    autoFocus,
-    disabled,
-}: {
-    choice: string | Widget;
-    onCompletion: ({
-        output,
-        variables,
-    }: {
-        output?: Record<string, string>;
-        variables?: Record<string, string>;
-    }) => void;
-    autoFocus: boolean;
-    disabled: boolean;
-}) => {
-    const currentState = useStoryStore((state) => state.currentState);
-    const story = useStoryStore((state) => state.story);
-
-    if (!currentState || !story) {
-        return null;
-    }
-
-    if (typeof choice === "string") {
-        let contents = (
-            <ProcessedTextLine text={choice} context="choice" tag="span" />
-        );
-
-        if (disabled) {
-            contents = (
-                <span>
-                    <SlashCircleIcon className="bi" /> {contents}
-                </span>
-            );
-        }
-        return (
-            <Button
-                ref={autoFocus ? handleAutoFocus : undefined}
-                variant="light"
-                className="text-start"
-                onClick={() => onCompletion({})}
-                disabled={disabled}
-            >
-                {contents}
-            </Button>
-        );
-    }
-
-    const Widget = gameChoiceWidgets.get(choice.type);
-    if (Widget) {
-        return (
-            <Widget
-                input={choice.input}
-                onCompletion={onCompletion}
-                autoFocus={autoFocus}
-                disabled={disabled}
-            />
-        );
-    }
-
-    return null;
-};
+import type { GameState } from "../shared/types";
 
 function GameChoices({
     disabled,
@@ -239,10 +169,12 @@ function GameChoices({
     }
 
     const choices = currentState.choices.map((choice, index) => (
-        <Choice
+        <ProcessedTextLine
             key={`choice-${currentState.id}-${index}`}
+            text={choice.choice}
+            context="choice"
+            tag="span"
             autoFocus={index === 0}
-            choice={choice.choice}
             onCompletion={onCompletion(index)}
             disabled={"disabled" in choice.tags}
         />

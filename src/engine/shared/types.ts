@@ -63,7 +63,9 @@ export type WidgetToastFn = (currentState: GameState) => {
 }[];
 
 export type WidgetChoiceProps = {
+    context: "game" | "history";
     input: Record<string, string>;
+    output?: Record<string, string>;
     onCompletion: ({
         output,
         variables,
@@ -75,11 +77,12 @@ export type WidgetChoiceProps = {
     disabled: boolean;
 };
 
-export type WidgetGameTextProps = {
+export type WidgetTextProps = {
     input: Record<string, string>;
+    context: "game" | "history";
 };
 
-export type WidgetHistoryProps = {
+export type WidgetLogProps = {
     input: Record<string, string>;
     output?: Record<string, string>;
 };
@@ -114,12 +117,11 @@ export type WidgetHandleStoryLoadProps = {
 
 export type WidgetRegistry = {
     type: string;
-    log?: (props: WidgetHistoryProps) => string;
+    log?: (props: WidgetLogProps) => string;
     toast?: WidgetToastFn;
     screen?: (props: ScreenProps) => React.ReactNode;
-    history?: (props: WidgetHistoryProps) => React.ReactNode;
-    gameText?: (props: WidgetGameTextProps) => React.ReactNode;
-    gameChoice?: (props: WidgetChoiceProps) => React.ReactNode;
+    text?: (props: WidgetTextProps) => React.ReactNode;
+    choice?: (props: WidgetChoiceProps) => React.ReactNode;
     header?: (props: WidgetHeaderProps) => React.ReactNode;
     knot?: (props: WidgetKnotProps) => React.ReactNode;
     preload?: () => Promise<any>;

@@ -5,17 +5,13 @@ import Modal from "react-bootstrap/Modal";
 
 import type {
     WidgetChoiceProps,
-    WidgetGameTextProps,
-    WidgetHistoryProps,
+    WidgetLogProps,
     WidgetRegistry,
+    WidgetTextProps,
 } from "../shared/types";
 import { getWidgetSettings } from "../shared/widgets";
 
-const renderImageLogView = ({ input: { alt } }: WidgetHistoryProps) => {
-    return `<p>[Image: ${alt}]</p>`;
-};
-
-function ImageHistory({ input }: WidgetHistoryProps) {
+function ImageText({ input }: WidgetTextProps) {
     const [showImageModal, setShowImageModal] = useState(false);
     const images = getWidgetSettings("images");
     const image = images?.[input.name as keyof typeof images];
@@ -72,12 +68,12 @@ function ImageHistory({ input }: WidgetHistoryProps) {
     );
 }
 
-const ImageChoice = ({ input }: WidgetChoiceProps) => {
-    return <ImageHistory input={input} />;
+const ImageChoice = ({ context, input }: WidgetChoiceProps) => {
+    return <ImageText context={context} input={input} />;
 };
 
-const ImageGameText = ({ input }: WidgetGameTextProps) => {
-    return <ImageHistory input={input} />;
+const log = ({ input: { alt } }: WidgetLogProps) => {
+    return `<p>[Image: ${alt}]</p>`;
 };
 
 const preload = async () => {
@@ -100,9 +96,8 @@ const preload = async () => {
 
 export const imageWidget = {
     type: "image",
-    log: renderImageLogView,
-    history: ImageHistory,
-    gameText: ImageGameText,
-    gameChoice: ImageChoice,
+    log,
+    text: ImageText,
+    choice: ImageChoice,
     preload,
 } satisfies WidgetRegistry;

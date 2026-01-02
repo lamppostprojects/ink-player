@@ -1,5 +1,5 @@
-import { GameTextLine } from "../game/GameText";
 import { useStoryStore } from "./game-state";
+import { ProcessedTextLine } from "./process-text";
 
 export const useEvalFunction = (functionName: string, args: any[]) => {
     const story = useStoryStore((state) => state.story);
@@ -13,7 +13,7 @@ export const useEvalFunction = (functionName: string, args: any[]) => {
     }
     const lines = (output as string).split("\n").map((line, index) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: ...
-        <GameTextLine key={`line-${index}`} text={line} />
+        <ProcessedTextLine key={`line-${index}`} text={line} context="game" />
     ));
     return <div>{lines}</div>;
 };

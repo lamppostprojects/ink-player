@@ -2,24 +2,18 @@ import { useCallback, useEffect, useRef } from "react";
 
 import type {
     WidgetChoiceProps,
-    WidgetHistoryProps,
+    WidgetLogProps,
     WidgetRegistry,
 } from "../shared/types";
 import { getWidgetSettings } from "../shared/widgets";
 
-const renderCardLogView = ({ input: { title } }: WidgetHistoryProps) => {
-    return `<p>&raquo; <strong>${title}</strong></p>`;
-};
-
-function CardHistory({ input: { title } }: WidgetHistoryProps) {
-    return (
-        <p>
-            &raquo; <strong>{title}</strong>
-        </p>
-    );
-}
-
-function Card({ input, onCompletion, autoFocus, disabled }: WidgetChoiceProps) {
+function Card({
+    context,
+    input,
+    onCompletion,
+    autoFocus,
+    disabled,
+}: WidgetChoiceProps) {
     const { icon, title, description, height: cardHeight } = input;
     const buttonRef = useRef<HTMLButtonElement>(null);
     const cardImages = getWidgetSettings("card");
@@ -43,6 +37,10 @@ function Card({ input, onCompletion, autoFocus, disabled }: WidgetChoiceProps) {
 
     if (icon && !cardImages) {
         return null;
+    }
+
+    if (context === "history") {
+        return log({ input });
     }
 
     const cardImage = cardImages?.[icon as keyof typeof cardImages];
@@ -114,6 +112,10 @@ function Card({ input, onCompletion, autoFocus, disabled }: WidgetChoiceProps) {
     );
 }
 
+const log = ({ input: { title } }: WidgetLogProps) => {
+    return title;
+};
+
 const preload = async () => {
     const cardImages = getWidgetSettings("card");
 
@@ -138,8 +140,7 @@ const preload = async () => {
 
 export const cardWidget = {
     type: "card",
-    log: renderCardLogView,
-    history: CardHistory,
-    gameChoice: Card,
+    log,
+    choice: Card,
     preload,
 } satisfies WidgetRegistry;

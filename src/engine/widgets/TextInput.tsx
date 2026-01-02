@@ -5,30 +5,18 @@ import Stack from "react-bootstrap/Stack";
 
 import type {
     WidgetChoiceProps,
-    WidgetHistoryProps,
+    WidgetLogProps,
     WidgetRegistry,
 } from "../shared/types";
 
-const renderTextInputLogView = ({
-    input: { label },
+function TextInput({
+    context,
+    input,
     output,
-}: WidgetHistoryProps) => {
-    return `<p>&raquo; <strong>${label ? `${label} ` : ""}${output?.value || "[Empty Text Input]"}</strong></p>`;
-};
-
-function TextInputHistory({ input: { label }, output }: WidgetHistoryProps) {
-    return (
-        <p>
-            &raquo;{" "}
-            <strong>
-                {label ? `${label} ` : ""}
-                {output?.value || "[Empty Text Input]"}
-            </strong>
-        </p>
-    );
-}
-
-function TextInput({ input, onCompletion, autoFocus, disabled }: WidgetChoiceProps) {
+    onCompletion,
+    autoFocus,
+    disabled,
+}: WidgetChoiceProps) {
     const { name, label, submitLabel } = input;
     const inputRef = useRef<HTMLInputElement>(null);
     const [value, setValue] = useState("");
@@ -60,6 +48,10 @@ function TextInput({ input, onCompletion, autoFocus, disabled }: WidgetChoicePro
         }
     }, [autoFocus, disabled]);
 
+    if (context === "history") {
+        return log({ input: { label }, output });
+    }
+
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-2">
@@ -87,9 +79,12 @@ function TextInput({ input, onCompletion, autoFocus, disabled }: WidgetChoicePro
     );
 }
 
+const log = ({ input: { label }, output }: WidgetLogProps) => {
+    return `${label ? `${label} ` : ""}${output?.value || "[Empty Text Input]"}`;
+};
+
 export const textInputWidget = {
     type: "text-input",
-    log: renderTextInputLogView,
-    history: TextInputHistory,
-    gameChoice: TextInput,
+    log,
+    choice: TextInput,
 } satisfies WidgetRegistry;

@@ -1,6 +1,5 @@
 import { ProcessedTextLine } from "../shared/process-text";
 import type { GameState } from "../shared/types";
-import { historyWidgets } from "../shared/widgets";
 
 export default function HistoryChoices({
     currentState,
@@ -22,15 +21,14 @@ export default function HistoryChoices({
                         text={choice}
                         context="history-choice"
                         tag="span"
+                        onCompletion={() => {}}
+                        autoFocus={false}
+                        disabled={false}
                     />
                 </strong>
             </p>
         );
     }
 
-    const Widget = historyWidgets.get(choice.type);
-    if (Widget) {
-        return <Widget input={choice.input} output={choice.output} />;
-    }
     return null;
 }

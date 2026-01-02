@@ -3,19 +3,7 @@ import Placeholder from "react-bootstrap/Placeholder";
 import type { TransitionStatus } from "react-transition-state";
 
 import { ProcessedTextLine } from "../shared/process-text";
-import type { GameState, Widget } from "../shared/types";
-import { gameTextWidgets } from "../shared/widgets";
-
-export const GameTextLine = ({ text }: { text: string | Widget }) => {
-    if (typeof text === "string") {
-        return <ProcessedTextLine text={text} context="game" />;
-    }
-    const Widget = gameTextWidgets.get(text.type);
-    if (Widget) {
-        return <Widget input={text.input} />;
-    }
-    return null;
-};
+import type { GameState } from "../shared/types";
 
 function GameText({
     currentState,
@@ -45,7 +33,11 @@ function GameText({
     }
 
     const text = currentState.lines.map((line, index) => (
-        <GameTextLine key={`line-${currentState.id}-${index}`} text={line} />
+        <ProcessedTextLine
+            key={`line-${currentState.id}-${index}`}
+            text={line}
+            context="game"
+        />
     ));
 
     return (
