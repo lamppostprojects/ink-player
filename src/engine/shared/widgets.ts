@@ -20,6 +20,7 @@ export const screenWidgets = new Map<
     string,
     (props: ScreenProps) => React.ReactNode
 >();
+export const footerWidgets = new Map<string, () => React.ReactNode>();
 export const textWidgets = new Map<
     string,
     (props: WidgetTextProps) => React.ReactNode
@@ -63,6 +64,9 @@ export const registerWidget = (widget: WidgetRegistry) => {
     }
     if (widget.screen) {
         screenWidgets.set(widget.type, widget.screen);
+    }
+    if (widget.footer) {
+        footerWidgets.set(widget.type, widget.footer);
     }
     if (widget.text) {
         textWidgets.set(widget.type, widget.text);

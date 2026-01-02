@@ -2,7 +2,12 @@ import Card from "react-bootstrap/Card";
 import { useTransitionMap } from "react-transition-state";
 
 import { useStoryStore } from "../shared/game-state";
-import { headerWidgets as headerWidgetsMap, keyWidgets, knotWidgets as knotWidgetsMap } from "../shared/widgets";
+import {
+    footerWidgets,
+    headerWidgets as headerWidgetsMap,
+    keyWidgets,
+    knotWidgets as knotWidgetsMap,
+} from "../shared/widgets";
 import GameChoices from "./GameChoices";
 import GameText from "./GameText";
 
@@ -17,10 +22,18 @@ export function Game() {
         preExit: true,
     });
 
-    const previousStateId = previousState?.id ? `${gameId}-${previousState?.id}` : undefined;
-    const currentStateId = currentState?.id ? `${gameId}-${currentState?.id}` : undefined;
-    const previousTransitionState = previousStateId ? stateMap.get(previousStateId) : undefined;
-    const currentTransitionState = currentStateId ? stateMap.get(currentStateId) : undefined;
+    const previousStateId = previousState?.id
+        ? `${gameId}-${previousState?.id}`
+        : undefined;
+    const currentStateId = currentState?.id
+        ? `${gameId}-${currentState?.id}`
+        : undefined;
+    const previousTransitionState = previousStateId
+        ? stateMap.get(previousStateId)
+        : undefined;
+    const currentTransitionState = currentStateId
+        ? stateMap.get(currentStateId)
+        : undefined;
 
     if (previousTransitionState?.status === "exited") {
         previousState = null;
@@ -84,7 +97,9 @@ export function Game() {
 
         for (const [type, Widget] of Array.from(knotWidgetsMap.entries())) {
             const getKey = keyWidgets.get(type);
-            const prevKey = previousState ? getKey?.({ currentState: previousState }) : null;
+            const prevKey = previousState
+                ? getKey?.({ currentState: previousState })
+                : null;
             const currKey = getKey?.({ currentState });
 
             if (currentTransitionState?.isMounted) {
@@ -92,7 +107,11 @@ export function Game() {
                     <Widget
                         key={currKey}
                         currentState={currentState}
-                        transitionStatus={prevKey !== currKey ? currentTransitionState?.status : undefined}
+                        transitionStatus={
+                            prevKey !== currKey
+                                ? currentTransitionState?.status
+                                : undefined
+                        }
                     />,
                 );
             }
@@ -102,11 +121,21 @@ export function Game() {
                     <Widget
                         key={prevKey}
                         currentState={previousState}
-                        transitionStatus={prevKey !== currKey ? previousTransitionState?.status : undefined}
+                        transitionStatus={
+                            prevKey !== currKey
+                                ? previousTransitionState?.status
+                                : undefined
+                        }
                     />,
                 );
             }
         }
+    }
+
+    const footer = [];
+
+    for (const FooterWidget of footerWidgets.values()) {
+        footer.push(<FooterWidget />);
     }
 
     return (
@@ -116,11 +145,42 @@ export function Game() {
                 <Card.Body>
                     <div className="clearfix">
                         {knotWidgets}
-                        {previousState && <GameText key={previousStateId} currentState={previousState} transitionStatus={previousTransitionState?.status} isMounted={!!previousTransitionState?.isMounted} />}
-                        <GameText key={currentStateId} currentState={currentState} transitionStatus={currentTransitionState?.status} isMounted={!!currentTransitionState?.isMounted} />
+                        {previousState && (
+                            <GameText
+                                key={previousStateId}
+                                currentState={previousState}
+                                transitionStatus={
+                                    previousTransitionState?.status
+                                }
+                                isMounted={!!previousTransitionState?.isMounted}
+                            />
+                        )}
+                        <GameText
+                            key={currentStateId}
+                            currentState={currentState}
+                            transitionStatus={currentTransitionState?.status}
+                            isMounted={!!currentTransitionState?.isMounted}
+                        />
                     </div>
-                    {previousState && <GameChoices key={previousStateId} currentState={previousState} disabled={previousTransitionState?.status === "exiting"} transitionStatus={previousTransitionState?.status} isMounted={!!previousTransitionState?.isMounted} />}
-                    <GameChoices key={currentStateId} currentState={currentState} disabled={currentTransitionState?.status === "exiting"} transitionStatus={currentTransitionState?.status} isMounted={!!currentTransitionState?.isMounted} />
+                    {previousState && (
+                        <GameChoices
+                            key={previousStateId}
+                            currentState={previousState}
+                            disabled={
+                                previousTransitionState?.status === "exiting"
+                            }
+                            transitionStatus={previousTransitionState?.status}
+                            isMounted={!!previousTransitionState?.isMounted}
+                        />
+                    )}
+                    <GameChoices
+                        key={currentStateId}
+                        currentState={currentState}
+                        disabled={currentTransitionState?.status === "exiting"}
+                        transitionStatus={currentTransitionState?.status}
+                        isMounted={!!currentTransitionState?.isMounted}
+                    />
+                    <div>{footer}</div>
                 </Card.Body>
             </Card>
         </div>

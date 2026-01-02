@@ -9,23 +9,45 @@ import {
     textWidgets,
 } from "./widgets";
 
-export const processText = ({
+export const ProcessedTextArray = ({
     text,
     context,
 }: {
-    text: string;
+    text: Array<string | Widget>;
     context: "game" | "history" | "choice" | "history-choice";
 }) => {
-    let processedText = text;
+    return text.map((line) => {
+        if (typeof line !== "string") {
+            const Widget = textWidgets.get(line.type);
 
-    for (const processTextLine of processTextLineWidgets.values()) {
-        processedText = processTextLine({
-            line: processedText,
-            context,
-        });
-    }
+            if (!Widget) {
+                return null;
+            }
 
-    return processedText;
+            return (
+                <Widget
+                    context={
+                        context === "game" || context === "choice"
+                            ? "game"
+                            : "history"
+                    }
+                    input={line.input}
+                />
+            );
+        }
+
+        let processedText = line;
+
+        for (const processTextLine of processTextLineWidgets.values()) {
+            processedText = processTextLine({
+                line: processedText,
+                context,
+            });
+        }
+
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: ...
+        return <span dangerouslySetInnerHTML={{ __html: processedText }} />;
+    });
 };
 
 const handleAutoFocus = (element: HTMLButtonElement | null) => {
@@ -35,7 +57,7 @@ const handleAutoFocus = (element: HTMLButtonElement | null) => {
 type ProcessedTextLineProps =
     | {
           context: "game" | "history";
-          text: string | Widget;
+          text: string | Widget | Array<string | Widget>;
           tag?: keyof React.JSX.IntrinsicElements;
           onCompletion?: ({
               output,
@@ -49,7 +71,7 @@ type ProcessedTextLineProps =
       }
     | {
           context: "choice" | "history-choice";
-          text: string | Widget;
+          text: string | Widget | Array<string | Widget>;
           tag?: keyof React.JSX.IntrinsicElements;
           onCompletion: ({
               output,
@@ -70,13 +92,15 @@ export const ProcessedTextLine = ({
     disabled,
     tag: Tag = "p",
 }: ProcessedTextLineProps) => {
-    if (typeof text === "string") {
-        const processedText = processText({ text, context });
-
-        let contents = (
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: ...
-            <Tag dangerouslySetInnerHTML={{ __html: processedText }} />
+    if (typeof text === "string" || Array.isArray(text)) {
+        const processedText = (
+            <ProcessedTextArray
+                text={Array.isArray(text) ? text : [text]}
+                context={context}
+            />
         );
+
+        let contents = <Tag>{processedText}</Tag>;
 
         for (const TextLine of textLineWidgets.values()) {
             contents = <TextLine context={context}>{contents}</TextLine>;

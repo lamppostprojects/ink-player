@@ -160,6 +160,7 @@ const TextLine = ({ children, context }: WidgetTextLineProps) => {
             ref={ref}
             onClick={handleActivation}
             onMouseEnterCapture={handleActivation}
+            style={{ display: "inline" }}
         >
             {children}
             {anchors.map(

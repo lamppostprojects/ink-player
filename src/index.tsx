@@ -16,6 +16,7 @@ import settings from "./story/settings";
 import "./engine/app/styles.scss";
 import "./story/styles.scss";
 
+import { footnoteWidget } from "./engine/widgets/Footnotes";
 import { glossaryWidget } from "./engine/widgets/Glossary";
 
 // Enable the theme
@@ -42,6 +43,7 @@ registerWidget(diceRollWidget);
 registerWidget(achievementsWidget);
 registerWidget(cardWidget);
 registerWidget(glossaryWidget);
+registerWidget(footnoteWidget);
 
 const root = document.getElementById("root");
 

@@ -2,7 +2,16 @@ import settings from "../../story/settings";
 import type { GameState, Widget } from "../shared/types";
 import { logWidgets } from "../shared/widgets";
 
-const renderLogLine = (line: string | Widget) => {
+const renderLogLine = (
+    line: string | Widget | Array<string | Widget>,
+): string | null => {
+    if (Array.isArray(line)) {
+        return `<p>${line
+            .map((part) => renderLogLine(part))
+            .filter(Boolean)
+            .join("")}</p>`;
+    }
+
     if (typeof line === "string") {
         return `<p>${line}</p>`;
     }
@@ -18,7 +27,16 @@ const renderLogLine = (line: string | Widget) => {
     return null;
 };
 
-const renderChoice = (choice: string | Widget) => {
+const renderChoice = (
+    choice: string | Widget | Array<string | Widget>,
+): string | null => {
+    if (Array.isArray(choice)) {
+        return `<p><strong>&raquo; ${choice
+            .map((part) => renderChoice(part))
+            .filter(Boolean)
+            .join("")}</strong></p>`;
+    }
+
     if (typeof choice === "string") {
         return `<p><strong>&raquo; ${choice}</strong></p>`;
     }
@@ -30,6 +48,7 @@ const renderChoice = (choice: string | Widget) => {
             output: choice.output,
         });
     }
+
     return null;
 };
 

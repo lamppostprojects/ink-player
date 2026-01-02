@@ -19,10 +19,10 @@ export type Widget = {
 
 export type GameState = {
     id: string;
-    lines: Array<string | Widget>;
+    lines: Array<string | Widget | Array<string | Widget>>;
     tags: Record<string, string>;
     choices: Array<{
-        choice: string | Widget;
+        choice: string | Widget | Array<string | Widget>;
         tags: Record<string, string>;
     }>;
     selectedChoice?: number;
@@ -120,6 +120,7 @@ export type WidgetRegistry = {
     log?: (props: WidgetLogProps) => string;
     toast?: WidgetToastFn;
     screen?: (props: ScreenProps) => React.ReactNode;
+    footer?: () => React.ReactNode;
     text?: (props: WidgetTextProps) => React.ReactNode;
     choice?: (props: WidgetChoiceProps) => React.ReactNode;
     header?: (props: WidgetHeaderProps) => React.ReactNode;

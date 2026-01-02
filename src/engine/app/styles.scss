@@ -193,3 +193,41 @@ p:hover .glossary {
 .choices-container .glossary.proper-noun {
     font-style: normal;
 }
+
+p:has(:target) {
+    background-color: var(--bs-warning-bg-subtle);
+    transition: background-color 4s ease-out;
+    animation: fade-target-bg 4s ease-out forwards;
+}
+
+@keyframes fade-target-bg {
+    to {
+        background-color: transparent;
+    }
+}
+
+p:hover .footnote {
+    color: var(--bs-link-hover-color);
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-color: var(--bs-link-hover-color);
+}
+
+.footnote {
+    color: var(--bs-body-color);
+    text-decoration: none;
+    font-size: 0.75rem;
+    vertical-align: super;
+    line-height: 0;
+}
+
+.footnote-entry {
+    text-indent: -1em;
+    padding-left: 1em;
+
+    &:target {
+        background-color: var(--bs-warning-bg-subtle);
+        transition: background-color 4s ease-out;
+        animation: fade-target-bg 4s ease-out forwards;
+    }
+}
