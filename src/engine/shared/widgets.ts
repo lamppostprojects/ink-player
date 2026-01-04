@@ -20,7 +20,10 @@ export const screenWidgets = new Map<
     string,
     (props: ScreenProps) => React.ReactNode
 >();
-export const footerWidgets = new Map<string, () => React.ReactNode>();
+export const footerWidgets = new Map<
+    string,
+    (props: WidgetKnotProps) => React.ReactNode
+>();
 export const textWidgets = new Map<
     string,
     (props: WidgetTextProps) => React.ReactNode

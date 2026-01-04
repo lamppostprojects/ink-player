@@ -72,8 +72,11 @@ const ImageChoice = ({ context, input }: WidgetChoiceProps) => {
     return <ImageText context={context} input={input} />;
 };
 
-const log = ({ input: { alt } }: WidgetLogProps) => {
-    return `<p>[Image: ${alt}]</p>`;
+const log = (props: WidgetLogProps) => {
+    if (!("input" in props)) {
+        return "";
+    }
+    return `<p>[Image: ${props.input.alt}]</p>`;
 };
 
 const preload = async () => {

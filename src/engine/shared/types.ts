@@ -26,6 +26,7 @@ export type GameState = {
         tags: Record<string, string>;
     }>;
     selectedChoice?: number;
+    widgets: Record<string, any>;
 };
 
 export type ScreenProps = {
@@ -82,17 +83,21 @@ export type WidgetTextProps = {
     context: "game" | "history";
 };
 
-export type WidgetLogProps = {
-    input: Record<string, string>;
-    output?: Record<string, string>;
-};
+export type WidgetLogProps =
+    | { currentState: GameState; location: "header" | "footer" }
+    | {
+          input: Record<string, string>;
+          output?: Record<string, string>;
+      };
 
 export type WidgetHeaderProps = {
+    context: "game" | "history";
     currentState: GameState;
     transitionStatus: TransitionStatus | undefined;
 };
 
 export type WidgetKnotProps = {
+    context: "game" | "history";
     currentState: GameState;
     transitionStatus: TransitionStatus | undefined;
 };
@@ -120,7 +125,7 @@ export type WidgetRegistry = {
     log?: (props: WidgetLogProps) => string;
     toast?: WidgetToastFn;
     screen?: (props: ScreenProps) => React.ReactNode;
-    footer?: () => React.ReactNode;
+    footer?: (props: WidgetKnotProps) => React.ReactNode;
     text?: (props: WidgetTextProps) => React.ReactNode;
     choice?: (props: WidgetChoiceProps) => React.ReactNode;
     header?: (props: WidgetHeaderProps) => React.ReactNode;

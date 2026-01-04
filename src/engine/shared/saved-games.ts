@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import settings from "../../story/settings";
+import { useStoryStore } from "./game-state";
 import type { SavedGame } from "./types";
 
 /**
@@ -36,6 +37,7 @@ export const useSavedGamesStore = create<{
     addSavedGame: (savedGame: SavedGame) => void;
     deleteSavedGame: (savedGameId: string) => void;
     canSaveInLocalStorage: () => boolean;
+    autosave: () => void;
 }>()(
     persist(
         (set, get) => ({
@@ -53,6 +55,17 @@ export const useSavedGamesStore = create<{
                 }),
             canSaveInLocalStorage: () =>
                 !isInCrossOriginIframe() || !disallowsCrossOriginSaves(),
+            autosave: () => {
+                const { canSaveInLocalStorage, addSavedGame } = get();
+                if (!canSaveInLocalStorage()) {
+                    return;
+                }
+                const { getSaveState } = useStoryStore.getState();
+                const saveState = getSaveState({ title: "Autosave" });
+                if (saveState) {
+                    addSavedGame(saveState);
+                }
+            },
         }),
         {
             name: `${settings.gameName}-savedGames`,

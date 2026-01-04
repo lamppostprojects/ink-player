@@ -1,6 +1,6 @@
 import type {
     GameState,
-    WidgetKnotProps,
+    WidgetHeaderProps,
     WidgetRegistry,
 } from "../shared/types";
 
@@ -8,7 +8,15 @@ const key = ({ currentState }: { currentState: GameState }) => {
     return currentState.tags.Location || null;
 };
 
-function Location({ currentState, transitionStatus }: WidgetKnotProps) {
+function Location({
+    context,
+    currentState,
+    transitionStatus,
+}: WidgetHeaderProps) {
+    if (context === "history") {
+        return null;
+    }
+
     const location = currentState.tags.Location;
 
     if (!location) {

@@ -3,6 +3,7 @@ import { ProcessedTextLine } from "../shared/process-text";
 import type {
     GameState,
     Widget,
+    WidgetKnotProps,
     WidgetRegistry,
     WidgetTextProps,
 } from "../shared/types";
@@ -87,7 +88,7 @@ const FootnoteReference = ({ input, context }: WidgetTextProps) => {
     );
 };
 
-const FootnoteFooter = () => {
+const FootnoteFooter = ({ context }: WidgetKnotProps) => {
     const currentState = useStoryStore((state) => state.currentState);
 
     const footnotes = collectWidgets({
@@ -95,7 +96,7 @@ const FootnoteFooter = () => {
         type: "footnote",
     });
 
-    if (footnotes.length === 0) {
+    if (footnotes.length === 0 || context === "history") {
         return null;
     }
 

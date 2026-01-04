@@ -16,6 +16,7 @@ import settings from "./story/settings";
 import "./engine/app/styles.scss";
 import "./story/styles.scss";
 
+import { commentWidget } from "./engine/widgets/Comment";
 import { footnoteWidget } from "./engine/widgets/Footnotes";
 import { glossaryWidget } from "./engine/widgets/Glossary";
 
@@ -44,6 +45,7 @@ registerWidget(achievementsWidget);
 registerWidget(cardWidget);
 registerWidget(glossaryWidget);
 registerWidget(footnoteWidget);
+registerWidget(commentWidget);
 
 const root = document.getElementById("root");
 

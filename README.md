@@ -310,6 +310,22 @@ A definition of the word.
 
 Then it'll automatically find all instances of that word in the game text and make them clickable to view the definition of the word as a popover.
 
+### Comments
+
+You can make it so that play testers can leave comments inside their transcript for future analysis.
+
+You can turn this feature on by enabling this setting in `src/story/settings.ts`:
+
+```
+widgets: {
+    "comment": {
+        enabled: true,
+    },
+},
+```
+
+The results will show up in the game, history, and the downloaded HTML log.
+
 ## Credits and License
 
 * The prototype version of this software was created by Nell Shaw Cohen for use in the games [The Secrets of Sylvan Gardens](https://lamppostprojects.com/the-secrets-of-sylvan-gardens), [Fantasy Opera: Mischief at the Masquerade](https://lamppostprojects.com/fantasy-opera), and [The Path of Totality](https://lamppostprojects.com/the-path-of-totality).

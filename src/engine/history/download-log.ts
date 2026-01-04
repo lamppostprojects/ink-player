@@ -31,10 +31,10 @@ const renderChoice = (
     choice: string | Widget | Array<string | Widget>,
 ): string | null => {
     if (Array.isArray(choice)) {
-        return `<p><strong>&raquo; ${choice
+        return choice
             .map((part) => renderChoice(part))
             .filter(Boolean)
-            .join("")}</strong></p>`;
+            .join("");
     }
 
     if (typeof choice === "string") {
@@ -52,19 +52,35 @@ const renderChoice = (
     return null;
 };
 
+const renderState = (state: GameState) => {
+    let text = "";
+
+    for (const log of logWidgets.values()) {
+        text += log({
+            currentState: state,
+            location: "header",
+        });
+    }
+
+    text += state.lines.map((line) => renderLogLine(line)).join("\n");
+
+    if (state.selectedChoice != null) {
+        text += `\n${renderChoice(state.choices[state.selectedChoice].choice)}`;
+    }
+
+    for (const log of logWidgets.values()) {
+        text += log({
+            currentState: state,
+            location: "footer",
+        });
+    }
+
+    return text;
+};
+
 export const downloadHTMLLog = (gameState: GameState[]) => {
     const { shortGameName, gameName } = settings;
-    const contents = gameState
-        .map((state) => {
-            let text = state.lines
-                .map((line) => renderLogLine(line))
-                .join("\n");
-            if (state.selectedChoice != null) {
-                text += `\n${renderChoice(state.choices[state.selectedChoice].choice)}`;
-            }
-            return text;
-        })
-        .join("\n<hr />\n");
+    const contents = gameState.map(renderState).join("\n<hr />\n");
     const html = `<html><body><h1>${gameName} Log</h1>
     <p><i>Downloaded on ${new Date().toLocaleString()}</i></p>
     ${contents}</body></html>`;

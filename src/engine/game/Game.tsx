@@ -180,7 +180,7 @@ export function Game() {
                         transitionStatus={currentTransitionState?.status}
                         isMounted={!!currentTransitionState?.isMounted}
                     />
-                    <div>{footer}</div>
+                    <div className="position-relative">{footer}</div>
                 </Card.Body>
             </Card>
         </div>

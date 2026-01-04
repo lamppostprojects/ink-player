@@ -20,6 +20,7 @@ export const useStoryStore = create<{
     loadSavedGame: (savedGame: SavedGame) => void;
     getSaveState: ({ title }: { title: string }) => SavedGame | null;
     startNewGame: () => void;
+    updateCurrentState: (currentState: GameState) => void;
     selectChoice: ({
         index,
         output,
@@ -130,6 +131,18 @@ export const useStoryStore = create<{
                         ? undefined
                         : selectedChoice.choice.output,
             });
+
+            // Restore widget state from the previous state
+            const { currentState: newCurrentState, updateCurrentState } = get();
+
+            if (newCurrentState) {
+                updateCurrentState({
+                    ...newCurrentState,
+                    widgets: {
+                        ...currentState?.widgets,
+                    },
+                });
+            }
         } else {
             set({
                 id: crypto.randomUUID(),
@@ -155,6 +168,13 @@ export const useStoryStore = create<{
             gameState,
             storyData,
         };
+    },
+    updateCurrentState: (currentState: GameState) => {
+        const { gameState } = get();
+        set({
+            gameState: [...(gameState || []).slice(0, -1), currentState],
+            currentState,
+        });
     },
     selectChoice: ({
         index,
@@ -284,7 +304,7 @@ const getStoryState = ({
 }: {
     story: Story | null;
     currentState: GameState | null;
-}) => {
+}): GameState | null => {
     if (!story || !story.canContinue) {
         return null;
     }
@@ -344,5 +364,6 @@ const getStoryState = ({
         lines,
         tags,
         choices,
+        widgets: {},
     } satisfies GameState;
 };

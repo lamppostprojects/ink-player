@@ -112,8 +112,11 @@ function Card({
     );
 }
 
-const log = ({ input: { title } }: WidgetLogProps) => {
-    return title;
+const log = (props: WidgetLogProps) => {
+    if (!("input" in props)) {
+        return "";
+    }
+    return props.input.title;
 };
 
 const preload = async () => {

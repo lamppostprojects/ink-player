@@ -79,7 +79,14 @@ function TextInput({
     );
 }
 
-const log = ({ input: { label }, output }: WidgetLogProps) => {
+const log = (props: WidgetLogProps) => {
+    if (!("input" in props)) {
+        return "";
+    }
+    const {
+        input: { label },
+        output,
+    } = props;
     return `${label ? `${label} ` : ""}${output?.value || "[Empty Text Input]"}`;
 };
 

@@ -65,8 +65,11 @@ function DiceRoll({ input, context }: WidgetTextProps) {
     );
 }
 
-const log = ({ input }: WidgetLogProps) => {
-    return `<p>[<strong>Dice Roll:</strong> ${getAlt(input)}]</p>`;
+const log = (props: WidgetLogProps) => {
+    if (!("input" in props)) {
+        return "";
+    }
+    return `<p>[<strong>Dice Roll:</strong> ${getAlt(props.input)}]</p>`;
 };
 
 const preload = async () => {

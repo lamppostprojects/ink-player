@@ -24,14 +24,7 @@ function GameChoices({
 }) {
     const gameState = useStoryStore((state) => state.gameState);
     const selectChoice = useStoryStore((state) => state.selectChoice);
-    const deleteSavedGame = useSavedGamesStore(
-        (state) => state.deleteSavedGame,
-    );
-    const addSavedGame = useSavedGamesStore((state) => state.addSavedGame);
-    const getSaveState = useStoryStore((state) => state.getSaveState);
-    const localSaveOnly = useSavedGamesStore(
-        (state) => !state.canSaveInLocalStorage(),
-    );
+    const autosave = useSavedGamesStore((state) => state.autosave);
     const startNewGame = useStoryStore((state) => state.startNewGame);
     const [showLoadModal, setShowLoadModal] = useState(false);
     const error = useStoryStore((state) => state.error);
@@ -51,18 +44,14 @@ function GameChoices({
 
                 const results = selectChoice({ index, output, variables });
 
-                if (results && !localSaveOnly) {
+                if (results) {
                     const { error } = results;
 
                     if (error) {
                         return;
                     }
 
-                    deleteSavedGame("autosave");
-                    const saveState = getSaveState({ title: "Autosave" });
-                    if (saveState) {
-                        addSavedGame(saveState);
-                    }
+                    autosave();
                 }
 
                 window.scrollTo({ top: 0, behavior: "smooth" });
