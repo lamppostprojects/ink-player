@@ -160,6 +160,9 @@ export const useStoryStore = create<{
                 });
             }
         } else {
+            // Remove the hash from the URL
+            history.replaceState(null, "", window.location.href.split("#")[0]);
+
             story.state.LoadJson(
                 typeof currentState.storyData === "string"
                     ? currentState.storyData
@@ -227,6 +230,9 @@ export const useStoryStore = create<{
             }
         }
 
+        // Remove the hash from the URL
+        history.replaceState(null, "", window.location.href.split("#")[0]);
+
         story.ChooseChoiceIndex(index);
         const newState = getStoryState({ story, currentState });
         if (newState) {
@@ -257,6 +263,9 @@ export const useStoryStore = create<{
                 ? previousState.storyData
                 : JSON.stringify(previousState.storyData),
         );
+
+        // Remove the hash from the URL
+        history.replaceState(null, "", window.location.href.split("#")[0]);
 
         set({
             gameState: gameState.slice(0, -1),

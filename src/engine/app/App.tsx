@@ -1,5 +1,5 @@
 import { useQueryState } from "nuqs";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "preact/hooks";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
 import screens from "../../story/screens";
@@ -11,7 +11,7 @@ import Header from "./Header";
 import { Toasts } from "./Toasts";
 
 const App = () => {
-    const [page, setPage] = useQueryState("page", {
+    const [page, setQueryPage] = useQueryState("page", {
         scroll: true,
         history: "push",
         defaultValue: screens[0].id,
@@ -24,6 +24,15 @@ const App = () => {
     const startNewGame = useStoryStore((state) => state.startNewGame);
     const gameState = useStoryStore((state) => state.gameState);
     const loading = gameState.length === 0;
+
+    const setPage = useCallback(
+        (page: string) => {
+            // Remove the hash from the URL
+            history.replaceState(null, "", window.location.href.split("#")[0]);
+            setQueryPage(page);
+        },
+        [setQueryPage],
+    );
 
     useEffect(() => {
         async function init() {
