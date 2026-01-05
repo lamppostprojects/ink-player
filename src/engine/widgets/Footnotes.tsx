@@ -1,4 +1,3 @@
-import { useStoryStore } from "../shared/game-state";
 import { ProcessedTextLine } from "../shared/process-text";
 import type {
     GameState,
@@ -88,9 +87,11 @@ const FootnoteReference = ({ input, context }: WidgetTextProps) => {
     );
 };
 
-const FootnoteFooter = ({ context }: WidgetKnotProps) => {
-    const currentState = useStoryStore((state) => state.currentState);
-
+const FootnoteFooter = ({
+    context,
+    transitionStatus,
+    currentState,
+}: WidgetKnotProps) => {
     const footnotes = collectWidgets({
         gameState: currentState,
         type: "footnote",
@@ -101,7 +102,7 @@ const FootnoteFooter = ({ context }: WidgetKnotProps) => {
     }
 
     return (
-        <div className="mt-3">
+        <div className={`mt-3 transitioned ${transitionStatus || ""}`}>
             <p>
                 <strong>Footnotes</strong>
             </p>
@@ -133,4 +134,5 @@ export const footnoteWidget = {
     type: "footnote",
     text: FootnoteReference,
     footer: FootnoteFooter,
+    key: ({ currentState }) => currentState.id,
 } satisfies WidgetRegistry;

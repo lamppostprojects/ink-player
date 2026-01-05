@@ -15,7 +15,7 @@ export function Game() {
     const gameId = useStoryStore((state) => state.id);
     const currentState = useStoryStore((state) => state.currentState);
     let previousState = useStoryStore((state) => state.previousState);
-    const { toggle, setItem, stateMap } = useTransitionMap<string>({
+    const { toggle, setItem, stateMap, deleteItem } = useTransitionMap<string>({
         unmountOnExit: true,
         timeout: 300,
         preEnter: true,
@@ -35,16 +35,31 @@ export function Game() {
         ? stateMap.get(currentStateId)
         : undefined;
 
+    if (
+        (previousTransitionState?.status === "unmounted" ||
+            previousTransitionState?.status === "exited") &&
+        previousStateId
+    ) {
+        deleteItem(previousStateId);
+        useStoryStore.setState({ previousState: null });
+        return;
+    }
+
     if (previousTransitionState?.status === "exited") {
         previousState = null;
     }
 
-    if (previousStateId && !stateMap.has(previousStateId)) {
+    if (
+        previousStateId &&
+        !stateMap.has(previousStateId) &&
+        previousTransitionState?.status !== "exited" &&
+        previousTransitionState?.status !== "unmounted"
+    ) {
         setItem(previousStateId);
     }
 
     if (currentStateId && !stateMap.has(currentStateId)) {
-        if (previousStateId) {
+        if (previousStateId && previousTransitionState?.status !== "exited") {
             toggle(previousStateId, false);
         }
         if (!previousTransitionState?.isMounted) {
@@ -57,6 +72,7 @@ export function Game() {
 
     const headerWidgets = [];
     const knotWidgets = [];
+    const footerWidgetsShown = [];
 
     if (currentState) {
         for (const [type, Widget] of Array.from(headerWidgetsMap.entries())) {
@@ -70,6 +86,7 @@ export function Game() {
                 headerWidgets.push(
                     <Widget
                         key={currKey}
+                        context="game"
                         currentState={currentState}
                         transitionStatus={
                             prevKey !== currKey
@@ -84,6 +101,7 @@ export function Game() {
                 headerWidgets.push(
                     <Widget
                         key={prevKey}
+                        context="game"
                         currentState={previousState}
                         transitionStatus={
                             prevKey !== currKey
@@ -106,6 +124,7 @@ export function Game() {
                 knotWidgets.push(
                     <Widget
                         key={currKey}
+                        context="game"
                         currentState={currentState}
                         transitionStatus={
                             prevKey !== currKey
@@ -120,6 +139,45 @@ export function Game() {
                 knotWidgets.push(
                     <Widget
                         key={prevKey}
+                        context="game"
+                        currentState={previousState}
+                        transitionStatus={
+                            prevKey !== currKey
+                                ? previousTransitionState?.status
+                                : undefined
+                        }
+                    />,
+                );
+            }
+        }
+
+        for (const [type, Widget] of Array.from(footerWidgets.entries())) {
+            const getKey = keyWidgets.get(type);
+            const prevKey = previousState
+                ? getKey?.({ currentState: previousState })
+                : null;
+            const currKey = getKey?.({ currentState });
+
+            if (currentTransitionState?.isMounted) {
+                footerWidgetsShown.push(
+                    <Widget
+                        key={currKey}
+                        context="game"
+                        currentState={currentState}
+                        transitionStatus={
+                            prevKey !== currKey
+                                ? currentTransitionState?.status
+                                : undefined
+                        }
+                    />,
+                );
+            }
+
+            if (previousState && previousTransitionState?.isMounted) {
+                footerWidgetsShown.push(
+                    <Widget
+                        key={prevKey}
+                        context="game"
                         currentState={previousState}
                         transitionStatus={
                             prevKey !== currKey
@@ -132,16 +190,14 @@ export function Game() {
         }
     }
 
-    const footer = [];
-
-    for (const FooterWidget of footerWidgets.values()) {
-        footer.push(<FooterWidget />);
-    }
-
     return (
         <div className="game-container">
             <Card>
-                <div className="position-relative">{headerWidgets}</div>
+                {headerWidgets.length > 0 && (
+                    <div className="header-widgets position-relative">
+                        {headerWidgets}
+                    </div>
+                )}
                 <Card.Body>
                     <div className="clearfix">
                         {knotWidgets}
@@ -180,7 +236,11 @@ export function Game() {
                         transitionStatus={currentTransitionState?.status}
                         isMounted={!!currentTransitionState?.isMounted}
                     />
-                    <div className="position-relative">{footer}</div>
+                    {footerWidgetsShown.length > 0 && (
+                        <div className="footer-widgets position-relative">
+                            {footerWidgetsShown}
+                        </div>
+                    )}
                 </Card.Body>
             </Card>
         </div>

@@ -57,6 +57,10 @@ export const handleStoryLoadWidgets = new Map<
     string,
     (props: WidgetHandleStoryLoadProps) => void
 >();
+export const navWidgets = new Map<
+    string,
+    (props: ScreenProps) => React.ReactNode
+>();
 
 export const registerWidget = (widget: WidgetRegistry) => {
     if (widget.log) {
@@ -82,6 +86,9 @@ export const registerWidget = (widget: WidgetRegistry) => {
     }
     if (widget.knot) {
         knotWidgets.set(widget.type, widget.knot);
+    }
+    if (widget.nav) {
+        navWidgets.set(widget.type, widget.nav);
     }
     if (widget.preload) {
         preloadWidgets.set(widget.type, widget.preload);

@@ -1,9 +1,9 @@
 import CommentIcon from "bootstrap-icons/icons/chat-dots.svg?react";
 import { useCallback, useRef, useState } from "preact/hooks";
 import Alert from "react-bootstrap/Alert";
-import Button from "react-bootstrap/Button";
 import CloseButton from "react-bootstrap/CloseButton";
 import Form from "react-bootstrap/esm/Form";
+import Nav from "react-bootstrap/Nav";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
 import Stack from "react-bootstrap/Stack";
@@ -11,13 +11,39 @@ import Stack from "react-bootstrap/Stack";
 import { useStoryStore } from "../shared/game-state";
 import { useSavedGamesStore } from "../shared/saved-games";
 import type {
+    ScreenProps,
     WidgetHeaderProps,
     WidgetLogProps,
     WidgetRegistry,
 } from "../shared/types";
 import { getWidgetSettings } from "../shared/widgets";
 
-const Comment = ({ context, currentState }: WidgetHeaderProps) => {
+const CommentHistory = ({ context, currentState }: WidgetHeaderProps) => {
+    const settings = getWidgetSettings("comment");
+    if (!settings?.enabled) {
+        return null;
+    }
+
+    if (context !== "history") {
+        return null;
+    }
+
+    const comment = currentState?.widgets?.comment ?? "";
+
+    if (!comment) {
+        return null;
+    }
+    return (
+        <Alert variant="success">
+            <strong>Comment:</strong> {comment}
+        </Alert>
+    );
+};
+
+const CommentNav = ({ page }: ScreenProps) => {
+    if (page !== "game") {
+        return null;
+    }
     const settings = getWidgetSettings("comment");
     if (!settings?.enabled) {
         return null;
@@ -25,6 +51,7 @@ const Comment = ({ context, currentState }: WidgetHeaderProps) => {
     const updateCurrentState = useStoryStore(
         (state) => state.updateCurrentState,
     );
+    const currentState = useStoryStore((state) => state.currentState);
     const autosave = useSavedGamesStore((state) => state.autosave);
     const [open, setOpen] = useState(false);
     const commentRef = useRef<HTMLTextAreaElement>(null);
@@ -53,17 +80,6 @@ const Comment = ({ context, currentState }: WidgetHeaderProps) => {
 
     const comment = currentState?.widgets?.comment ?? "";
 
-    if (context === "history") {
-        if (!comment) {
-            return null;
-        }
-        return (
-            <Alert variant="success">
-                <strong>Comment:</strong> {comment}
-            </Alert>
-        );
-    }
-
     const popover = (
         <Popover id="popover-basic">
             <Popover.Header as="h3">
@@ -88,34 +104,34 @@ const Comment = ({ context, currentState }: WidgetHeaderProps) => {
     );
 
     return (
-        <div>
-            <OverlayTrigger
-                trigger="click"
-                placement="bottom"
-                overlay={popover}
-                flip={true}
-                show={open}
-            >
-                {({ ...triggerHandler }) => (
-                    <Button
-                        {...triggerHandler}
-                        variant="primary"
-                        style={{ position: "absolute", top: 0, right: -60 }}
-                        onClick={toggleOpen}
-                    >
-                        {comment && (
-                            <span className="position-absolute top-0 start-100 translate-middle p-2 bg-primary border border-light rounded-circle">
-                                <span className="visually-hidden">
-                                    Has Comment
-                                </span>
-                            </span>
-                        )}
-                        <CommentIcon className="bi" />
-                        <span className="visually-hidden">Add Comment</span>
-                    </Button>
-                )}
-            </OverlayTrigger>
-        </div>
+        <OverlayTrigger
+            trigger="click"
+            placement="bottom"
+            overlay={popover}
+            flip={true}
+            show={open}
+        >
+            {({ ...triggerHandler }) => (
+                <Nav.Link
+                    {...triggerHandler}
+                    onClick={toggleOpen}
+                    className="position-relative"
+                >
+                    {comment && (
+                        <span
+                            className="position-absolute translate-middle p-1 bg-primary border border-light rounded-circle"
+                            style={{
+                                top: `var(--bs-nav-link-padding-y)`,
+                                right: -3,
+                            }}
+                        >
+                            <span className="visually-hidden">Has Comment</span>
+                        </span>
+                    )}
+                    <CommentIcon className="bi" /> <span>Comment</span>
+                </Nav.Link>
+            )}
+        </OverlayTrigger>
     );
 };
 
@@ -132,6 +148,8 @@ const log = (props: WidgetLogProps) => {
 
 export const commentWidget = {
     type: "comment",
-    header: Comment,
+    header: CommentHistory,
+    nav: CommentNav,
     log,
+    key: () => "comment",
 } satisfies WidgetRegistry;

@@ -9,7 +9,6 @@ export const useStoryStore = create<{
     id: string;
     story: Story | null;
     storyJSON: { inkVersion: number } | null;
-    storyData: any;
     Story: typeof Story | null;
     error: string | null;
     _initializing: boolean;
@@ -18,7 +17,13 @@ export const useStoryStore = create<{
     previousState: GameState | null;
     loadStoryData: () => Promise<void>;
     loadSavedGame: (savedGame: SavedGame) => void;
-    getSaveState: ({ title }: { title: string }) => SavedGame | null;
+    getSaveState: ({
+        title,
+        id,
+    }: {
+        title: string;
+        id?: string;
+    }) => SavedGame | null;
     startNewGame: () => void;
     updateCurrentState: (currentState: GameState) => void;
     selectChoice: ({
@@ -30,11 +35,11 @@ export const useStoryStore = create<{
         output?: Record<string, string>;
         variables?: Record<string, string>;
     }) => { gameState: GameState[]; story: Story; error: string | null } | null;
+    back: () => void;
 }>((set, get) => ({
     id: "",
     story: null,
     storyJSON: null,
-    storyData: null,
     Story: null,
     error: null,
     _initializing: false,
@@ -78,12 +83,16 @@ export const useStoryStore = create<{
         for (const handleStoryLoad of handleStoryLoadWidgets.values()) {
             handleStoryLoad({ story });
         }
-        const newState = getStoryState({ story, currentState: null });
+
+        const newState = getStoryState({
+            story,
+            currentState: null,
+        });
+
         if (newState) {
             set({
                 id: crypto.randomUUID(),
                 story,
-                storyData: story.state.toJson(),
                 gameState: [newState],
                 currentState: newState,
                 previousState: null,
@@ -96,7 +105,7 @@ export const useStoryStore = create<{
         if (!storyJSON || !Story) {
             return;
         }
-        const { gameState, storyData } = savedGame;
+        const { gameState } = savedGame;
         const story = new Story(storyJSON);
         story.onError = (error) => {
             set({ error });
@@ -104,17 +113,24 @@ export const useStoryStore = create<{
         for (const handleStoryLoad of handleStoryLoadWidgets.values()) {
             handleStoryLoad({ story });
         }
-        story.state.LoadJson(storyData);
 
         const currentState = gameState[gameState.length - 1] ?? null;
         const previousState = gameState[gameState.length - 2] ?? null;
 
-        if (previousState?.selectedChoice !== undefined) {
+        if (
+            previousState?.selectedChoice !== undefined &&
+            previousState.storyData
+        ) {
+            story.state.LoadJson(
+                typeof previousState.storyData === "string"
+                    ? previousState.storyData
+                    : JSON.stringify(previousState.storyData),
+            );
+
             set({
                 id: crypto.randomUUID(),
                 story,
                 gameState: gameState.slice(0, -1) ?? [],
-                storyData,
                 currentState: previousState,
                 previousState: null,
                 error: null,
@@ -144,29 +160,32 @@ export const useStoryStore = create<{
                 });
             }
         } else {
+            story.state.LoadJson(
+                typeof currentState.storyData === "string"
+                    ? currentState.storyData
+                    : JSON.stringify(currentState.storyData),
+            );
             set({
                 id: crypto.randomUUID(),
                 story,
                 gameState,
-                storyData,
                 currentState,
                 previousState,
                 error: null,
             });
         }
     },
-    getSaveState: ({ title }: { title: string }) => {
-        const { story, currentState, gameState, storyData } = get();
+    getSaveState: ({ title, id }: { title: string; id?: string }) => {
+        const { story, currentState, gameState } = get();
         if (!story || !currentState) {
             return null;
         }
         return {
-            id: crypto.randomUUID(),
+            id: id ?? crypto.randomUUID(),
             title,
             steps: Math.max(gameState.length - 1, 1),
             date: new Date().toLocaleString(),
             gameState,
-            storyData,
         };
     },
     updateCurrentState: (currentState: GameState) => {
@@ -208,13 +227,11 @@ export const useStoryStore = create<{
             }
         }
 
-        const storyData = story.state.toJson();
         story.ChooseChoiceIndex(index);
         const newState = getStoryState({ story, currentState });
         if (newState) {
             const newGameState = [...(gameState || []), newState];
             set({
-                storyData,
                 gameState: newGameState,
                 currentState: newState,
                 previousState: currentState,
@@ -226,6 +243,26 @@ export const useStoryStore = create<{
             };
         }
         return null;
+    },
+    back: () => {
+        const { story, currentState, gameState } = get();
+        const previousState = gameState[gameState.length - 2] ?? null;
+
+        if (!story || !currentState || !previousState) {
+            return;
+        }
+
+        story.state.LoadJson(
+            typeof previousState.storyData === "string"
+                ? previousState.storyData
+                : JSON.stringify(previousState.storyData),
+        );
+
+        set({
+            gameState: gameState.slice(0, -1),
+            currentState: { ...previousState },
+            previousState: { ...currentState },
+        });
     },
 }));
 
@@ -359,11 +396,14 @@ const getStoryState = ({
         };
     });
 
+    const storyData = JSON.parse(story.state.toJson());
+
     return {
         id: crypto.randomUUID(),
         lines,
         tags,
         choices,
+        storyData,
         widgets: {},
     } satisfies GameState;
 };

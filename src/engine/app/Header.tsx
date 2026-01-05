@@ -14,6 +14,7 @@ import { NewGameModal } from "../saves/NewGameModal";
 import { SaveModal } from "../saves/SaveModal";
 import { useStoryStore } from "../shared/game-state";
 import type { ScreenProps } from "../shared/types";
+import { navWidgets } from "../shared/widgets";
 
 function Header(props: ScreenProps) {
     const [showSaveModal, setShowSaveModal] = useState(false);
@@ -78,6 +79,8 @@ function Header(props: ScreenProps) {
         setPage("game");
     }, [setPage, setShowNewGameModal]);
 
+    const widgets = Array.from(navWidgets.entries());
+
     return (
         <>
             <Navbar
@@ -129,6 +132,11 @@ function Header(props: ScreenProps) {
                                     </Nav.Link>
                                 </Nav.Item>
                             )}
+                            {widgets.map(([type, Widget]) => (
+                                <Nav.Item key={type}>
+                                    <Widget {...props} />
+                                </Nav.Item>
+                            ))}
                             <Nav.Item>
                                 <NavDropdown
                                     title={

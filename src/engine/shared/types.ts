@@ -8,7 +8,6 @@ export type SavedGame = {
     steps: number;
     date: string;
     gameState: GameState[];
-    storyData: string;
 };
 
 export type Widget = {
@@ -27,6 +26,7 @@ export type GameState = {
     }>;
     selectedChoice?: number;
     widgets: Record<string, any>;
+    storyData: string;
 };
 
 export type ScreenProps = {
@@ -130,6 +130,7 @@ export type WidgetRegistry = {
     choice?: (props: WidgetChoiceProps) => React.ReactNode;
     header?: (props: WidgetHeaderProps) => React.ReactNode;
     knot?: (props: WidgetKnotProps) => React.ReactNode;
+    nav?: (props: ScreenProps) => React.ReactNode;
     preload?: () => Promise<any>;
     key?: (props: WidgetKeyProps) => string | null;
     processTextLine?: (props: WidgetProcessTextLineProps) => string;

@@ -56,20 +56,25 @@ export const useSavedGamesStore = create<{
             canSaveInLocalStorage: () =>
                 !isInCrossOriginIframe() || !disallowsCrossOriginSaves(),
             autosave: () => {
-                const { canSaveInLocalStorage, addSavedGame } = get();
+                const { canSaveInLocalStorage, addSavedGame, deleteSavedGame } =
+                    get();
                 if (!canSaveInLocalStorage()) {
                     return;
                 }
                 const { getSaveState } = useStoryStore.getState();
-                const saveState = getSaveState({ title: "Autosave" });
+                const saveState = getSaveState({
+                    id: "autosave",
+                    title: "Autosave",
+                });
                 if (saveState) {
+                    deleteSavedGame("autosave");
                     addSavedGame(saveState);
                 }
             },
         }),
         {
             name: `${settings.gameName}-savedGames`,
-            version: 2,
+            version: 5,
             storage: createJSONStorage(() => ({
                 getItem: (name) => localStorage.getItem(name),
                 setItem: (name, value) => {
@@ -88,6 +93,23 @@ export const useSavedGamesStore = create<{
                 removeItem: (name) => localStorage.removeItem(name),
             })),
             migrate(persistedState: any, version) {
+                if (!version || version < 5) {
+                    return {
+                        ...persistedState,
+                        savedGames: persistedState.savedGames.map(
+                            (savedGame: any) => ({
+                                ...savedGame,
+                                gameState: savedGame.gameState.map(
+                                    (state: any) => ({
+                                        ...state,
+                                        storyData: savedGame.storyData,
+                                    }),
+                                ),
+                            }),
+                        ),
+                    };
+                }
+
                 // Make it so that choices now have access to their tags
                 if (!version || version < 2) {
                     return {
