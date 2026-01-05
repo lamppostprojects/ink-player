@@ -126,6 +126,35 @@ widgets: {
 },
 ```
 
+### Background Music
+
+Background music can be played between scenes. Can be configured by setting the "Background Music:Name" tag in your Ink story. The "Name" value will be used to match one of the music files defined in the `src/story/settings.ts` file.
+
+The volume levels will be controlled via a button in the navbar.
+
+You'll probably want to specify "BackgroundMusic" as a sticky tag, as well, in order to ensure seemless music playback during a long conversation. More info on Sticky Tags in the section below.
+
+For example, in your Ink file, add the following tag:
+
+```
+# BackgroundMusic:
+```
+
+In `src/story/settings.ts`:
+
+```
+import ThemeA from "./assets/audio/theme-a.mp3";
+import ThemeB from "./assets/audio/theme-b.mp3";
+...
+stickyTags: ["BackgroundMusic"],
+widgets: {
+    backgroundMusic: {
+        ThemeA: ThemeA,
+        ThemeB: ThemeB,
+    },
+},
+```
+
 ### Inline Images
 
 Images to be displayed inline in a knot. Can be configured by using a special `!widget:image` syntax in your Ink story. The "Name" value will be used to match one of the images defined in the `src/story/settings.ts` file. If a large image is specified then it'll be shown in a modal when the portrait is clicked.
@@ -133,6 +162,8 @@ Images to be displayed inline in a knot. Can be configured by using a special `!
 The alt text is optional, and will be used as the alt text for the image (but should be provided for accessibility reasons).
 
 The align property is optional, and can be "left", "right", or "center". The default is "center". Left or right will float the image and allow the text to flow around it.
+
+You can add a caption to the image using the "caption" property. If you add a URL in the "source" property then it'll be added as a link to the caption.
 
 For example, in your Ink file, add the following text:
 
