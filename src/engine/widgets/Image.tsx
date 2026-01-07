@@ -15,11 +15,13 @@ const ImageWrapper = ({
     children,
     caption,
     source,
+    sourceText,
     align = "center",
 }: {
     children: React.ReactNode;
     caption?: string;
     source?: string;
+    sourceText?: string;
     align?: string;
 }) => {
     return (
@@ -49,7 +51,7 @@ const ImageWrapper = ({
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Source
+                                {sourceText}
                             </a>
                             )
                         </>
@@ -65,7 +67,10 @@ function ImageText({ input }: WidgetTextProps) {
     const images = getWidgetSettings("images");
     const align = input.align || "center";
     const source = input.source;
-    const maxHeight = input.maxHeight || 400;
+    const maxHeight = input.maxHeight
+        ? parseFloat(input.maxHeight as string)
+        : 400;
+    const sourceText = input.sourceText || "Source";
     let small = input.small;
 
     const image = images?.[input.name as keyof typeof images];
@@ -91,7 +96,12 @@ function ImageText({ input }: WidgetTextProps) {
 
     if (!large) {
         return (
-            <ImageWrapper caption={input.caption} source={source} align={align}>
+            <ImageWrapper
+                caption={input.caption}
+                source={source}
+                sourceText={sourceText}
+                align={align}
+            >
                 {renderedImage}
             </ImageWrapper>
         );
@@ -99,7 +109,12 @@ function ImageText({ input }: WidgetTextProps) {
 
     return (
         <>
-            <ImageWrapper caption={input.caption} source={source} align={align}>
+            <ImageWrapper
+                caption={input.caption}
+                source={source}
+                sourceText={sourceText}
+                align={align}
+            >
                 <a
                     href={input.name ? `?image=${input.name}` : "#"}
                     onClick={(e) => {
