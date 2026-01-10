@@ -1,14 +1,12 @@
 import DownloadIcon from "bootstrap-icons/icons/download.svg?react";
-import { Fragment, useEffect } from "react";
+import { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Stack from "react-bootstrap/Stack";
 
 import { useStoryStore } from "../shared/game-state";
-import { footerWidgets, headerWidgets } from "../shared/widgets";
 import { downloadHTMLLog } from "./download-log";
-import HistoryChoices from "./HistoryChoices";
-import HistoryText from "./HistoryText";
+import HistoryGrouped from "./HistoryGrouped";
 
 export default function History() {
     const gameState = useStoryStore((state) => state.gameState);
@@ -16,42 +14,6 @@ export default function History() {
     useEffect(() => {
         window.scrollTo(0, document.body.scrollHeight);
     }, []);
-
-    const contents: React.ReactNode = gameState.map((state) => {
-        const header = [];
-
-        for (const HeaderWidget of headerWidgets.values()) {
-            header.push(
-                <HeaderWidget
-                    context="history"
-                    currentState={state}
-                    transitionStatus={undefined}
-                />,
-            );
-        }
-
-        const footer = [];
-
-        for (const FooterWidget of footerWidgets.values()) {
-            footer.push(
-                <FooterWidget
-                    context="history"
-                    currentState={state}
-                    transitionStatus={undefined}
-                />,
-            );
-        }
-
-        return (
-            <Fragment key={state.id}>
-                {header}
-                <HistoryText currentState={state} />
-                <HistoryChoices currentState={state} />
-                {footer}
-                <hr />
-            </Fragment>
-        );
-    });
 
     return (
         <Card className="mb-3">
@@ -70,8 +32,8 @@ export default function History() {
                     </Button>
                 </Stack>
                 <hr />
-                {contents}
-                <Stack direction="horizontal" gap={3}>
+                <HistoryGrouped gameState={gameState} />
+                <Stack direction="horizontal" gap={3} className="mt-3">
                     <Button
                         size="sm"
                         type="button"

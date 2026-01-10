@@ -12,7 +12,7 @@ export default function HistoryChoices({
 
     const { choice } = currentState.choices[currentState.selectedChoice];
 
-    if (typeof choice === "string") {
+    if (typeof choice === "string" || Array.isArray(choice)) {
         return (
             <p>
                 <strong>
