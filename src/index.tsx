@@ -1,5 +1,5 @@
 import { NuqsAdapter } from "nuqs/adapters/react";
-import { render } from "react";
+import { render } from "preact";
 
 import App from "./engine/app/App";
 import { registerWidget } from "./engine/shared/widgets";
