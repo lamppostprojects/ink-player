@@ -2,8 +2,8 @@ import ArrowLeftIcon from "bootstrap-icons/icons/arrow-left.svg?react";
 import { useCallback } from "preact/hooks";
 import Nav from "react-bootstrap/Nav";
 
-import { useStoryStore } from "../shared/game-state";
-import { useSavedGamesStore } from "../shared/saved-games";
+import { getUseStoryStore } from "../shared/game-state";
+import { getUseSavedGamesStore } from "../shared/saved-games";
 import type { ScreenProps, WidgetRegistry } from "../shared/types";
 import { getWidgetSettings } from "../shared/widgets";
 
@@ -15,13 +15,16 @@ const BackButton = ({ page }: ScreenProps) => {
     if (!settings?.enabled) {
         return null;
     }
+    const useStoryStore = getUseStoryStore();
     const numStates = useStoryStore((state) => state.gameState.length);
     const back = useStoryStore((state) => state.back);
+    const getSaveState = useStoryStore((state) => state.getSaveState);
+    const useSavedGamesStore = getUseSavedGamesStore();
     const autosave = useSavedGamesStore((state) => state.autosave);
 
     const handleBack = useCallback(() => {
         back();
-        autosave();
+        autosave(getSaveState);
     }, [back, autosave]);
 
     return (

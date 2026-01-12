@@ -2,21 +2,24 @@ import { useQueryState } from "nuqs";
 import { useCallback, useEffect } from "preact/hooks";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
-import screens from "../../story/screens";
-import settings from "../../story/settings";
-import { useStoryStore } from "../shared/game-state";
-import { useSavedGamesStore } from "../shared/saved-games";
+import { getUseStoryStore } from "../shared/game-state";
+import { getUseSavedGamesStore } from "../shared/saved-games";
+import { getSettings } from "../shared/settings";
 import Contents from "./Contents";
 import Header from "./Header";
 import { Toasts } from "./Toasts";
 
 const App = () => {
+    const settings = getSettings();
+    const { screens } = settings;
     const [page, setQueryPage] = useQueryState("page", {
         scroll: true,
         history: "push",
         defaultValue: screens[0].id,
     });
+    const useStoryStore = getUseStoryStore();
     const loadStoryData = useStoryStore((state) => state.loadStoryData);
+    const useSavedGamesStore = getUseSavedGamesStore();
     const getMostRecentSavedGame = useSavedGamesStore(
         (state) => state.getMostRecentSavedGame,
     );

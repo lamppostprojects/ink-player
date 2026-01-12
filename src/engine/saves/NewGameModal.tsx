@@ -2,7 +2,7 @@ import { useState } from "react";
 import Button from "react-bootstrap/button";
 import Modal from "react-bootstrap/modal";
 
-import { useStoryStore } from "../shared/game-state";
+import { getUseStoryStore } from "../shared/game-state";
 import { SaveModal } from "./SaveModal";
 
 export function NewGameModal({
@@ -13,6 +13,7 @@ export function NewGameModal({
     handleClose: () => void;
 }) {
     const [showSaveModal, setShowSaveModal] = useState(false);
+    const useStoryStore = getUseStoryStore();
     const startNewGame = useStoryStore((state) => state.startNewGame);
 
     const handleNewGame = async () => {

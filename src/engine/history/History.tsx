@@ -4,11 +4,12 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Stack from "react-bootstrap/Stack";
 
-import { useStoryStore } from "../shared/game-state";
+import { getUseStoryStore } from "../shared/game-state";
 import { downloadHTMLLog } from "./download-log";
 import HistoryGrouped from "./HistoryGrouped";
 
 export default function History() {
+    const useStoryStore = getUseStoryStore();
     const gameState = useStoryStore((state) => state.gameState);
 
     useEffect(() => {

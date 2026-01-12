@@ -1,7 +1,7 @@
 import Button from "react-bootstrap/button";
 import Modal from "react-bootstrap/modal";
 
-import { useSavedGamesStore } from "../shared/saved-games";
+import { getUseSavedGamesStore } from "../shared/saved-games";
 import type { SavedGame } from "../shared/types";
 
 export function DeleteModal({
@@ -13,6 +13,7 @@ export function DeleteModal({
     handleClose: () => void;
     savedGame: SavedGame;
 }) {
+    const useSavedGamesStore = getUseSavedGamesStore();
     const deleteSavedGame = useSavedGamesStore(
         (state) => state.deleteSavedGame,
     );

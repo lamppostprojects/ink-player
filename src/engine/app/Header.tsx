@@ -7,16 +7,17 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
-import screens from "../../story/screens";
-import settings from "../../story/settings";
 import { LoadModal } from "../saves/LoadModal";
 import { NewGameModal } from "../saves/NewGameModal";
 import { SaveModal } from "../saves/SaveModal";
-import { useStoryStore } from "../shared/game-state";
+import { getUseStoryStore } from "../shared/game-state";
+import { getSettings } from "../shared/settings";
 import type { ScreenProps } from "../shared/types";
 import { navWidgets } from "../shared/widgets";
 
 function Header(props: ScreenProps) {
+    const settings = getSettings();
+    const { screens } = settings;
     const [showSaveModal, setShowSaveModal] = useState(false);
     const [showLoadModal, setShowLoadModal] = useState(false);
     const [theme, setTheme] = useState(
@@ -26,6 +27,7 @@ function Header(props: ScreenProps) {
     );
     const [expanded, setExpanded] = useState(false);
     const [showNewGameModal, setShowNewGameModal] = useState(false);
+    const useStoryStore = getUseStoryStore();
     const startNewGame = useStoryStore((state) => state.startNewGame);
     const gameState = useStoryStore((state) => state.gameState);
 

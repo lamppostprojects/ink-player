@@ -1,4 +1,4 @@
-import settings from "../../story/settings";
+import { getSettings } from "./settings";
 import type {
     ScreenProps,
     WidgetChoiceProps,
@@ -108,7 +108,5 @@ export const registerWidget = (widget: WidgetRegistry) => {
 };
 
 export const getWidgetSettings = (widget: string) => {
-    return (settings as any).widgets?.[widget] as
-        | Record<string, any>
-        | undefined;
+    return getSettings().widgets?.[widget] as Record<string, any> | undefined;
 };

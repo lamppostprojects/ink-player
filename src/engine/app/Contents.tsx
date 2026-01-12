@@ -6,9 +6,9 @@ import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import { Helmet } from "react-helmet-async";
 
-import screens from "../../story/screens";
 import { Game } from "../game/Game";
 import History from "../history/History";
+import { getSettings } from "../shared/settings";
 import type { ScreenProps } from "../shared/types";
 import { screenWidgets } from "../shared/widgets";
 
@@ -31,6 +31,7 @@ const getPageComponent = ({
 
 const Contents = (props: ScreenProps) => {
     const { page, setPage, loading } = props;
+    const { screens } = getSettings();
 
     const handlePageChange = useCallback(
         (page: string) => {

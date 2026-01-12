@@ -1,4 +1,4 @@
-import settings from "../../story/settings";
+import { getSettings } from "../shared/settings";
 import type { GameState, Widget } from "../shared/types";
 import { logWidgets } from "../shared/widgets";
 
@@ -79,6 +79,7 @@ const renderState = (state: GameState) => {
 };
 
 export const downloadHTMLLog = (gameState: GameState[]) => {
+    const settings = getSettings();
     const { shortGameName, gameName } = settings;
     const contents = gameState.map(renderState).join("\n<hr />\n");
     const html = `<html><body><h1>${gameName} Log</h1>

@@ -6,9 +6,9 @@ import type { TransitionStatus } from "react-transition-state";
 
 import { downloadHTMLLog } from "../history/download-log";
 import { LoadModal } from "../saves/LoadModal";
-import { useStoryStore } from "../shared/game-state";
+import { getUseStoryStore } from "../shared/game-state";
 import { ProcessedTextLine } from "../shared/process-text";
-import { useSavedGamesStore } from "../shared/saved-games";
+import { getUseSavedGamesStore } from "../shared/saved-games";
 import type { GameState } from "../shared/types";
 
 function GameChoices({
@@ -22,10 +22,13 @@ function GameChoices({
     transitionStatus: TransitionStatus | undefined;
     isMounted: boolean;
 }) {
+    const useStoryStore = getUseStoryStore();
     const gameState = useStoryStore((state) => state.gameState);
     const selectChoice = useStoryStore((state) => state.selectChoice);
-    const autosave = useSavedGamesStore((state) => state.autosave);
     const startNewGame = useStoryStore((state) => state.startNewGame);
+    const getSaveState = useStoryStore((state) => state.getSaveState);
+    const useSavedGamesStore = getUseSavedGamesStore();
+    const autosave = useSavedGamesStore((state) => state.autosave);
     const [showLoadModal, setShowLoadModal] = useState(false);
     const error = useStoryStore((state) => state.error);
 
@@ -51,7 +54,7 @@ function GameChoices({
                         return;
                     }
 
-                    autosave();
+                    autosave(getSaveState);
                 }
 
                 window.scrollTo({ top: 0, behavior: "smooth" });

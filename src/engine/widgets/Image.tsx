@@ -150,7 +150,7 @@ const log = (props: WidgetLogProps) => {
     if (!("input" in props)) {
         return "";
     }
-    return `<p>[Image: ${props.input.alt}]</p>`;
+    return `<p>[Image: ${props.input.alt || props.input.caption || "Image"}]</p>`;
 };
 
 const preload = async () => {

@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "bootstrap": "^5.3.8",
+        "es-toolkit": "^1.43.0",
         "inkjs": "^2.3.2",
         "nuqs": "^2.6.0",
         "preact": "^10.27.1",

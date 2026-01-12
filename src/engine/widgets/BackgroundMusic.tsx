@@ -1,5 +1,6 @@
 import MuteIcon from "bootstrap-icons/icons/volume-mute.svg?react";
 import VolumeIcon from "bootstrap-icons/icons/volume-up.svg?react";
+import { memoize } from "es-toolkit";
 import { useCallback, useEffect, useState } from "preact/hooks";
 import Button from "react-bootstrap/esm/Button";
 import OverlayTrigger from "react-bootstrap/esm/OverlayTrigger";
@@ -10,7 +11,7 @@ import Popover from "react-bootstrap/Popover";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import settings from "../../story/settings";
+import { getSettings } from "../shared/settings";
 import type {
     GameState,
     WidgetHeaderProps,
@@ -40,92 +41,95 @@ const isAudioElementPlayable = async (audioElement: HTMLAudioElement) => {
     });
 };
 
-const useAudioStore = create<{
-    audioElements: Map<string, HTMLAudioElement>;
-    activeAudioElements: Set<HTMLAudioElement>;
-    volume: number;
-    setVolume: (volume: number) => void;
-    getAudioElement: (src: string) => HTMLAudioElement;
-    play: (src: string) => Promise<void>;
-    stop: (src: string) => void;
-}>()(
-    persist(
-        (set, get) => ({
-            audioElements: new Map(),
-            activeAudioElements: new Set(),
-            volume: 1,
-            setVolume: (volume: number) => {
-                set({ volume });
-                const { activeAudioElements } = get();
-                for (const audioElement of activeAudioElements) {
-                    audioElement.volume = volume;
-                }
-            },
-            getAudioElement: (src: string) => {
-                const { audioElements } = get();
-                const existingAudioElement = audioElements.get(src);
-                if (existingAudioElement) {
-                    return existingAudioElement;
-                }
-                const audioElement = new Audio();
-                audioElement.src = src;
-                audioElement.autoplay = true;
-                audioElement.loop = true;
-                audioElement.volume = 0;
-                audioElements.set(src, audioElement);
-                return audioElement;
-            },
-            play: async (src: string) => {
-                const {
-                    volume: maxVolume,
-                    getAudioElement,
-                    activeAudioElements,
-                } = get();
-
-                const audioElement = getAudioElement(src);
-                activeAudioElements.add(audioElement);
-                set({ activeAudioElements });
-
-                // From: https://stackoverflow.com/a/68806539
-                let i = 0;
-                const interval = FADE_DURATION / FADE_STEPS;
-                await isAudioElementPlayable(audioElement);
-                audioElement.currentTime = 0;
-                const intervalId = setInterval(() => {
-                    const volume = (maxVolume / FADE_STEPS) * i;
-                    audioElement.volume = volume;
-                    if (++i >= FADE_STEPS) {
-                        clearInterval(intervalId);
-                        audioElement.volume = maxVolume;
+const getUseAudioStore = memoize(() =>
+    create<{
+        audioElements: Map<string, HTMLAudioElement>;
+        activeAudioElements: Set<HTMLAudioElement>;
+        volume: number;
+        setVolume: (volume: number) => void;
+        getAudioElement: (src: string) => HTMLAudioElement;
+        play: (src: string) => Promise<void>;
+        stop: (src: string) => void;
+    }>()(
+        persist(
+            (set, get) => ({
+                audioElements: new Map(),
+                activeAudioElements: new Set(),
+                volume: 1,
+                setVolume: (volume: number) => {
+                    set({ volume });
+                    const { activeAudioElements } = get();
+                    for (const audioElement of activeAudioElements) {
+                        audioElement.volume = volume;
                     }
-                }, interval);
-            },
-            stop: (src: string) => {
-                const { getAudioElement, activeAudioElements } = get();
-
-                const audioElement = getAudioElement(src);
-                activeAudioElements.delete(audioElement);
-                set({ activeAudioElements });
-
-                let i = 0;
-                const interval = FADE_DURATION / FADE_STEPS;
-                const startVolume = audioElement.volume;
-                const intervalId = setInterval(() => {
-                    const volume = startVolume - (startVolume / FADE_STEPS) * i;
-                    audioElement.volume = volume;
-                    if (++i >= FADE_STEPS) {
-                        clearInterval(intervalId);
-                        audioElement.volume = 0;
+                },
+                getAudioElement: (src: string) => {
+                    const { audioElements } = get();
+                    const existingAudioElement = audioElements.get(src);
+                    if (existingAudioElement) {
+                        return existingAudioElement;
                     }
-                }, interval);
-            },
-        }),
-        {
-            name: `${settings.gameName}-audio`,
-            partialize: (state) => ({
-                volume: state.volume,
+                    const audioElement = new Audio();
+                    audioElement.src = src;
+                    audioElement.autoplay = true;
+                    audioElement.loop = true;
+                    audioElement.volume = 0;
+                    audioElements.set(src, audioElement);
+                    return audioElement;
+                },
+                play: async (src: string) => {
+                    const {
+                        volume: maxVolume,
+                        getAudioElement,
+                        activeAudioElements,
+                    } = get();
+
+                    const audioElement = getAudioElement(src);
+                    activeAudioElements.add(audioElement);
+                    set({ activeAudioElements });
+
+                    // From: https://stackoverflow.com/a/68806539
+                    let i = 0;
+                    const interval = FADE_DURATION / FADE_STEPS;
+                    await isAudioElementPlayable(audioElement);
+                    audioElement.currentTime = 0;
+                    const intervalId = setInterval(() => {
+                        const volume = (maxVolume / FADE_STEPS) * i;
+                        audioElement.volume = volume;
+                        if (++i >= FADE_STEPS) {
+                            clearInterval(intervalId);
+                            audioElement.volume = maxVolume;
+                        }
+                    }, interval);
+                },
+                stop: (src: string) => {
+                    const { getAudioElement, activeAudioElements } = get();
+
+                    const audioElement = getAudioElement(src);
+                    activeAudioElements.delete(audioElement);
+                    set({ activeAudioElements });
+
+                    let i = 0;
+                    const interval = FADE_DURATION / FADE_STEPS;
+                    const startVolume = audioElement.volume;
+                    const intervalId = setInterval(() => {
+                        const volume =
+                            startVolume - (startVolume / FADE_STEPS) * i;
+                        audioElement.volume = volume;
+                        if (++i >= FADE_STEPS) {
+                            clearInterval(intervalId);
+                            audioElement.volume = 0;
+                        }
+                    }, interval);
+                },
             }),
-        },
+            {
+                name: `${getSettings().gameName}-audio`,
+                partialize: (state) => ({
+                    volume: state.volume,
+                }),
+            },
+        ),
     ),
 );
 
@@ -148,6 +152,7 @@ function BackgroundMusic({
         return null;
     }
 
+    const useAudioStore = getUseAudioStore();
     const play = useAudioStore((state) => state.play);
     const stop = useAudioStore((state) => state.stop);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -168,6 +173,7 @@ function BackgroundMusic({
 }
 
 function BackgroundMusicNav() {
+    const useAudioStore = getUseAudioStore();
     const volume = useAudioStore((state) => state.volume);
     const setVolume = useAudioStore((state) => state.setVolume);
     const backgroundMusic = getWidgetSettings("backgroundMusic");

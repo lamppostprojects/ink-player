@@ -5,9 +5,9 @@ import Button from "react-bootstrap/button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/modal";
 
-import settings from "../../story/settings";
-import { useStoryStore } from "../shared/game-state";
-import { useSavedGamesStore } from "../shared/saved-games";
+import { getUseStoryStore } from "../shared/game-state";
+import { getUseSavedGamesStore } from "../shared/saved-games";
+import { getSettings } from "../shared/settings";
 
 export function SaveModal({
     show,
@@ -19,14 +19,17 @@ export function SaveModal({
     onSave?: () => void;
 }) {
     const saveNameRef = useRef<HTMLInputElement>(null);
+    const useStoryStore = getUseStoryStore();
     const story = useStoryStore((state) => state.story);
     const gameState = useStoryStore((state) => state.gameState);
+    const useSavedGamesStore = getUseSavedGamesStore();
     const addSavedGame = useSavedGamesStore((state) => state.addSavedGame);
     const getSaveState = useStoryStore((state) => state.getSaveState);
     const localSaveOnly = useSavedGamesStore(
         (state) => !state.canSaveInLocalStorage(),
     );
     const currentState = useStoryStore((state) => state.currentState);
+    const settings = getSettings();
     const { shortGameName, gameName } = settings;
 
     const handleSave = () => {

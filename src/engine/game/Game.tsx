@@ -1,7 +1,7 @@
 import Card from "react-bootstrap/Card";
 import { useTransitionMap } from "react-transition-state";
 
-import { useStoryStore } from "../shared/game-state";
+import { getUseStoryStore } from "../shared/game-state";
 import {
     footerWidgets,
     headerWidgets as headerWidgetsMap,
@@ -12,6 +12,7 @@ import GameChoices from "./GameChoices";
 import GameText from "./GameText";
 
 export function Game() {
+    const useStoryStore = getUseStoryStore();
     const gameId = useStoryStore((state) => state.id);
     const currentState = useStoryStore((state) => state.currentState);
     let previousState = useStoryStore((state) => state.previousState);

@@ -5,8 +5,8 @@ import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/modal";
 import Stack from "react-bootstrap/Stack";
 
-import { useStoryStore } from "../shared/game-state";
-import { useSavedGamesStore } from "../shared/saved-games";
+import { getUseStoryStore } from "../shared/game-state";
+import { getUseSavedGamesStore } from "../shared/saved-games";
 import type { SavedGame } from "../shared/types";
 import { DeleteModal } from "./DeleteModal";
 
@@ -17,7 +17,9 @@ export function LoadModal({
     show: boolean;
     handleClose: () => void;
 }) {
+    const useSavedGamesStore = getUseSavedGamesStore();
     const savedGames = useSavedGamesStore((state) => state.savedGames);
+    const useStoryStore = getUseStoryStore();
     const loadSavedGame = useStoryStore((state) => state.loadSavedGame);
     const reversedSavedGames = savedGames
         ? Array.from(savedGames).reverse()

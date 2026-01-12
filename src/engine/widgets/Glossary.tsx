@@ -8,7 +8,7 @@ import {
 import Overlay, { type OverlayInjectedProps } from "react-bootstrap/Overlay";
 import Popover from "react-bootstrap/Popover";
 
-import { useStoryStore } from "../shared/game-state";
+import { getUseStoryStore } from "../shared/game-state";
 import type {
     WidgetHandleStoryLoadProps,
     WidgetProcessTextLineProps,
@@ -104,6 +104,7 @@ const TextLine = ({ children, context }: WidgetTextLineProps) => {
         }
     }, [ref]);
 
+    const useStoryStore = getUseStoryStore();
     const story = useStoryStore((state) => state.story);
 
     const renderPopover = useCallback(

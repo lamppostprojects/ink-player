@@ -2,7 +2,7 @@ import { useMemo, useState } from "preact/hooks";
 import Toast from "react-bootstrap/esm/Toast";
 import ToastContainer from "react-bootstrap/esm/ToastContainer";
 
-import { useStoryStore } from "../shared/game-state";
+import { getUseStoryStore } from "../shared/game-state";
 import type { ScreenProps } from "../shared/types";
 import { toastWidgets } from "../shared/widgets";
 
@@ -53,6 +53,7 @@ function ToastItem({
 }
 
 export function Toasts({ setPage }: ScreenProps) {
+    const useStoryStore = getUseStoryStore();
     const currentState = useStoryStore((state) => state.currentState);
     const allToasts = useMemo(() => {
         const newToasts: {

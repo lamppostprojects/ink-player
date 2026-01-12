@@ -1,279 +1,292 @@
+import { memoize } from "es-toolkit";
 import type { Story } from "inkjs";
 import { create } from "zustand";
 
-import settings from "../../story/settings";
+import { getSettings } from "./settings";
 import type { GameState, SavedGame, Widget } from "./types";
 import { handleStoryLoadWidgets, preloadWidgets } from "./widgets";
 
-export const useStoryStore = create<{
-    id: string;
-    story: Story | null;
-    storyJSON: { inkVersion: number } | null;
-    Story: typeof Story | null;
-    error: string | null;
-    _initializing: boolean;
-    gameState: GameState[];
-    currentState: GameState | null;
-    previousState: GameState | null;
-    loadStoryData: () => Promise<void>;
-    loadSavedGame: (savedGame: SavedGame) => void;
-    getSaveState: ({
-        title,
-        id,
-    }: {
-        title: string;
-        id?: string;
-    }) => SavedGame | null;
-    startNewGame: () => void;
-    updateCurrentState: (currentState: GameState) => void;
-    selectChoice: ({
-        index,
-        output,
-        variables,
-    }: {
-        index: number;
-        output?: Record<string, string>;
-        variables?: Record<string, string>;
-    }) => { gameState: GameState[]; story: Story; error: string | null } | null;
-    back: () => void;
-}>((set, get) => ({
-    id: "",
-    story: null,
-    storyJSON: null,
-    Story: null,
-    error: null,
-    _initializing: false,
-    gameState: [],
-    currentState: null,
-    previousState: null,
-    loadStoryData: async () => {
-        const { story, _initializing } = get();
-        if (story || _initializing) {
-            return;
-        }
-        set({ _initializing: true });
-        const [storyJSON, { Story }] = await Promise.all([
-            // Load the story data
-            settings.loadStory(),
+export const getUseStoryStore = memoize(() =>
+    create<{
+        id: string;
+        story: Story | null;
+        storyJSON: { inkVersion: number } | null;
+        Story: typeof Story | null;
+        error: string | null;
+        _initializing: boolean;
+        gameState: GameState[];
+        currentState: GameState | null;
+        previousState: GameState | null;
+        loadStoryData: () => Promise<void>;
+        loadSavedGame: (savedGame: SavedGame) => void;
+        getSaveState: ({
+            title,
+            id,
+        }: {
+            title: string;
+            id?: string;
+        }) => SavedGame | null;
+        startNewGame: () => void;
+        updateCurrentState: (currentState: GameState) => void;
+        selectChoice: ({
+            index,
+            output,
+            variables,
+        }: {
+            index: number;
+            output?: Record<string, string>;
+            variables?: Record<string, string>;
+        }) => {
+            gameState: GameState[];
+            story: Story;
+            error: string | null;
+        } | null;
+        back: () => void;
+    }>((set, get) => ({
+        id: "",
+        story: null,
+        storyJSON: null,
+        Story: null,
+        error: null,
+        _initializing: false,
+        gameState: [],
+        currentState: null,
+        previousState: null,
+        loadStoryData: async () => {
+            const { story, _initializing } = get();
+            if (story || _initializing) {
+                return;
+            }
+            set({ _initializing: true });
+            const settings = getSettings();
+            const [storyJSON, { Story }] = await Promise.all([
+                // Load the story data
+                settings.loadStory(),
 
-            // Load the inkjs library
-            import("inkjs"),
+                // Load the inkjs library
+                import("inkjs"),
 
-            // Preload the widgets
-            ...Array.from(preloadWidgets.values()).map((preloadWidget) =>
-                preloadWidget?.(),
-            ),
-        ]);
-        set({
-            storyJSON,
-            Story,
-            id: crypto.randomUUID(),
-            _initializing: false,
-        });
-    },
-    startNewGame: () => {
-        const { storyJSON, Story } = get();
-        if (!storyJSON || !Story) {
-            return;
-        }
-        const story = new Story(storyJSON);
-        story.onError = (error) => {
-            set({ error });
-        };
-        for (const handleStoryLoad of handleStoryLoadWidgets.values()) {
-            handleStoryLoad({ story });
-        }
-
-        const newState = getStoryState({
-            story,
-            currentState: null,
-        });
-
-        if (newState) {
+                // Preload the widgets
+                ...Array.from(preloadWidgets.values()).map((preloadWidget) =>
+                    preloadWidget?.(),
+                ),
+            ]);
             set({
+                storyJSON,
+                Story,
                 id: crypto.randomUUID(),
-                story,
-                gameState: [newState],
-                currentState: newState,
-                previousState: null,
-                error: null,
+                _initializing: false,
             });
-        }
-    },
-    loadSavedGame: (savedGame: SavedGame) => {
-        const { storyJSON, Story, selectChoice } = get();
-        if (!storyJSON || !Story) {
-            return;
-        }
-        const { gameState } = savedGame;
-        const story = new Story(storyJSON);
-        story.onError = (error) => {
-            set({ error });
-        };
-        for (const handleStoryLoad of handleStoryLoadWidgets.values()) {
-            handleStoryLoad({ story });
-        }
+        },
+        startNewGame: () => {
+            const { storyJSON, Story } = get();
+            if (!storyJSON || !Story) {
+                return;
+            }
+            const story = new Story(storyJSON);
+            story.onError = (error) => {
+                set({ error });
+            };
+            for (const handleStoryLoad of handleStoryLoadWidgets.values()) {
+                handleStoryLoad({ story });
+            }
 
-        const currentState = gameState[gameState.length - 1] ?? null;
-        const previousState = gameState[gameState.length - 2] ?? null;
+            const newState = getStoryState({
+                story,
+                currentState: null,
+            });
 
-        if (
-            previousState?.selectedChoice !== undefined &&
-            previousState.storyData
-        ) {
+            if (newState) {
+                set({
+                    id: crypto.randomUUID(),
+                    story,
+                    gameState: [newState],
+                    currentState: newState,
+                    previousState: null,
+                    error: null,
+                });
+            }
+        },
+        loadSavedGame: (savedGame: SavedGame) => {
+            const { storyJSON, Story, selectChoice } = get();
+            if (!storyJSON || !Story) {
+                return;
+            }
+            const { gameState } = savedGame;
+            const story = new Story(storyJSON);
+            story.onError = (error) => {
+                set({ error });
+            };
+            for (const handleStoryLoad of handleStoryLoadWidgets.values()) {
+                handleStoryLoad({ story });
+            }
+
+            const currentState = gameState[gameState.length - 1] ?? null;
+            const previousState = gameState[gameState.length - 2] ?? null;
+
+            if (
+                previousState?.selectedChoice !== undefined &&
+                previousState.storyData
+            ) {
+                story.state.LoadJson(
+                    typeof previousState.storyData === "string"
+                        ? previousState.storyData
+                        : JSON.stringify(previousState.storyData),
+                );
+
+                set({
+                    id: crypto.randomUUID(),
+                    story,
+                    gameState: gameState.slice(0, -1) ?? [],
+                    currentState: previousState,
+                    previousState: null,
+                    error: null,
+                });
+
+                const selectedChoice =
+                    previousState.choices[previousState.selectedChoice];
+
+                selectChoice({
+                    index: previousState.selectedChoice,
+                    output:
+                        typeof selectedChoice.choice === "string" ||
+                        !("type" in selectedChoice.choice)
+                            ? undefined
+                            : selectedChoice.choice.output,
+                });
+
+                // Restore widget state from the previous state
+                const { currentState: newCurrentState, updateCurrentState } =
+                    get();
+
+                if (newCurrentState) {
+                    updateCurrentState({
+                        ...newCurrentState,
+                        widgets: {
+                            ...currentState?.widgets,
+                        },
+                    });
+                }
+            } else {
+                // Remove the hash from the URL
+                history.replaceState(
+                    null,
+                    "",
+                    window.location.href.split("#")[0],
+                );
+
+                story.state.LoadJson(
+                    typeof currentState.storyData === "string"
+                        ? currentState.storyData
+                        : JSON.stringify(currentState.storyData),
+                );
+                set({
+                    id: crypto.randomUUID(),
+                    story,
+                    gameState,
+                    currentState,
+                    previousState,
+                    error: null,
+                });
+            }
+        },
+        getSaveState: ({ title, id }: { title: string; id?: string }) => {
+            const { story, currentState, gameState } = get();
+            if (!story || !currentState) {
+                return null;
+            }
+            return {
+                id: id ?? crypto.randomUUID(),
+                title,
+                steps: Math.max(gameState.length - 1, 1),
+                date: new Date().toLocaleString(),
+                gameState,
+            };
+        },
+        updateCurrentState: (currentState: GameState) => {
+            const { gameState } = get();
+            set({
+                gameState: [...(gameState || []).slice(0, -1), currentState],
+                currentState,
+            });
+        },
+        selectChoice: ({
+            index,
+            output,
+            variables,
+        }: {
+            index: number;
+            output?: Record<string, string>;
+            variables?: Record<string, string>;
+        }) => {
+            const { story, currentState, gameState } = get();
+            if (!story || !currentState) {
+                return null;
+            }
+
+            currentState.selectedChoice = index;
+
+            if (output) {
+                const selectedChoice = currentState.choices[index];
+                if (
+                    typeof selectedChoice.choice !== "string" &&
+                    "type" in selectedChoice.choice
+                ) {
+                    selectedChoice.choice.output = output;
+                }
+            }
+
+            if (variables) {
+                for (const [key, value] of Object.entries(variables)) {
+                    story.variablesState[key] = value;
+                }
+            }
+
+            // Remove the hash from the URL
+            history.replaceState(null, "", window.location.href.split("#")[0]);
+
+            story.ChooseChoiceIndex(index);
+            const newState = getStoryState({ story, currentState });
+            if (newState) {
+                const newGameState = [...(gameState || []), newState];
+                set({
+                    gameState: newGameState,
+                    currentState: newState,
+                    previousState: currentState,
+                });
+                return {
+                    gameState: newGameState,
+                    story,
+                    error: get().error,
+                };
+            }
+            return null;
+        },
+        back: () => {
+            const { story, currentState, gameState } = get();
+            const previousState = gameState[gameState.length - 2] ?? null;
+
+            if (!story || !currentState || !previousState) {
+                return;
+            }
+
             story.state.LoadJson(
                 typeof previousState.storyData === "string"
                     ? previousState.storyData
                     : JSON.stringify(previousState.storyData),
             );
 
-            set({
-                id: crypto.randomUUID(),
-                story,
-                gameState: gameState.slice(0, -1) ?? [],
-                currentState: previousState,
-                previousState: null,
-                error: null,
-            });
-
-            const selectedChoice =
-                previousState.choices[previousState.selectedChoice];
-
-            selectChoice({
-                index: previousState.selectedChoice,
-                output:
-                    typeof selectedChoice.choice === "string" ||
-                    !("type" in selectedChoice.choice)
-                        ? undefined
-                        : selectedChoice.choice.output,
-            });
-
-            // Restore widget state from the previous state
-            const { currentState: newCurrentState, updateCurrentState } = get();
-
-            if (newCurrentState) {
-                updateCurrentState({
-                    ...newCurrentState,
-                    widgets: {
-                        ...currentState?.widgets,
-                    },
-                });
-            }
-        } else {
             // Remove the hash from the URL
             history.replaceState(null, "", window.location.href.split("#")[0]);
 
-            story.state.LoadJson(
-                typeof currentState.storyData === "string"
-                    ? currentState.storyData
-                    : JSON.stringify(currentState.storyData),
-            );
             set({
-                id: crypto.randomUUID(),
-                story,
-                gameState,
-                currentState,
-                previousState,
-                error: null,
+                gameState: gameState.slice(0, -1),
+                currentState: { ...previousState },
+                previousState: { ...currentState },
             });
-        }
-    },
-    getSaveState: ({ title, id }: { title: string; id?: string }) => {
-        const { story, currentState, gameState } = get();
-        if (!story || !currentState) {
-            return null;
-        }
-        return {
-            id: id ?? crypto.randomUUID(),
-            title,
-            steps: Math.max(gameState.length - 1, 1),
-            date: new Date().toLocaleString(),
-            gameState,
-        };
-    },
-    updateCurrentState: (currentState: GameState) => {
-        const { gameState } = get();
-        set({
-            gameState: [...(gameState || []).slice(0, -1), currentState],
-            currentState,
-        });
-    },
-    selectChoice: ({
-        index,
-        output,
-        variables,
-    }: {
-        index: number;
-        output?: Record<string, string>;
-        variables?: Record<string, string>;
-    }) => {
-        const { story, currentState, gameState } = get();
-        if (!story || !currentState) {
-            return null;
-        }
-
-        currentState.selectedChoice = index;
-
-        if (output) {
-            const selectedChoice = currentState.choices[index];
-            if (
-                typeof selectedChoice.choice !== "string" &&
-                "type" in selectedChoice.choice
-            ) {
-                selectedChoice.choice.output = output;
-            }
-        }
-
-        if (variables) {
-            for (const [key, value] of Object.entries(variables)) {
-                story.variablesState[key] = value;
-            }
-        }
-
-        // Remove the hash from the URL
-        history.replaceState(null, "", window.location.href.split("#")[0]);
-
-        story.ChooseChoiceIndex(index);
-        const newState = getStoryState({ story, currentState });
-        if (newState) {
-            const newGameState = [...(gameState || []), newState];
-            set({
-                gameState: newGameState,
-                currentState: newState,
-                previousState: currentState,
-            });
-            return {
-                gameState: newGameState,
-                story,
-                error: get().error,
-            };
-        }
-        return null;
-    },
-    back: () => {
-        const { story, currentState, gameState } = get();
-        const previousState = gameState[gameState.length - 2] ?? null;
-
-        if (!story || !currentState || !previousState) {
-            return;
-        }
-
-        story.state.LoadJson(
-            typeof previousState.storyData === "string"
-                ? previousState.storyData
-                : JSON.stringify(previousState.storyData),
-        );
-
-        // Remove the hash from the URL
-        history.replaceState(null, "", window.location.href.split("#")[0]);
-
-        set({
-            gameState: gameState.slice(0, -1),
-            currentState: { ...previousState },
-            previousState: { ...currentState },
-        });
-    },
-}));
+        },
+    })),
+);
 
 const extractInput = (line: string) => {
     const input: Record<string, string> = {};
@@ -355,6 +368,7 @@ const getStoryState = ({
         return null;
     }
 
+    const settings = getSettings();
     const lines: Array<string | Widget | Array<string | Widget>> = [];
     const tags: Record<string, string> = {};
 

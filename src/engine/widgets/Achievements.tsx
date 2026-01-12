@@ -1,12 +1,13 @@
 import CheckCircleFillIcon from "bootstrap-icons/icons/check-circle-fill.svg?react";
 import LockFillIcon from "bootstrap-icons/icons/lock-fill.svg?react";
+import { memoize } from "es-toolkit";
 import { useCallback, useState } from "preact/hooks";
 import Card from "react-bootstrap/Card";
 import Stack from "react-bootstrap/Stack";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import settings from "../../story/settings";
+import { getSettings } from "../shared/settings";
 import type {
     GameState,
     WidgetKnotProps,
@@ -17,19 +18,21 @@ import { getWidgetSettings } from "../shared/widgets";
 
 const NUM_COLUMNS = 2;
 
-const useAchievementStore = create<{
-    achievements: string[];
-    addAchievement: (achievement: string) => void;
-}>()(
-    persist(
-        (set, get) => ({
-            achievements: [],
-            addAchievement: (achievement: string) =>
-                set({ achievements: [...get().achievements, achievement] }),
-        }),
-        {
-            name: `${settings.gameName}-achievements`,
-        },
+const getUseAchievementStore = memoize(() =>
+    create<{
+        achievements: string[];
+        addAchievement: (achievement: string) => void;
+    }>()(
+        persist(
+            (set, get) => ({
+                achievements: [],
+                addAchievement: (achievement: string) =>
+                    set({ achievements: [...get().achievements, achievement] }),
+            }),
+            {
+                name: `${getSettings().gameName}-achievements`,
+            },
+        ),
     ),
 );
 
@@ -123,6 +126,7 @@ function Achievement({
 }
 
 function AchievementsScreen() {
+    const useAchievementStore = getUseAchievementStore();
     const playerAchievements = useAchievementStore(
         (state) => state.achievements,
     );
@@ -178,6 +182,7 @@ function AchievementsScreen() {
 }
 
 function AchievementKnot({ currentState }: WidgetKnotProps) {
+    const useAchievementStore = getUseAchievementStore();
     const addAchievement = useAchievementStore((state) => state.addAchievement);
     const achievements = getWidgetSettings("achievements");
     const id = currentState.tags.Achievement as keyof typeof achievements;
@@ -191,6 +196,7 @@ function AchievementKnot({ currentState }: WidgetKnotProps) {
 }
 
 const toast: WidgetToastFn = (currentState: GameState) => {
+    const useAchievementStore = getUseAchievementStore();
     const playerAchievements = useAchievementStore(
         (state) => state.achievements,
     );

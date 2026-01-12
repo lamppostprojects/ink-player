@@ -8,8 +8,8 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
 import Stack from "react-bootstrap/Stack";
 
-import { useStoryStore } from "../shared/game-state";
-import { useSavedGamesStore } from "../shared/saved-games";
+import { getUseStoryStore } from "../shared/game-state";
+import { getUseSavedGamesStore } from "../shared/saved-games";
 import type {
     ScreenProps,
     WidgetHeaderProps,
@@ -48,10 +48,13 @@ const CommentNav = ({ page }: ScreenProps) => {
     if (!settings?.enabled) {
         return null;
     }
+    const useStoryStore = getUseStoryStore();
     const updateCurrentState = useStoryStore(
         (state) => state.updateCurrentState,
     );
     const currentState = useStoryStore((state) => state.currentState);
+    const getSaveState = useStoryStore((state) => state.getSaveState);
+    const useSavedGamesStore = getUseSavedGamesStore();
     const autosave = useSavedGamesStore((state) => state.autosave);
     const [open, setOpen] = useState(false);
     const commentRef = useRef<HTMLTextAreaElement>(null);
@@ -71,7 +74,7 @@ const CommentNav = ({ page }: ScreenProps) => {
                 comment: commentRef.current?.value ?? "",
             },
         });
-        autosave();
+        autosave(getSaveState);
     }, [commentRef, currentState, updateCurrentState]);
 
     const handleClose = useCallback(() => {

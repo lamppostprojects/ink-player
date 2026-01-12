@@ -55,6 +55,7 @@ export type Settings = {
     shortGameName?: string;
     favicon?: string;
     widgets?: Record<string, Record<string, any>>;
+    screens: Screen[];
 };
 
 export type WidgetToastFn = (currentState: GameState) => {
