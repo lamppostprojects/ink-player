@@ -97,7 +97,11 @@ const FootnoteFooter = ({
         type: "footnote",
     });
 
-    if (footnotes.length === 0 || context === "history") {
+    if (
+        footnotes.length === 0 ||
+        context === "history" ||
+        context === "screen"
+    ) {
         return null;
     }
 

@@ -42,7 +42,7 @@ function Location({
                           display: "inline-block",
                       }
             }
-            className={`fs-3 bg-body bg-opacity-75 rounded-top transitioned ${transitionStatus || ""} ${hasHeaderImage ? "p-2" : ""}`}
+            className={`fs-3 rounded-top transitioned ${transitionStatus || ""} ${hasHeaderImage ? "p-2" : ""}`}
         >
             {location}
         </h1>

@@ -31,7 +31,7 @@ const getPageComponent = ({
 
 const Contents = (props: ScreenProps) => {
     const { page, setPage, loading } = props;
-    const { screens } = getSettings();
+    const { screens, enableGameScreen } = getSettings();
 
     const handlePageChange = useCallback(
         (page: string) => {
@@ -52,8 +52,9 @@ const Contents = (props: ScreenProps) => {
             </Helmet>
             <Tab.Container defaultActiveKey="game">
                 <Row className="pb-3">
+                    {enableGameScreen && <Game context="screen" />}
                     <Col
-                        className="d-none d-lg-block position-fixed"
+                        className="sidebar d-none d-lg-block position-fixed"
                         sm={3}
                         style={{
                             width: 170,

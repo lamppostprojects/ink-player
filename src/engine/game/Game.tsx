@@ -11,7 +11,7 @@ import {
 import GameChoices from "./GameChoices";
 import GameText from "./GameText";
 
-export function Game() {
+export function Game({ context }: { context?: "game" | "screen" }) {
     const useStoryStore = getUseStoryStore();
     const gameId = useStoryStore((state) => state.id);
     const currentState = useStoryStore((state) => state.currentState);
@@ -24,10 +24,10 @@ export function Game() {
     });
 
     const previousStateId = previousState?.id
-        ? `${gameId}-${previousState?.id}`
+        ? `${gameId}-${previousState?.id}-${context ?? "game"}`
         : undefined;
     const currentStateId = currentState?.id
-        ? `${gameId}-${currentState?.id}`
+        ? `${gameId}-${currentState?.id}-${context ?? "game"}`
         : undefined;
     const previousTransitionState = previousStateId
         ? stateMap.get(previousStateId)
@@ -87,7 +87,7 @@ export function Game() {
                 headerWidgets.push(
                     <Widget
                         key={currKey}
-                        context="game"
+                        context={context ?? "game"}
                         currentState={currentState}
                         transitionStatus={
                             prevKey !== currKey
@@ -102,7 +102,7 @@ export function Game() {
                 headerWidgets.push(
                     <Widget
                         key={prevKey}
-                        context="game"
+                        context={context ?? "game"}
                         currentState={previousState}
                         transitionStatus={
                             prevKey !== currKey
@@ -125,7 +125,7 @@ export function Game() {
                 knotWidgets.push(
                     <Widget
                         key={currKey}
-                        context="game"
+                        context={context ?? "game"}
                         currentState={currentState}
                         transitionStatus={
                             prevKey !== currKey
@@ -140,7 +140,7 @@ export function Game() {
                 knotWidgets.push(
                     <Widget
                         key={prevKey}
-                        context="game"
+                        context={context ?? "game"}
                         currentState={previousState}
                         transitionStatus={
                             prevKey !== currKey
@@ -163,7 +163,7 @@ export function Game() {
                 footerWidgetsShown.push(
                     <Widget
                         key={currKey}
-                        context="game"
+                        context={context ?? "game"}
                         currentState={currentState}
                         transitionStatus={
                             prevKey !== currKey
@@ -178,7 +178,7 @@ export function Game() {
                 footerWidgetsShown.push(
                     <Widget
                         key={prevKey}
-                        context="game"
+                        context={context ?? "game"}
                         currentState={previousState}
                         transitionStatus={
                             prevKey !== currKey
@@ -192,7 +192,9 @@ export function Game() {
     }
 
     return (
-        <div className="game-container">
+        <div
+            className={context === "screen" ? "game-screen" : "game-container"}
+        >
             <Card>
                 {headerWidgets.length > 0 && (
                     <div className="header-widgets position-relative">
@@ -200,25 +202,26 @@ export function Game() {
                     </div>
                 )}
                 <Card.Body>
-                    <div className="clearfix">
-                        {knotWidgets}
-                        {previousState && (
-                            <GameText
-                                key={previousStateId}
-                                currentState={previousState}
-                                transitionStatus={
-                                    previousTransitionState?.status
-                                }
-                                isMounted={!!previousTransitionState?.isMounted}
-                            />
-                        )}
+                    {knotWidgets}
+                    {previousState && (
                         <GameText
-                            key={currentStateId}
-                            currentState={currentState}
-                            transitionStatus={currentTransitionState?.status}
-                            isMounted={!!currentTransitionState?.isMounted}
+                            key={previousStateId}
+                            currentState={previousState}
+                            transitionStatus={previousTransitionState?.status}
+                            isMounted={!!previousTransitionState?.isMounted}
+                            context={context ?? "game"}
                         />
-                    </div>
+                    )}
+                    <GameText
+                        key={currentStateId}
+                        currentState={currentState}
+                        transitionStatus={currentTransitionState?.status}
+                        isMounted={!!currentTransitionState?.isMounted}
+                        context={context ?? "game"}
+                    />
+
+                    <div className="clearfix" />
+
                     {previousState && (
                         <GameChoices
                             key={previousStateId}
@@ -228,6 +231,7 @@ export function Game() {
                             }
                             transitionStatus={previousTransitionState?.status}
                             isMounted={!!previousTransitionState?.isMounted}
+                            context={context ?? "game"}
                         />
                     )}
                     <GameChoices
@@ -236,6 +240,7 @@ export function Game() {
                         disabled={currentTransitionState?.status === "exiting"}
                         transitionStatus={currentTransitionState?.status}
                         isMounted={!!currentTransitionState?.isMounted}
+                        context={context ?? "game"}
                     />
                     {footerWidgetsShown.length > 0 && (
                         <div className="footer-widgets position-relative">

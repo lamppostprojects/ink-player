@@ -48,9 +48,15 @@
 // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
 @import "~bootstrap/scss/utilities/api";
 
+:root {
+    --bs-bg-opacity: 1;
+    --navbar-height: 64px;
+    --sidebar-height: 40px;
+}
+
 body {
     // Ensure that the content is not covered by the navbar
-    padding-top: 64px;
+    padding-top: var(--navbar-height);
 
     // Prevent the scrollbar from popping in and out when
     // navigating between screens
@@ -58,6 +64,16 @@ body {
 
     // Prevent the page from scrolling too far on mobile devices
     overscroll-behavior: contain;
+}
+
+body:has(.game-screen) {
+    overflow-y: scroll;
+}
+
+@include media-breakpoint-up(md) {
+    body:has(.game-screen) {
+        overflow-y: hidden;
+    }
 }
 
 // Make the main content container a bit narrower on larger screens
@@ -68,10 +84,20 @@ body {
 }
 
 // Improve the styling of the active tab in the sidebar
-.nav-pills .nav-link.active {
-    font-weight: bold;
-    color: var(--bs-link-color);
-    background-color: transparent;
+.nav-pills .nav-link {
+    text-shadow: 0 0 5px var(--bs-body-bg);
+    filter: drop-shadow(0 0 5px var(--bs-body-bg));
+
+    &.active {
+        font-weight: bold;
+        color: var(--bs-link-color);
+        background-color: transparent;
+    }
+}
+
+body:has(.game-screen) .nav-pills .nav-link {
+    text-shadow: none;
+    filter: none;
 }
 
 // Include the Bootstrap Icons default styling
@@ -230,5 +256,166 @@ p:hover .footnote {
         background-color: var(--bs-warning-bg-subtle);
         transition: background-color 4s ease-out;
         animation: fade-target-bg 4s ease-out forwards;
+    }
+}
+
+.card {
+    --bs-card-bg: rgba(var(--bs-tertiary-bg-rgb), var(--bs-bg-opacity));
+}
+
+.game-screen {
+    display: none;
+
+    .card {
+        background: transparent;
+        height: calc(100vh - var(--sidebar-height) - var(--navbar-height) - 8px);
+        overflow-y: hidden;
+        position: fixed;
+        left: 8px;
+        width: calc(100% - 532px);
+        display: flex;
+        flex-direction: column;
+        border: none !important;
+        border-radius: 0 !important;
+    }
+
+    .header-widgets {
+        flex: 0 0 auto;
+
+        h1 {
+            background: rgba(var(--bs-tertiary-bg-rgb), var(--bs-bg-opacity));
+            margin-left: 0 !important;
+            padding-top: 0 !important;
+            border-radius: 0 !important;
+        }
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: hidden;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .text-container {
+        flex: 1 1 auto;
+        display: flex;
+        min-width: 0;
+        min-height: 0;
+        align-items: center;
+        justify-content: center;
+    }
+
+    figcaption {
+        background: rgba(var(--bs-tertiary-bg-rgb), var(--bs-bg-opacity));
+        color: var(--bs-body-color) !important;
+        padding: 2px;
+    }
+}
+
+figure.image {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    max-height: 100%;
+
+    a:has(img) {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    figcaption {
+        max-width: 100%;
+        text-align: center;
+    }
+}
+
+body:not(:has(.game-screen)) figure.image {
+    display: inline-table;
+
+    figcaption {
+        display: table-caption;
+        caption-side: bottom;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .game-screen {
+        display: block;
+
+        figure.image {
+            img {
+                max-width: 100%;
+                max-height: 400px;
+            }
+
+            figcaption {
+                max-width: 300px;
+            }
+        }
+    }
+
+    body:has(.game-screen) .game-container {
+        & .header-widgets, & figure {
+            display: none !important;
+        }
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .game-screen {
+        figure.image {
+            img {
+                max-width: 100%;
+                max-height: 600px;
+            }
+
+            figcaption {
+                max-width: 600px;
+            }
+        }
+    }
+}
+
+@include media-breakpoint-up(md) {
+    body:has(.game-screen) {
+        [role="tabpanel"] .card {
+            background: rgba(var(--bs-tertiary-bg-rgb), var(--bs-bg-opacity));
+            height: calc(100vh - var(--sidebar-height) - var(--navbar-height) - 8px);
+            overflow-y: auto;
+            position: fixed;
+            right: 8px;
+            width: 500px;
+        }
+
+        .navbar .container {
+            max-width: 100%;
+        }
+
+        .sidebar {
+            height: var(--sidebar-height);
+            width: 100% !important;
+            margin-left: 0 !important;
+            bottom: 0;
+            left: 0;
+            background: rgba(var(--bs-tertiary-bg-rgb), var(--bs-bg-opacity));
+        }
+
+        .sidebar [role="tablist"] {
+            flex-direction: row !important;
+        }
     }
 }

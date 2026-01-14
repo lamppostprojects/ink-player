@@ -17,31 +17,31 @@ const ImageWrapper = ({
     source,
     sourceText,
     align = "center",
+    context,
 }: {
     children: React.ReactNode;
     caption?: string;
     source?: string;
     sourceText?: string;
     align?: string;
+    context: "game" | "history" | "screen";
 }) => {
     return (
         <figure
-            style={{ display: "table" }}
             className={
-                "text-center mb-4 " +
-                (align === "left"
-                    ? "float-start me-4"
-                    : align === "right"
-                      ? "float-end ms-4"
-                      : "mx-auto")
+                "image text-center mb-4 " +
+                (context === "screen"
+                    ? "mx-auto"
+                    : align === "left"
+                      ? "float-start me-4"
+                      : align === "right"
+                        ? "float-end ms-4"
+                        : "mx-auto")
             }
         >
             {children}
             {(caption || source) && (
-                <figcaption
-                    style={{ display: "table-caption", captionSide: "bottom" }}
-                    className="mt-2 small text-secondary"
-                >
+                <figcaption className="mt-2 small">
                     {caption}{" "}
                     {source && (
                         <>
@@ -62,23 +62,27 @@ const ImageWrapper = ({
     );
 };
 
-function ImageText({ input }: WidgetTextProps) {
+function ImageText({ input, context }: WidgetTextProps) {
     const [showImageModal, setShowImageModal] = useState(false);
     const images = getWidgetSettings("images");
     const align = input.align || "center";
     const source = input.source;
-    const maxHeight = input.maxHeight
-        ? parseFloat(input.maxHeight as string)
-        : 400;
+    const maxHeight =
+        context === "screen"
+            ? undefined
+            : input.maxHeight
+              ? parseFloat(input.maxHeight as string)
+              : 400;
     const sourceText = input.sourceText || "Source";
-    let small = input.small;
+    let small = context === "screen" ? input.large || input.small : input.small;
 
     const image = images?.[input.name as keyof typeof images];
     if ((!image || !image.small) && !small) {
         return null;
     }
     if (!small) {
-        small = image?.small;
+        small =
+            context === "screen" ? image?.large || image?.small : image?.small;
     }
 
     const alt = input.alt || (input.name ? `Image: ${input.name}` : "");
@@ -101,6 +105,7 @@ function ImageText({ input }: WidgetTextProps) {
                 source={source}
                 sourceText={sourceText}
                 align={align}
+                context={context}
             >
                 {renderedImage}
             </ImageWrapper>
@@ -114,6 +119,7 @@ function ImageText({ input }: WidgetTextProps) {
                 source={source}
                 sourceText={sourceText}
                 align={align}
+                context={context}
             >
                 <a
                     href={input.name ? `?image=${input.name}` : "#"}

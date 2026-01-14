@@ -9,45 +9,53 @@ import {
     textWidgets,
 } from "./widgets";
 
-export const ProcessedTextArray = ({
+const getProcessedTextArray = ({
     text,
     context,
 }: {
     text: Array<string | Widget>;
-    context: "game" | "history" | "choice" | "history-choice";
+    context: "game" | "history" | "choice" | "history-choice" | "screen";
 }) => {
-    return text.map((line) => {
-        if (typeof line !== "string") {
-            const Widget = textWidgets.get(line.type);
+    return text
+        .map((line) => {
+            if (typeof line !== "string") {
+                const Widget = textWidgets.get(line.type);
 
-            if (!Widget) {
+                if (!Widget) {
+                    return null;
+                }
+
+                return (
+                    <Widget
+                        context={
+                            context === "screen"
+                                ? "screen"
+                                : context === "game" || context === "choice"
+                                  ? "game"
+                                  : "history"
+                        }
+                        input={line.input}
+                    />
+                );
+            }
+
+            if (context === "screen") {
                 return null;
             }
 
-            return (
-                <Widget
-                    context={
-                        context === "game" || context === "choice"
-                            ? "game"
-                            : "history"
-                    }
-                    input={line.input}
-                />
-            );
-        }
+            let processedText = line;
 
-        let processedText = line;
+            for (const processTextLine of processTextLineWidgets.values()) {
+                processedText = processTextLine({
+                    line: processedText,
+                    context,
+                });
+            }
 
-        for (const processTextLine of processTextLineWidgets.values()) {
-            processedText = processTextLine({
-                line: processedText,
-                context,
-            });
-        }
-
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: ...
-        return <span dangerouslySetInnerHTML={{ __html: processedText }} />;
-    });
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: ...
+            return <span dangerouslySetInnerHTML={{ __html: processedText }} />;
+        })
+        .filter(Boolean);
 };
 
 const handleAutoFocus = (element: HTMLButtonElement | null) => {
@@ -56,7 +64,7 @@ const handleAutoFocus = (element: HTMLButtonElement | null) => {
 
 type ProcessedTextLineProps =
     | {
-          context: "game" | "history";
+          context: "game" | "history" | "screen";
           text: string | Widget | Array<string | Widget>;
           tag?: keyof React.JSX.IntrinsicElements;
           onCompletion?: ({
@@ -93,12 +101,14 @@ export const ProcessedTextLine = ({
     tag: Tag = "p",
 }: ProcessedTextLineProps) => {
     if (typeof text === "string" || Array.isArray(text)) {
-        const processedText = (
-            <ProcessedTextArray
-                text={Array.isArray(text) ? text : [text]}
-                context={context}
-            />
-        );
+        const processedText = getProcessedTextArray({
+            text: Array.isArray(text) ? text : [text],
+            context,
+        });
+
+        if (processedText.length === 0) {
+            return null;
+        }
 
         let contents = <Tag>{processedText}</Tag>;
 
@@ -130,10 +140,10 @@ export const ProcessedTextLine = ({
         return contents;
     }
 
-    if (context === "game") {
+    if (context === "game" || context === "screen") {
         const Widget = textWidgets.get(text.type);
         if (Widget) {
-            return <Widget context="game" input={text.input} />;
+            return <Widget context={context} input={text.input} />;
         }
     } else if (context === "choice") {
         const Widget = choiceWidgets.get(text.type);

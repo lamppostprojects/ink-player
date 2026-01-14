@@ -16,11 +16,13 @@ function GameChoices({
     currentState,
     transitionStatus,
     isMounted,
+    context,
 }: {
     disabled: boolean;
     currentState: GameState | null;
     transitionStatus: TransitionStatus | undefined;
     isMounted: boolean;
+    context: "game" | "screen";
 }) {
     const useStoryStore = getUseStoryStore();
     const gameState = useStoryStore((state) => state.gameState);
@@ -75,7 +77,7 @@ function GameChoices({
         downloadHTMLLog(gameState);
     }, [gameState]);
 
-    if (!isMounted || !transitionStatus) {
+    if (!isMounted || !transitionStatus || context === "screen") {
         return null;
     }
 

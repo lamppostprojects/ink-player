@@ -47,6 +47,7 @@ export type Screen = {
 
 export type Settings = {
     enableDarkMode?: boolean | "toggle";
+    enableGameScreen?: boolean;
     defaultTheme?: string;
     loadStory: () => Promise<any>;
     defaultSaveName?: (currentState: GameState) => string;
@@ -81,7 +82,7 @@ export type WidgetChoiceProps = {
 
 export type WidgetTextProps = {
     input: Record<string, string>;
-    context: "game" | "history";
+    context: "game" | "history" | "screen";
 };
 
 export type WidgetLogProps =
@@ -92,13 +93,13 @@ export type WidgetLogProps =
       };
 
 export type WidgetHeaderProps = {
-    context: "game" | "history";
+    context: "game" | "history" | "screen";
     currentState: GameState;
     transitionStatus: TransitionStatus | undefined;
 };
 
 export type WidgetKnotProps = {
-    context: "game" | "history";
+    context: "game" | "history" | "screen";
     currentState: GameState;
     transitionStatus: TransitionStatus | undefined;
 };
@@ -109,12 +110,12 @@ export type WidgetKeyProps = {
 
 export type WidgetProcessTextLineProps = {
     line: string;
-    context: "game" | "history" | "choice" | "history-choice";
+    context: "game" | "history" | "choice" | "history-choice" | "screen";
 };
 
 export type WidgetTextLineProps = {
     children: React.ReactNode;
-    context: "game" | "history" | "choice" | "history-choice";
+    context: "game" | "history" | "choice" | "history-choice" | "screen";
 };
 
 export type WidgetHandleStoryLoadProps = {

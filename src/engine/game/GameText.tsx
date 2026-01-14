@@ -9,10 +9,12 @@ function GameText({
     currentState,
     transitionStatus,
     isMounted,
+    context,
 }: {
     currentState: GameState | null;
     transitionStatus: TransitionStatus | undefined;
     isMounted: boolean;
+    context: "game" | "screen";
 }) {
     if (!isMounted || !transitionStatus) {
         return null;
@@ -36,12 +38,14 @@ function GameText({
         <ProcessedTextLine
             key={`line-${currentState.id}-${index}`}
             text={line}
-            context="game"
+            context={context}
         />
     ));
 
     return (
-        <div className={`text-container transitioned ${transitionStatus}`}>
+        <div
+            className={`text-container clearfix transitioned ${transitionStatus}`}
+        >
             {text}
         </div>
     );
