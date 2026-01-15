@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import BootstrapImage from "react-bootstrap/Image";
 import Modal from "react-bootstrap/Modal";
 
+import { getSettings } from "../shared/settings";
 import type {
     WidgetChoiceProps,
     WidgetLogProps,
@@ -160,21 +161,32 @@ const log = (props: WidgetLogProps) => {
 };
 
 const preload = async () => {
+    const settings = getSettings();
     const images = getWidgetSettings("images");
 
     if (!images) {
         return;
     }
 
-    return Promise.all(
-        Object.values(images).map(({ small }) => {
+    return Promise.all([
+        ...Object.values(images).map(({ small }) => {
             return new Promise((resolve) => {
                 const img = new Image();
                 img.src = small;
                 img.onload = resolve;
             });
         }),
-    );
+
+        ...(settings.enableGameScreen
+            ? Object.values(images).map(({ large }) => {
+                  return new Promise((resolve) => {
+                      const img = new Image();
+                      img.src = large;
+                      img.onload = resolve;
+                  });
+              })
+            : []),
+    ]);
 };
 
 export const imageWidget = {
