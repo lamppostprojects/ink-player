@@ -160,40 +160,88 @@ body:has(.game-screen) .nav-pills .nav-link {
     user-select: none;
 }
 
-button:has(.card) {
-    outline: none;
-    border: none;
-    background: none;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-    text-align: left;
-    user-select: none;
-}
+.choices-container {
+    list-style: none;
+    padding-left: 0;
 
-button:has(.card):disabled {
-    cursor: default;
-    filter: grayscale(1);
-    pointer-events: none;
-    opacity: 0.5;
-}
-
-button:active .card, button:focus .card, button:hover .card {
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    --bs-card-border-color: var(--bs-link-hover-color);
-}
-
-.choices-container:has(.card) {
-    grid-template-columns: repeat(1, 1fr);
-}
-
-@include media-breakpoint-up(md) {
-    .choices-container:has(.card) {
-        grid-template-columns: repeat(2, 1fr);
+    button {
+        width: 100%;
     }
 
-    .card .small {
-        font-size: 0.75rem;
+    &.keyboard-input.has-multiple-choices {
+        list-style: numeric;
+        padding-left: 1em;
+        font-weight: bold;
+
+        li {
+            line-height: normal;
+        }
+
+        button, button:hover, button:focus, button:active, button:focus-visible {
+            background: transparent !important;
+            border: none !important;
+            margin: 0;
+            margin-top: -2px;
+            padding: 0;
+            outline: none !important;
+            box-shadow: none !important;
+            color: var(--bs-link-color) !important;
+            text-shadow: 0 0 5px var(--bs-tertiary-bg-rgb);
+            text-decoration: none;
+            transition: none !important;
+            font-weight: bold;
+            line-height: normal;
+
+            i {
+                color: var(--bs-link-color) !important;
+            }
+
+            &:hover, &:focus, &:active, &:focus-visible {
+                color: var(--bs-link-hover-color) !important;
+                text-decoration: none !important;
+
+                i {
+                    color: var(--bs-link-hover-color) !important;
+                }
+            }
+        }
+    }
+
+    &:has(.card) {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    @include media-breakpoint-up(md) {
+        &:has(.card) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .card .small {
+            font-size: 0.75rem;
+        }
+    }
+
+    button:has(.card) {
+        outline: none;
+        border: none;
+        background: none;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        text-align: left;
+        user-select: none;
+    }
+
+    button:has(.card):disabled {
+        cursor: default;
+        filter: grayscale(1);
+        pointer-events: none;
+        opacity: 0.5;
+    }
+
+    button:active .card, button:focus .card, button:hover .card {
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+        --bs-card-border-color: var(--bs-link-hover-color);
     }
 }
 
@@ -201,7 +249,7 @@ button:active .card, button:focus .card, button:hover .card {
     color: var(--bs-body-color);
     text-decoration: underline;
     text-decoration-style: dotted;
-    text-decoration-color: rgba(var(--bs-body-color-rgb), 0.25);
+    text-decoration-color: rgba(var(--bs-body-color-rgb), 0.5);
     text-decoration-thickness: 1px;
     text-underline-offset: 2px;
 }

@@ -46,6 +46,7 @@ export type Screen = {
 };
 
 export type Settings = {
+    enableKeyboardInput?: boolean;
     enableDarkMode?: boolean | "toggle";
     enableGameScreen?: boolean;
     defaultTheme?: string;

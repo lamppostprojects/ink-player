@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Placeholder from "react-bootstrap/Placeholder";
@@ -9,6 +9,7 @@ import { LoadModal } from "../saves/LoadModal";
 import { getUseStoryStore } from "../shared/game-state";
 import { ProcessedTextLine } from "../shared/process-text";
 import { getUseSavedGamesStore } from "../shared/saved-games";
+import { getSettings } from "../shared/settings";
 import type { GameState } from "../shared/types";
 
 function GameChoices({
@@ -33,6 +34,7 @@ function GameChoices({
     const autosave = useSavedGamesStore((state) => state.autosave);
     const [showLoadModal, setShowLoadModal] = useState(false);
     const error = useStoryStore((state) => state.error);
+    const settings = getSettings();
 
     const onCompletion = useCallback(
         (index: number) => {
@@ -76,6 +78,38 @@ function GameChoices({
     const handleDownloadHTMLLog = useCallback(() => {
         downloadHTMLLog(gameState);
     }, [gameState]);
+
+    const handleKeyPress = useCallback(
+        (event: KeyboardEvent) => {
+            if (
+                !settings.enableKeyboardInput ||
+                event.currentTarget instanceof HTMLInputElement
+            ) {
+                return;
+            }
+
+            // If the user presses a number key, select the choice at that index
+            if (
+                context === "game" &&
+                currentState &&
+                event.key >= "0" &&
+                event.key <= "9"
+            ) {
+                event.preventDefault();
+                event.stopPropagation();
+                const index = parseFloat(event.key) - 1;
+                if (index >= 0 && index < currentState.choices.length) {
+                    onCompletion(index)({});
+                }
+            }
+        },
+        [currentState, onCompletion, context],
+    );
+
+    useEffect(() => {
+        document.addEventListener("keyup", handleKeyPress);
+        return () => document.removeEventListener("keyup", handleKeyPress);
+    }, [handleKeyPress]);
 
     if (!isMounted || !transitionStatus || context === "screen") {
         return null;
@@ -163,23 +197,24 @@ function GameChoices({
     }
 
     const choices = currentState.choices.map((choice, index) => (
-        <ProcessedTextLine
-            key={`choice-${currentState.id}-${index}`}
-            text={choice.choice}
-            context="choice"
-            tag="span"
-            autoFocus={index === 0}
-            onCompletion={onCompletion(index)}
-            disabled={"disabled" in choice.tags}
-        />
+        <li key={`choice-${currentState.id}-${index}`}>
+            <ProcessedTextLine
+                text={choice.choice}
+                context="choice"
+                tag="span"
+                autoFocus={index === 0}
+                onCompletion={onCompletion(index)}
+                disabled={"disabled" in choice.tags}
+            />
+        </li>
     ));
 
     return (
-        <div
-            className={`d-grid gap-3 choices-container transitioned ${transitionStatus}`}
+        <ol
+            className={`d-grid gap-3 choices-container transitioned ${transitionStatus} ${settings.enableKeyboardInput ? "keyboard-input" : ""} ${currentState.choices.length > 1 ? "has-multiple-choices" : ""}`}
         >
             {choices}
-        </div>
+        </ol>
     );
 }
 
