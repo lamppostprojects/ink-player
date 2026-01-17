@@ -1,3 +1,4 @@
+import { useRef } from "preact/hooks";
 import Card from "react-bootstrap/Card";
 import { useTransitionMap } from "react-transition-state";
 
@@ -16,6 +17,7 @@ export function Game({ context }: { context?: "game" | "screen" }) {
     const gameId = useStoryStore((state) => state.id);
     const currentState = useStoryStore((state) => state.currentState);
     let previousState = useStoryStore((state) => state.previousState);
+    const ref = useRef<HTMLDivElement>(null);
     const { toggle, setItem, stateMap, deleteItem } = useTransitionMap<string>({
         unmountOnExit: true,
         timeout: 300,
@@ -64,6 +66,12 @@ export function Game({ context }: { context?: "game" | "screen" }) {
             toggle(previousStateId, false);
         }
         if (!previousTransitionState?.isMounted) {
+            if (ref.current) {
+                ref.current.scrollTo({
+                    top: 0,
+                    behavior: "auto",
+                });
+            }
             setItem(currentStateId, {
                 initialEntered: previousState === null,
             });
@@ -195,7 +203,7 @@ export function Game({ context }: { context?: "game" | "screen" }) {
         <div
             className={context === "screen" ? "game-screen" : "game-container"}
         >
-            <Card>
+            <Card ref={ref}>
                 {headerWidgets.length > 0 && (
                     <div className="header-widgets position-relative">
                         {headerWidgets}

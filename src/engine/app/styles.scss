@@ -169,12 +169,19 @@ body:has(.game-screen) .nav-pills .nav-link {
     }
 
     &.keyboard-input.has-multiple-choices {
-        list-style: numeric;
-        padding-left: 1em;
+        counter-reset: item;
         font-weight: bold;
 
         li {
+            display: flex;
             line-height: normal;
+
+            &::before {
+                counter-increment: item;
+                content: counter(item) ".";
+                margin-right: 0.5em;
+                align-self: flex-start;
+            }
         }
 
         button, button:hover, button:focus, button:active, button:focus-visible {
