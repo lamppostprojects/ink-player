@@ -1,4 +1,10 @@
+import { memoize } from "es-toolkit";
+import { Accordion } from "react-bootstrap";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
 import { ProcessedTextLine } from "../shared/process-text";
+import { getSettings } from "../shared/settings";
 import type {
     GameState,
     Widget,
@@ -6,6 +12,23 @@ import type {
     WidgetRegistry,
     WidgetTextProps,
 } from "../shared/types";
+
+const getUseFootnotesStore = memoize(() =>
+    create<{
+        open: boolean;
+        setOpen: (open: boolean) => void;
+    }>()(
+        persist(
+            (set) => ({
+                open: true,
+                setOpen: (open: boolean) => set({ open }),
+            }),
+            {
+                name: `${getSettings().gameName}-footnotes`,
+            },
+        ),
+    ),
+);
 
 const collectWidgets = ({
     gameState,
@@ -92,6 +115,10 @@ const FootnoteFooter = ({
     transitionStatus,
     currentState,
 }: WidgetKnotProps) => {
+    const useFootnotesStore = getUseFootnotesStore();
+    const open = useFootnotesStore((state) => state.open);
+    const setOpen = useFootnotesStore((state) => state.setOpen);
+
     const footnotes = collectWidgets({
         gameState: currentState,
         type: "footnote",
@@ -106,31 +133,39 @@ const FootnoteFooter = ({
     }
 
     return (
-        <div className={`mt-3 transitioned ${transitionStatus || ""}`}>
-            <p>
-                <strong>Footnotes</strong>
-            </p>
-
-            <ol className="small">
-                {footnotes.map((widget) => {
-                    const id = widget.input.id ?? "unknown";
-                    return (
-                        <li id={`note-${id}`} className="footnote-entry">
-                            {widget.input.link === "true" ? (
-                                <>
-                                    <a href={`#ref-${id}`}>^</a>{" "}
-                                </>
-                            ) : null}
-                            <ProcessedTextLine
-                                text={widget.input.contents}
-                                context="game"
-                                tag="span"
-                            />
-                        </li>
-                    );
-                })}
-            </ol>
-        </div>
+        <Accordion
+            className={`footnotes transitioned ${transitionStatus || ""}`}
+            activeKey={open ? "0" : undefined}
+            onSelect={(eventKey) => setOpen(eventKey === "0")}
+        >
+            <Accordion.Item eventKey="0">
+                <Accordion.Header>Footnotes</Accordion.Header>
+                <Accordion.Body>
+                    <ol className="small">
+                        {footnotes.map((widget) => {
+                            const id = widget.input.id ?? "unknown";
+                            return (
+                                <li
+                                    id={`note-${id}`}
+                                    className="footnote-entry"
+                                >
+                                    {widget.input.link === "true" ? (
+                                        <>
+                                            <a href={`#ref-${id}`}>^</a>{" "}
+                                        </>
+                                    ) : null}
+                                    <ProcessedTextLine
+                                        text={widget.input.contents}
+                                        context="game"
+                                        tag="span"
+                                    />
+                                </li>
+                            );
+                        })}
+                    </ol>
+                </Accordion.Body>
+            </Accordion.Item>
+        </Accordion>
     );
 };
 
