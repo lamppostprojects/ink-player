@@ -9,7 +9,7 @@ interface PortraitSettings {
     images: Record<string, { small: string; large?: string }>;
 }
 
-export default createPlugin((settings: PortraitSettings) => {
+export default createPlugin<PortraitSettings>(({ settings }) => {
     return {
         type: "portrait",
         knot({ currentState, transitionStatus }) {

@@ -8,13 +8,12 @@ import {
 import Overlay, { type OverlayInjectedProps } from "react-bootstrap/Overlay";
 import Popover from "react-bootstrap/Popover";
 
-import { getUseStoryStore } from "../shared/game-state";
 import { createPlugin } from "../shared/plugins";
 
 const glossary = new Map<string, string | null>();
 let glossaryRegex: RegExp | null = null;
 
-export default createPlugin(() => {
+export default createPlugin(({ useStoryStore }) => {
     return {
         type: "glossary",
         processTextLine({ line, context }) {
@@ -83,7 +82,6 @@ export default createPlugin(() => {
                 }
             }, [ref]);
 
-            const useStoryStore = getUseStoryStore();
             const story = useStoryStore((state) => state.story);
 
             const renderPopover = useCallback(

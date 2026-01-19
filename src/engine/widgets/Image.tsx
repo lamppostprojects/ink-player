@@ -60,7 +60,7 @@ const ImageWrapper = ({
     );
 };
 
-export default createPlugin((settings: ImageSettings, gameSettings) => {
+export default createPlugin<ImageSettings>(({ settings, gameSettings }) => {
     return {
         type: "image",
         log(props) {

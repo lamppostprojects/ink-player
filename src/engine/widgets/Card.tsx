@@ -6,7 +6,7 @@ interface CardSettings {
     images: Record<string, string | React.FunctionComponent<any>>;
 }
 
-export default createPlugin((settings: CardSettings) => {
+export default createPlugin<CardSettings>(({ settings }) => {
     return {
         type: "card",
         log(props) {

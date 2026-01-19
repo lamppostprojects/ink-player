@@ -6,7 +6,7 @@ interface HeaderImageSettings {
     images: Record<string, string>;
 }
 
-export default createPlugin((settings: HeaderImageSettings) => {
+export default createPlugin<HeaderImageSettings>(({ settings }) => {
     return {
         type: "header-image",
         header({ context, currentState, transitionStatus }) {

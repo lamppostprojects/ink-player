@@ -71,7 +71,7 @@ const collectWidgets = ({
 // biome-ignore lint/complexity/noBannedTypes: empty object is ok
 type FootnotesSettings = {};
 
-export default createPlugin((_settings: FootnotesSettings, gameSettings) => {
+export default createPlugin<FootnotesSettings>(({ gameSettings }) => {
     const useFootnotesStore = create<{
         open: boolean;
         setOpen: (open: boolean) => void;

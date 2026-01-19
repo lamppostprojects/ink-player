@@ -8,145 +8,148 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
 import Stack from "react-bootstrap/Stack";
 
-import { getUseStoryStore } from "../shared/game-state";
 import { createPlugin } from "../shared/plugins";
-import { getUseSavedGamesStore } from "../shared/saved-games";
 
 interface CommentSettings {
     enabled: boolean;
 }
 
-export default createPlugin((settings: CommentSettings) => {
-    if (!settings.enabled) {
-        return null;
-    }
+export default createPlugin<CommentSettings>(
+    ({ settings, useStoryStore, useSavedGamesStore }) => {
+        if (!settings.enabled) {
+            return null;
+        }
 
-    return {
-        type: "comment",
-        header({ context, currentState }) {
-            if (context !== "history") {
-                return null;
-            }
-
-            const comment = currentState?.widgets?.comment ?? "";
-
-            if (!comment) {
-                return null;
-            }
-            return (
-                <Alert variant="success">
-                    <strong>Comment:</strong> {comment}
-                </Alert>
-            );
-        },
-        nav({ page }) {
-            if (page !== "game") {
-                return null;
-            }
-            const useStoryStore = getUseStoryStore();
-            const updateCurrentState = useStoryStore(
-                (state) => state.updateCurrentState,
-            );
-            const currentState = useStoryStore((state) => state.currentState);
-            const getSaveState = useStoryStore((state) => state.getSaveState);
-            const useSavedGamesStore = getUseSavedGamesStore();
-            const autosave = useSavedGamesStore((state) => state.autosave);
-            const [open, setOpen] = useState(false);
-            const commentRef = useRef<HTMLTextAreaElement>(null);
-
-            const toggleOpen = useCallback(() => {
-                setOpen(!open);
-            }, [setOpen, open]);
-
-            const handleChange = useCallback(() => {
-                if (!currentState) {
-                    return;
+        return {
+            type: "comment",
+            header({ context, currentState }) {
+                if (context !== "history") {
+                    return null;
                 }
-                updateCurrentState({
-                    ...currentState,
-                    widgets: {
-                        ...currentState?.widgets,
-                        comment: commentRef.current?.value ?? "",
-                    },
-                });
-                autosave(getSaveState);
-            }, [commentRef, currentState, updateCurrentState]);
 
-            const handleClose = useCallback(() => {
-                setOpen(false);
-            }, [setOpen]);
+                const comment = currentState?.widgets?.comment ?? "";
 
-            const comment = currentState?.widgets?.comment ?? "";
+                if (!comment) {
+                    return null;
+                }
+                return (
+                    <Alert variant="success">
+                        <strong>Comment:</strong> {comment}
+                    </Alert>
+                );
+            },
+            nav({ page }) {
+                if (page !== "game") {
+                    return null;
+                }
+                const updateCurrentState = useStoryStore(
+                    (state) => state.updateCurrentState,
+                );
+                const currentState = useStoryStore(
+                    (state) => state.currentState,
+                );
+                const getSaveState = useStoryStore(
+                    (state) => state.getSaveState,
+                );
+                const autosave = useSavedGamesStore((state) => state.autosave);
+                const [open, setOpen] = useState(false);
+                const commentRef = useRef<HTMLTextAreaElement>(null);
 
-            const popover = (
-                <Popover id="popover-basic">
-                    <Popover.Header as="h3">
-                        <Stack direction="horizontal">
-                            <span>Comment</span>
-                            <CloseButton
-                                onClick={handleClose}
-                                className="ms-auto"
+                const toggleOpen = useCallback(() => {
+                    setOpen(!open);
+                }, [setOpen, open]);
+
+                const handleChange = useCallback(() => {
+                    if (!currentState) {
+                        return;
+                    }
+                    updateCurrentState({
+                        ...currentState,
+                        widgets: {
+                            ...currentState?.widgets,
+                            comment: commentRef.current?.value ?? "",
+                        },
+                    });
+                    autosave(getSaveState);
+                }, [commentRef, currentState, updateCurrentState]);
+
+                const handleClose = useCallback(() => {
+                    setOpen(false);
+                }, [setOpen]);
+
+                const comment = currentState?.widgets?.comment ?? "";
+
+                const popover = (
+                    <Popover id="popover-basic">
+                        <Popover.Header as="h3">
+                            <Stack direction="horizontal">
+                                <span>Comment</span>
+                                <CloseButton
+                                    onClick={handleClose}
+                                    className="ms-auto"
+                                />
+                            </Stack>
+                        </Popover.Header>
+                        <Popover.Body>
+                            <Form.Control
+                                ref={commentRef}
+                                name="comment"
+                                value={comment}
+                                onChange={handleChange}
+                                as="textarea"
+                                style={{ height: "100px" }}
+                                className="mb-2"
+                                placeholder="Add a comment"
                             />
-                        </Stack>
-                    </Popover.Header>
-                    <Popover.Body>
-                        <Form.Control
-                            ref={commentRef}
-                            name="comment"
-                            value={comment}
-                            onChange={handleChange}
-                            as="textarea"
-                            style={{ height: "100px" }}
-                            className="mb-2"
-                            placeholder="Add a comment"
-                        />
-                    </Popover.Body>
-                </Popover>
-            );
+                        </Popover.Body>
+                    </Popover>
+                );
 
-            return (
-                <OverlayTrigger
-                    trigger="click"
-                    placement="bottom"
-                    overlay={popover}
-                    flip={true}
-                    show={open}
-                >
-                    {({ ...triggerHandler }) => (
-                        <Nav.Link
-                            {...triggerHandler}
-                            onClick={toggleOpen}
-                            className="position-relative"
-                        >
-                            {comment && (
-                                <span
-                                    className="position-absolute translate-middle p-1 bg-primary border border-light rounded-circle"
-                                    style={{
-                                        top: `var(--bs-nav-link-padding-y)`,
-                                        right: -3,
-                                    }}
-                                >
-                                    <span className="visually-hidden">
-                                        Has Comment
+                return (
+                    <OverlayTrigger
+                        trigger="click"
+                        placement="bottom"
+                        overlay={popover}
+                        flip={true}
+                        show={open}
+                    >
+                        {({ ...triggerHandler }) => (
+                            <Nav.Link
+                                {...triggerHandler}
+                                onClick={toggleOpen}
+                                className="position-relative"
+                            >
+                                {comment && (
+                                    <span
+                                        className="position-absolute translate-middle p-1 bg-primary border border-light rounded-circle"
+                                        style={{
+                                            top: `var(--bs-nav-link-padding-y)`,
+                                            right: -3,
+                                        }}
+                                    >
+                                        <span className="visually-hidden">
+                                            Has Comment
+                                        </span>
                                     </span>
-                                </span>
-                            )}
-                            <CommentIcon className="bi" /> <span>Comment</span>
-                        </Nav.Link>
-                    )}
-                </OverlayTrigger>
-            );
-        },
-        log(props) {
-            if (!("currentState" in props)) {
-                return "";
-            }
-            const comment = props.currentState.widgets?.comment ?? "";
-            if (!comment || props.location === "footer") {
-                return "";
-            }
-            return `<p style="background-color: #f0f0f0; padding: 0.5rem; border-radius: 0.5rem;"><strong>Comment:</strong> ${comment}</p>`;
-        },
-        key: () => "comment",
-    };
-});
+                                )}
+                                <CommentIcon className="bi" />{" "}
+                                <span>Comment</span>
+                            </Nav.Link>
+                        )}
+                    </OverlayTrigger>
+                );
+            },
+            log(props) {
+                if (!("currentState" in props)) {
+                    return "";
+                }
+                const comment = props.currentState.widgets?.comment ?? "";
+                if (!comment || props.location === "footer") {
+                    return "";
+                }
+                return `<p style="background-color: #f0f0f0; padding: 0.5rem; border-radius: 0.5rem;"><strong>Comment:</strong> ${comment}</p>`;
+            },
+            key: () => "comment",
+        };
+    },
+);

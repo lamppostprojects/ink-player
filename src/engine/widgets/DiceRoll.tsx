@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 import BootstrapImage from "react-bootstrap/Image";
 
 import { createPlugin } from "../shared/plugins";
-import type { WidgetLogProps } from "../shared/types";
 
 const DEFAULT_DURATION = 1500;
 
@@ -17,7 +16,7 @@ interface DiceRollSettings {
     images: Record<string, Record<string, string>>;
 }
 
-export default createPlugin((settings: DiceRollSettings) => {
+export default createPlugin<DiceRollSettings>(({ settings }) => {
     return {
         type: "dice-roll",
         text({ input, context }) {
@@ -66,7 +65,7 @@ export default createPlugin((settings: DiceRollSettings) => {
                 </p>
             );
         },
-        log(props: WidgetLogProps) {
+        log(props) {
             if (!("input" in props)) {
                 return "";
             }

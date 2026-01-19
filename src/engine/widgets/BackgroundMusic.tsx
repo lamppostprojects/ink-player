@@ -34,8 +34,8 @@ interface BackgroundMusicSettings {
     audioFiles: Record<string, string>;
 }
 
-export default createPlugin(
-    (settings: BackgroundMusicSettings, gameSettings) => {
+export default createPlugin<BackgroundMusicSettings>(
+    ({ settings, gameSettings }) => {
         const useAudioStore = create<{
             audioElements: Map<string, HTMLAudioElement>;
             activeAudioElements: Set<HTMLAudioElement>;
