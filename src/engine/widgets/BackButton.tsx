@@ -9,41 +9,35 @@ interface BackButtonSettings {
 }
 
 export default createPlugin<BackButtonSettings>(
-    ({ settings, useStoryStore, useSavedGamesStore }) => {
-        if (!settings.enabled) {
-            return null;
-        }
-        return {
-            type: "backButton",
-            nav({ page }) {
-                if (page !== "game") {
-                    return null;
-                }
-                const numStates = useStoryStore(
-                    (state) => state.gameState.length,
-                );
-                const back = useStoryStore((state) => state.back);
-                const getSaveState = useStoryStore(
-                    (state) => state.getSaveState,
-                );
-                const autosave = useSavedGamesStore((state) => state.autosave);
+    ({ settings, useStoryStore, useSavedGamesStore }) => ({
+        type: "backButton",
+        nav({ page }) {
+            if (!settings.enabled) {
+                return null;
+            }
+            if (page !== "game") {
+                return null;
+            }
+            const numStates = useStoryStore((state) => state.gameState.length);
+            const back = useStoryStore((state) => state.back);
+            const getSaveState = useStoryStore((state) => state.getSaveState);
+            const autosave = useSavedGamesStore((state) => state.autosave);
 
-                const handleBack = useCallback(() => {
-                    back();
-                    autosave(getSaveState);
-                }, [back, autosave]);
+            const handleBack = useCallback(() => {
+                back();
+                autosave(getSaveState);
+            }, [back, autosave]);
 
-                return (
-                    <Nav.Link
-                        onClick={handleBack}
-                        disabled={numStates <= 1}
-                        className="position-relative"
-                    >
-                        <ArrowLeftIcon className="bi" /> <span>Back</span>
-                    </Nav.Link>
-                );
-            },
-            key: () => "backButton",
-        };
-    },
+            return (
+                <Nav.Link
+                    onClick={handleBack}
+                    disabled={numStates <= 1}
+                    className="position-relative"
+                >
+                    <ArrowLeftIcon className="bi" /> <span>Back</span>
+                </Nav.Link>
+            );
+        },
+        key: () => "backButton",
+    }),
 );
