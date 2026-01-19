@@ -1,61 +1,47 @@
 import Card from "react-bootstrap/Card";
 
-import type {
-    GameState,
-    WidgetHeaderProps,
-    WidgetRegistry,
-} from "../shared/types";
-import { getWidgetSettings } from "../shared/widgets";
+import { createPlugin } from "../shared/plugins";
 
-function key({ currentState }: { currentState: GameState }) {
-    return currentState.tags.Image || null;
+interface HeaderImageSettings {
+    images: Record<string, string>;
 }
 
-function HeaderImage({
-    context,
-    currentState,
-    transitionStatus,
-}: WidgetHeaderProps) {
-    if (context === "history") {
-        return null;
-    }
-    const headerImages = getWidgetSettings("headerImage");
-    const imageSrc =
-        headerImages?.[currentState.tags.Image as keyof typeof headerImages];
-    if (!imageSrc) {
-        return null;
-    }
-    return (
-        <Card.Img
-            src={imageSrc}
-            alt={currentState.tags.Image}
-            variant="top"
-            className={`transitioned ${transitionStatus || ""}`}
-        />
-    );
-}
-
-const preload = async () => {
-    const headerImages = getWidgetSettings("headerImage");
-
-    if (!headerImages) {
-        return;
-    }
-
-    return Promise.all(
-        Object.values(headerImages).map((headerImage) => {
-            return new Promise((resolve) => {
-                const headerImg = new Image();
-                headerImg.src = headerImage;
-                headerImg.onload = resolve;
-            });
-        }),
-    );
-};
-
-export const headerImageWidget = {
-    type: "header-image",
-    header: HeaderImage,
-    preload,
-    key,
-} satisfies WidgetRegistry;
+export default createPlugin((settings: HeaderImageSettings) => {
+    return {
+        type: "header-image",
+        header({ context, currentState, transitionStatus }) {
+            if (context === "history") {
+                return null;
+            }
+            const imageSrc =
+                settings.images?.[
+                    currentState.tags.Image as keyof typeof settings.images
+                ];
+            if (!imageSrc) {
+                return null;
+            }
+            return (
+                <Card.Img
+                    src={imageSrc}
+                    alt={currentState.tags.Image}
+                    variant="top"
+                    className={`transitioned ${transitionStatus || ""}`}
+                />
+            );
+        },
+        async preload() {
+            return Promise.all(
+                Object.values(settings.images).map((headerImage) => {
+                    return new Promise((resolve) => {
+                        const headerImg = new Image();
+                        headerImg.src = headerImage;
+                        headerImg.onload = resolve;
+                    });
+                }),
+            );
+        },
+        key({ currentState }) {
+            return currentState.tags.Image || null;
+        },
+    };
+});

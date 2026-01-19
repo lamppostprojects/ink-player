@@ -1,34 +1,10 @@
-import { memoize } from "es-toolkit";
 import { Accordion } from "react-bootstrap";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { createPlugin } from "../shared/plugins";
 import { ProcessedTextLine } from "../shared/process-text";
-import { getSettings } from "../shared/settings";
-import type {
-    GameState,
-    Widget,
-    WidgetKnotProps,
-    WidgetRegistry,
-    WidgetTextProps,
-} from "../shared/types";
-
-const getUseFootnotesStore = memoize(() =>
-    create<{
-        open: boolean;
-        setOpen: (open: boolean) => void;
-    }>()(
-        persist(
-            (set) => ({
-                open: true,
-                setOpen: (open: boolean) => set({ open }),
-            }),
-            {
-                name: `${getSettings().gameName}-footnotes`,
-            },
-        ),
-    ),
-);
+import type { GameState, Widget } from "../shared/types";
 
 const collectWidgets = ({
     gameState,
@@ -92,86 +68,99 @@ const collectWidgets = ({
     return widgets;
 };
 
-const FootnoteReference = ({ input, context }: WidgetTextProps) => {
-    if (context === "history") {
-        return null;
-    }
+// biome-ignore lint/complexity/noBannedTypes: empty object is ok
+type FootnotesSettings = {};
 
-    if (input.link !== "true") {
-        return null;
-    }
-
-    const id = input.id ?? "unknown";
-
-    return (
-        <a href={`#note-${id}`} id={`ref-${id}`} className="footnote">
-            {id}
-        </a>
+export default createPlugin((_settings: FootnotesSettings, gameSettings) => {
+    const useFootnotesStore = create<{
+        open: boolean;
+        setOpen: (open: boolean) => void;
+    }>()(
+        persist(
+            (set) => ({
+                open: true,
+                setOpen: (open: boolean) => set({ open }),
+            }),
+            {
+                name: `${gameSettings.gameName}-footnotes`,
+            },
+        ),
     );
-};
 
-const FootnoteFooter = ({
-    context,
-    transitionStatus,
-    currentState,
-}: WidgetKnotProps) => {
-    const useFootnotesStore = getUseFootnotesStore();
-    const open = useFootnotesStore((state) => state.open);
-    const setOpen = useFootnotesStore((state) => state.setOpen);
-
-    const footnotes = collectWidgets({
-        gameState: currentState,
+    return {
         type: "footnote",
-    });
+        text({ input, context }) {
+            if (context === "history") {
+                return null;
+            }
 
-    if (
-        footnotes.length === 0 ||
-        context === "history" ||
-        context === "screen"
-    ) {
-        return null;
-    }
+            if (input.link !== "true") {
+                return null;
+            }
 
-    return (
-        <Accordion
-            className={`footnotes transitioned ${transitionStatus || ""}`}
-            activeKey={open ? "0" : undefined}
-            onSelect={(eventKey) => setOpen(eventKey === "0")}
-        >
-            <Accordion.Item eventKey="0">
-                <Accordion.Header>Footnotes</Accordion.Header>
-                <Accordion.Body>
-                    <ol className="small">
-                        {footnotes.map((widget) => {
-                            const id = widget.input.id ?? "unknown";
-                            return (
-                                <li
-                                    id={`note-${id}`}
-                                    className="footnote-entry"
-                                >
-                                    {widget.input.link === "true" ? (
-                                        <>
-                                            <a href={`#ref-${id}`}>^</a>{" "}
-                                        </>
-                                    ) : null}
-                                    <ProcessedTextLine
-                                        text={widget.input.contents}
-                                        context="game"
-                                        tag="span"
-                                    />
-                                </li>
-                            );
-                        })}
-                    </ol>
-                </Accordion.Body>
-            </Accordion.Item>
-        </Accordion>
-    );
-};
+            const id = input.id ?? "unknown";
 
-export const footnoteWidget = {
-    type: "footnote",
-    text: FootnoteReference,
-    footer: FootnoteFooter,
-    key: ({ currentState }) => currentState.id,
-} satisfies WidgetRegistry;
+            return (
+                <a href={`#note-${id}`} id={`ref-${id}`} className="footnote">
+                    {id}
+                </a>
+            );
+        },
+        footer({ context, transitionStatus, currentState }) {
+            const open = useFootnotesStore((state) => state.open);
+            const setOpen = useFootnotesStore((state) => state.setOpen);
+
+            const footnotes = collectWidgets({
+                gameState: currentState,
+                type: "footnote",
+            });
+
+            if (
+                footnotes.length === 0 ||
+                context === "history" ||
+                context === "screen"
+            ) {
+                return null;
+            }
+
+            return (
+                <Accordion
+                    className={`footnotes transitioned ${transitionStatus || ""}`}
+                    activeKey={open ? "0" : undefined}
+                    onSelect={(eventKey) => setOpen(eventKey === "0")}
+                >
+                    <Accordion.Item eventKey="0">
+                        <Accordion.Header>Footnotes</Accordion.Header>
+                        <Accordion.Body>
+                            <ol className="small">
+                                {footnotes.map((widget) => {
+                                    const id = widget.input.id ?? "unknown";
+                                    return (
+                                        <li
+                                            id={`note-${id}`}
+                                            className="footnote-entry"
+                                        >
+                                            {widget.input.link === "true" ? (
+                                                <>
+                                                    <a href={`#ref-${id}`}>
+                                                        ^
+                                                    </a>{" "}
+                                                </>
+                                            ) : null}
+                                            <ProcessedTextLine
+                                                text={widget.input.contents}
+                                                context="game"
+                                                tag="span"
+                                            />
+                                        </li>
+                                    );
+                                })}
+                            </ol>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>
+            );
+        },
+        key: ({ currentState }) => currentState.id,
+    };
+});

@@ -1,4 +1,5 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo } from "preact/compat";
+import { useCallback, useEffect, useState } from "preact/hooks";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Placeholder from "react-bootstrap/Placeholder";

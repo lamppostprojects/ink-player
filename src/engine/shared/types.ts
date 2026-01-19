@@ -1,5 +1,5 @@
 import type { Story } from "inkjs";
-import type React from "react";
+import type React from "preact/compat";
 import type { TransitionStatus } from "react-transition-state";
 
 export type SavedGame = {

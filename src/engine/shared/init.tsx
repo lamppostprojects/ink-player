@@ -2,19 +2,19 @@ import { NuqsAdapter } from "nuqs/adapters/react";
 import { render } from "preact";
 
 import App from "../app/App";
-import { achievementsWidget } from "../widgets/Achievements";
-import { backButtonWidget } from "../widgets/BackButton";
-import { backgroundMusicWidget } from "../widgets/BackgroundMusic";
-import { cardWidget } from "../widgets/Card";
-import { commentWidget } from "../widgets/Comment";
-import { diceRollWidget } from "../widgets/DiceRoll";
-import { footnoteWidget } from "../widgets/Footnotes";
-import { glossaryWidget } from "../widgets/Glossary";
-import { headerImageWidget } from "../widgets/HeaderImage";
-import { imageWidget } from "../widgets/Image";
-import { locationWidget } from "../widgets/Location";
-import { portraitWidget } from "../widgets/Portrait";
-import { textInputWidget } from "../widgets/TextInput";
+import achievementsPlugin from "../widgets/Achievements";
+import backButtonPlugin from "../widgets/BackButton";
+import backgroundMusicPlugin from "../widgets/BackgroundMusic";
+import cardPlugin from "../widgets/Card";
+import commentPlugin from "../widgets/Comment";
+import diceRollPlugin from "../widgets/DiceRoll";
+import footnotePlugin from "../widgets/Footnotes";
+import glossaryPlugin from "../widgets/Glossary";
+import headerImagePlugin from "../widgets/HeaderImage";
+import imagePlugin from "../widgets/Image";
+import locationPlugin from "../widgets/Location";
+import portraitPlugin from "../widgets/Portrait";
+import textInputPlugin from "../widgets/TextInput";
 import { setSettings } from "./settings";
 import type { Settings } from "./types";
 import { registerWidget } from "./widgets";
@@ -42,19 +42,55 @@ export const init = (settings: Settings) => {
     document.documentElement.setAttribute("data-bs-theme", defaultTheme);
 
     // Register widgets
-    registerWidget(imageWidget);
-    registerWidget(textInputWidget);
-    registerWidget(headerImageWidget);
-    registerWidget(locationWidget);
-    registerWidget(portraitWidget);
-    registerWidget(diceRollWidget);
-    registerWidget(achievementsWidget);
-    registerWidget(cardWidget);
-    registerWidget(glossaryWidget);
-    registerWidget(footnoteWidget);
-    registerWidget(backButtonWidget);
-    registerWidget(commentWidget);
-    registerWidget(backgroundMusicWidget);
+    registerWidget(
+        imagePlugin({
+            images: settings.widgets?.images ?? {},
+        })(settings),
+    );
+    registerWidget(textInputPlugin({})(settings));
+    registerWidget(
+        headerImagePlugin({
+            images: settings.widgets?.headerImage ?? {},
+        })(settings),
+    );
+    registerWidget(locationPlugin({})(settings));
+    registerWidget(
+        portraitPlugin({
+            images: settings.widgets?.portrait ?? {},
+        })(settings),
+    );
+    registerWidget(
+        diceRollPlugin({
+            images: settings.widgets?.diceRoll ?? {},
+        })(settings),
+    );
+    registerWidget(
+        achievementsPlugin({
+            achievements: settings.widgets?.achievements ?? {},
+        })(settings),
+    );
+    registerWidget(
+        cardPlugin({
+            images: settings.widgets?.card?.images ?? {},
+        })(settings),
+    );
+    registerWidget(glossaryPlugin({})(settings));
+    registerWidget(footnotePlugin({})(settings));
+    registerWidget(
+        backButtonPlugin({
+            enabled: settings.widgets?.backButton?.enabled,
+        })(settings),
+    );
+    registerWidget(
+        commentPlugin({
+            enabled: settings.widgets?.comment?.enabled ?? false,
+        })(settings),
+    );
+    registerWidget(
+        backgroundMusicPlugin({
+            audioFiles: settings.widgets?.backgroundMusic ?? {},
+        })(settings),
+    );
 
     const root = document.getElementById("root");
 

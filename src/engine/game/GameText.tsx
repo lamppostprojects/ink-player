@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo } from "preact/compat";
 import Placeholder from "react-bootstrap/Placeholder";
 import type { TransitionStatus } from "react-transition-state";
 

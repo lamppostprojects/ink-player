@@ -62,7 +62,10 @@ export const navWidgets = new Map<
     (props: ScreenProps) => React.ReactNode
 >();
 
-export const registerWidget = (widget: WidgetRegistry) => {
+export const registerWidget = (widget: WidgetRegistry | null) => {
+    if (!widget) {
+        return;
+    }
     if (widget.log) {
         logWidgets.set(widget.type, widget.log);
     }

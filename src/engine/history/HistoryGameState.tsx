@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment } from "preact";
 
 import type { GameState } from "../shared/types";
 import { footerWidgets, headerWidgets } from "../shared/widgets";

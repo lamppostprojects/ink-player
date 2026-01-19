@@ -1,7 +1,7 @@
 import MoonIcon from "bootstrap-icons/icons/moon.svg?react";
 import SaveIcon from "bootstrap-icons/icons/save.svg?react";
 import SunIcon from "bootstrap-icons/icons/sun.svg?react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "preact/hooks";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
