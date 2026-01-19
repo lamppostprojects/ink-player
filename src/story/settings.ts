@@ -1,32 +1,4 @@
-import LockFillIcon from "bootstrap-icons/icons/sunset.svg?react";
-
-import type { GameState, Settings } from "../engine/shared/types";
-import { About } from "./About";
-//import ThemeA from "./assets/audio/balanors-theme.mp3";
-//import ThemeB from "./assets/audio/garden-of-flowers.mp3";
-import CatfishImage from "./assets/images/1855-catfish.jpg";
-import CatfishImageLarge from "./assets/images/1855-catfish-large.jpg";
-import Destruction1 from "./assets/images/1923-destruction1.jpg";
-import Destruction2 from "./assets/images/1923-destruction2.jpg";
-import Fire1 from "./assets/images/1923-fire1.jpg";
-import Fire1Large from "./assets/images/1923-fire1-large.jpg";
-import Fire2 from "./assets/images/1923-fire2.jpg";
-import Fire2Large from "./assets/images/1923-fire2-large.jpg";
-import FirstAid from "./assets/images/1923-firstaid.jpg";
-import FirstAidLarge from "./assets/images/1923-firstaid-large.jpg";
-import Refugee from "./assets/images/1923-refugee.jpg";
-import RefugeeLarge from "./assets/images/1923-refugee-large.jpg";
-import Teaching from "./assets/images/1923-teaching.jpg";
-import TeachingLarge from "./assets/images/1923-teaching-large.jpg";
-import Tent from "./assets/images/1923-tent.jpg";
-import TentLarge from "./assets/images/1923-tent-large.jpg";
-import Dice1 from "./assets/images/dice/d4_1.gif";
-import Dice2 from "./assets/images/dice/d4_2.gif";
-import Dice3 from "./assets/images/dice/d4_3.gif";
-import Dice4 from "./assets/images/dice/d4_4.gif";
-import MapImage from "./assets/images/map.jpg";
-import { Glossary } from "./Glossary";
-import { References } from "./References";
+import type { Settings } from "../engine/shared/types";
 
 export default {
     /**
@@ -41,45 +13,7 @@ export default {
      * Load the JSON version of the Ink story. Change this to point to your
      * own story file.
      */
-    loadStory: () => import("./yoshiwara.ink"),
-
-    defaultTheme: "dark",
-    enableDarkMode: true,
-    enableGameScreen: true,
-    enableKeyboardInput: true,
-
-    screens: [
-        {
-            id: "home",
-            title: "Home",
-            component: About,
-        },
-        {
-            id: "game",
-            title: "Story",
-            component: "Game",
-        },
-        {
-            id: "history",
-            title: "History",
-            component: "History",
-        },
-        {
-            id: "glossary",
-            title: "Glossary",
-            component: Glossary,
-        },
-        {
-            id: "references",
-            title: "References",
-            component: References,
-        },
-        {
-            id: "achievements",
-            title: "Achievements",
-            component: "achievements",
-        },
-    ],
+    loadStory: () => import("./demo.ink.json"),
 
     /**
      * The short name of the game. It will be used as the name of the game
@@ -124,13 +58,7 @@ export default {
      * You can stop a sticky tag from persisting by setting it to "None" in
      * your Ink story.
      */
-    stickyTags: [
-        "Portrait",
-        "Image",
-        "Chapter Title",
-        "Location",
-        "BackgroundMusic",
-    ],
+    // stickyTags: ["Portrait", "Image", "Chapter Title", "Location"],
 
     /**
      * Configuration for shared widgets.
@@ -180,99 +108,11 @@ export default {
          * The default is "center". Left or right will float the image and allow
          * the text to flow around it.
          */
-        images: {
-            Catfish: {
-                small: CatfishImage,
-                large: CatfishImageLarge,
-            },
-            Fire1: {
-                small: Fire1,
-                large: Fire1Large,
-            },
-            Fire2: {
-                small: Fire2,
-                large: Fire2Large,
-            },
-            Destruction1: {
-                small: Destruction1,
-                large: Destruction1,
-            },
-            Destruction2: {
-                small: Destruction2,
-                large: Destruction2,
-            },
-            FirstAid: {
-                small: FirstAid,
-                large: FirstAidLarge,
-            },
-            Refugee: {
-                small: Refugee,
-                large: RefugeeLarge,
-            },
-            Tent: {
-                small: Tent,
-                large: TentLarge,
-            },
-            Teaching: {
-                small: Teaching,
-                large: TeachingLarge,
-            },
-        },
-        "dice-roll": {
-            d4: {
-                "1": Dice1,
-                "2": Dice2,
-                "3": Dice3,
-                "4": Dice4,
-            },
-        },
-        //achievements: {
-        //    Start: {
-        //        icon: MapImage,
-        //        title: "Start",
-        //        description: "Start the game.",
-        //        hidden: true,
-        //        showHiddenButtonText: "View Locked Achievement",
-        //    },
-        //    "Sitting Room": {
-        //        icon: MapImage,
-        //        title: "Sitting Room",
-        //        description: "Enter the sitting room.",
-        //        hidden: true,
-        //        showHiddenButtonText: "View Locked Achievement",
-        //    },
-        //    "Dining Room": {
-        //        icon: MapImage,
-        //        title: "Dining Room",
-        //        description: "Enter the dining room.",
-        //        hidden: true,
-        //    },
-        //    Kitchen: {
-        //        icon: LockFillIcon,
-        //        title: "Kitchen",
-        //        description: "Enter the kitchen.",
-        //        hidden: false,
-        //    },
-        //},
-        card: {
-            map: MapImage,
-            lock: LockFillIcon,
-        },
-        //comment: {
-        //    enabled: true,
-        //},
-        backButton: {
-            enabled: true,
-        },
-        history: {
-            groupBy: (currentState: GameState) => ({
-                id: currentState.tags.Location,
-                title: currentState.tags.Location ?? "Unknown Location",
-            }),
-        },
-        //backgroundMusic: {
-        //    ThemeA: ThemeA,
-        //    ThemeB: ThemeB,
-        //},
+        // images: {
+        //     Map: {
+        //         small: MapImage,
+        //         large: MapImageLarge,
+        //     },
+        // },
     },
 } as Settings;
