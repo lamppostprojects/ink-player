@@ -1,0 +1,17 @@
+packages:
+    - "packages/*"
+    - "story"
+
+catalog:
+    "bootstrap": "^5.3.8"
+    "bootstrap-icons": "^1.13.1"
+    "es-toolkit": "^1.43.0"
+    "inkjs": "^2.3.2"
+    "nuqs": "^2.6.0"
+    "preact": "^10.27.1"
+    "react-bootstrap": "^2.10.10"
+    "react-helmet-async": "^2.0.5"
+    "react-transition-state": "^2.3.1"
+    "zustand": "^5.0.8"
+    "@biomejs/biome": "2.2.4"
+    "typescript": "^5.9.2"

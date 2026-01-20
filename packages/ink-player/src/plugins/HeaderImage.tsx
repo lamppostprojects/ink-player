@@ -1,6 +1,5 @@
+import { createPlugin } from "@lamppost/ink-player";
 import Card from "react-bootstrap/Card";
-
-import { createPlugin } from "../shared/plugins";
 
 interface HeaderImageSettings {
     images: Record<string, string>;

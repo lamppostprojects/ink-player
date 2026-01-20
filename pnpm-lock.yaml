@@ -4,6 +4,45 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@biomejs/biome':
+      specifier: 2.2.4
+      version: 2.2.4
+    bootstrap:
+      specifier: ^5.3.8
+      version: 5.3.8
+    bootstrap-icons:
+      specifier: ^1.13.1
+      version: 1.13.1
+    es-toolkit:
+      specifier: ^1.43.0
+      version: 1.43.0
+    inkjs:
+      specifier: ^2.3.2
+      version: 2.3.2
+    nuqs:
+      specifier: ^2.6.0
+      version: 2.6.0
+    preact:
+      specifier: ^10.27.1
+      version: 10.27.1
+    react-bootstrap:
+      specifier: ^2.10.10
+      version: 2.10.10
+    react-helmet-async:
+      specifier: ^2.0.5
+      version: 2.0.5
+    react-transition-state:
+      specifier: ^2.3.1
+      version: 2.3.1
+    typescript:
+      specifier: ^5.9.2
+      version: 5.9.2
+    zustand:
+      specifier: ^5.0.8
+      version: 5.0.8
+
 patchedDependencies:
   '@restart/ui':
     hash: a5e8fc90b178768eb944dda5eebb5517aac083132f334bb49f55dc218e12ccbd
@@ -11,38 +50,71 @@ patchedDependencies:
 
 importers:
 
-  .:
+  .: {}
+
+  packages/ink-player:
     dependencies:
       bootstrap:
-        specifier: ^5.3.8
+        specifier: 'catalog:'
         version: 5.3.8(@popperjs/core@2.11.8)
+      bootstrap-icons:
+        specifier: 'catalog:'
+        version: 1.13.1
       es-toolkit:
-        specifier: ^1.43.0
+        specifier: 'catalog:'
         version: 1.43.0
       inkjs:
-        specifier: ^2.3.2
+        specifier: 'catalog:'
         version: 2.3.2
       nuqs:
-        specifier: ^2.6.0
+        specifier: 'catalog:'
         version: 2.6.0(react@19.1.1)
       preact:
-        specifier: ^10.27.1
+        specifier: 'catalog:'
         version: 10.27.1
       react-bootstrap:
-        specifier: ^2.10.10
+        specifier: 'catalog:'
         version: 2.10.10(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react-helmet-async:
-        specifier: ^2.0.5
+        specifier: 'catalog:'
         version: 2.0.5(react@19.1.1)
       react-transition-state:
-        specifier: ^2.3.1
+        specifier: 'catalog:'
         version: 2.3.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       zustand:
-        specifier: ^5.0.8
+        specifier: 'catalog:'
         version: 5.0.8(@types/react@19.1.12)(react@19.1.1)
     devDependencies:
       '@biomejs/biome':
-        specifier: 2.2.4
+        specifier: 'catalog:'
+        version: 2.2.4
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.2
+
+  story:
+    dependencies:
+      '@lamppost/ink-player':
+        specifier: workspace:*
+        version: link:../packages/ink-player
+      bootstrap-icons:
+        specifier: 'catalog:'
+        version: 1.13.1
+      inkjs:
+        specifier: 'catalog:'
+        version: 2.3.2
+      preact:
+        specifier: 'catalog:'
+        version: 10.27.1
+      react-bootstrap:
+        specifier: 'catalog:'
+        version: 2.10.10(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      react-helmet-async:
+        specifier: 'catalog:'
+        version: 2.0.5(react@19.1.1)
+    devDependencies:
+      '@biomejs/biome':
+        specifier: 'catalog:'
         version: 2.2.4
       '@rsbuild/core':
         specifier: ^1.5.4
@@ -59,11 +131,8 @@ importers:
       '@rsbuild/plugin-svgr':
         specifier: ^1.2.2
         version: 1.2.2(@rsbuild/core@1.5.6)(typescript@5.9.2)
-      bootstrap-icons:
-        specifier: ^1.13.1
-        version: 1.13.1
       typescript:
-        specifier: ^5.9.2
+        specifier: 'catalog:'
         version: 5.9.2
 
 packages:

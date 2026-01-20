@@ -5,8 +5,6 @@ import App from "../app/App";
 import { setSettings } from "./settings";
 import type { IncomingSettings } from "./types";
 
-import "../app/styles.scss";
-
 export const init = (settings: IncomingSettings) => {
     setSettings(settings);
 

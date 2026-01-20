@@ -1,0 +1,55 @@
+// Put any custom styles you want here!
+
+body {
+    background-image: url("../assets/images/nihonbashi-night.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+:root {
+    --bs-bg-opacity: 0.85;
+    --navbar-height: 48px;
+}
+
+.navbar {
+    --bs-bg-opacity: 0.85;
+    background: rgba(var(--bs-tertiary-bg-rgb), var(--bs-bg-opacity));
+    --bs-navbar-padding-y: 0;
+}
+
+.glossary-popover .sources {
+    display: none;
+}
+
+.glossary-page .sources {
+    .badge {
+        font-weight: normal;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+            outline: 1px solid var(--bs-body-color);
+        }
+    }
+}
+
+.references-page li {
+    text-indent: -2em;
+    padding-left: 2em;
+
+    span {
+        text-indent: initial;
+    }
+}
+
+.spoiler {
+    filter: blur(10px);
+    transition: filter 0.3s ease-in-out;
+
+    &:hover {
+        filter: blur(0px);
+    }
+}

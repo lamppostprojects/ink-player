@@ -1,0 +1,8 @@
+assets
+game/*
+!game/demo.ink.json
+src/*
+!src/About.tsx
+!src/screens.ts
+!src/settings.ts
+!src/styles.scss

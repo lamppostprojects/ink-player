@@ -1,8 +1,7 @@
+import type { ScreenProps } from "@lamppost/ink-player";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Spinner from "react-bootstrap/Spinner";
-
-import type { ScreenProps } from "../engine/shared/types";
 
 /**
  * The component is provided with the following props:

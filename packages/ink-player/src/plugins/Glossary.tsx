@@ -1,3 +1,4 @@
+import { createPlugin } from "@lamppost/ink-player";
 import {
     useCallback,
     useEffect,
@@ -7,8 +8,6 @@ import {
 } from "preact/hooks";
 import Overlay, { type OverlayInjectedProps } from "react-bootstrap/Overlay";
 import Popover from "react-bootstrap/Popover";
-
-import { createPlugin } from "../shared/plugins";
 
 const glossary = new Map<string, string | null>();
 let glossaryRegex: RegExp | null = null;

@@ -1,0 +1,40 @@
+{
+    "name": "@lamppost/ink-player",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts",
+        "./styles.scss": "./src/app/styles.scss",
+        "./ink-loader": "./src/build/ink-loader.js",
+        "./plugins/achievements": "./src/plugins/Achievements.tsx",
+        "./plugins/back-button": "./src/plugins/BackButton.tsx",
+        "./plugins/background-music": "./src/plugins/BackgroundMusic.tsx",
+        "./plugins/card": "./src/plugins/Card.tsx",
+        "./plugins/comment": "./src/plugins/Comment.tsx",
+        "./plugins/dice-roll": "./src/plugins/DiceRoll.tsx",
+        "./plugins/footnotes": "./src/plugins/Footnotes.tsx",
+        "./plugins/glossary": "./src/plugins/Glossary.tsx",
+        "./plugins/header-image": "./src/plugins/HeaderImage.tsx",
+        "./plugins/image": "./src/plugins/Image.tsx",
+        "./plugins/location": "./src/plugins/Location.tsx",
+        "./plugins/portrait": "./src/plugins/Portrait.tsx",
+        "./plugins/text-input": "./src/plugins/TextInput.tsx"
+    },
+    "dependencies": {
+        "bootstrap": "catalog:",
+        "bootstrap-icons": "catalog:",
+        "es-toolkit": "catalog:",
+        "inkjs": "catalog:",
+        "nuqs": "catalog:",
+        "preact": "catalog:",
+        "react-bootstrap": "catalog:",
+        "react-helmet-async": "catalog:",
+        "react-transition-state": "catalog:",
+        "zustand": "catalog:"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "catalog:",
+        "typescript": "catalog:"
+    }
+}

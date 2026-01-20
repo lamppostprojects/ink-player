@@ -1,3 +1,4 @@
+import { createPlugin } from "@lamppost/ink-player";
 import CommentIcon from "bootstrap-icons/icons/chat-dots.svg?react";
 import { useCallback, useRef, useState } from "preact/hooks";
 import Alert from "react-bootstrap/Alert";
@@ -7,8 +8,6 @@ import Nav from "react-bootstrap/Nav";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
 import Stack from "react-bootstrap/Stack";
-
-import { createPlugin } from "../shared/plugins";
 
 type CommentSettings = Record<string, never>;
 

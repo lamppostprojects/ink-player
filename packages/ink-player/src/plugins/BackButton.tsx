@@ -1,8 +1,7 @@
+import { createPlugin } from "@lamppost/ink-player";
 import ArrowLeftIcon from "bootstrap-icons/icons/arrow-left.svg?react";
 import { useCallback } from "preact/hooks";
 import Nav from "react-bootstrap/Nav";
-
-import { createPlugin } from "../shared/plugins";
 
 type BackButtonSettings = Record<string, never>;
 

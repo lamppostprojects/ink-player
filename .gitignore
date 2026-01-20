@@ -14,11 +14,3 @@ dist/
 .vscode/*
 !.vscode/extensions.json
 .idea
-
-# Example Story Config
-src/story/*
-!src/story/demo.ink.json
-!src/story/About.tsx
-!src/story/screens.ts
-!src/story/settings.ts
-!src/story/styles.scss

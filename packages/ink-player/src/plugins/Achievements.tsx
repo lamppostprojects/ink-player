@@ -1,3 +1,4 @@
+import { createPlugin } from "@lamppost/ink-player";
 import CheckCircleFillIcon from "bootstrap-icons/icons/check-circle-fill.svg?react";
 import LockFillIcon from "bootstrap-icons/icons/lock-fill.svg?react";
 import { useCallback, useState } from "preact/hooks";
@@ -5,8 +6,6 @@ import Card from "react-bootstrap/Card";
 import Stack from "react-bootstrap/Stack";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-import { createPlugin } from "../shared/plugins";
 
 const NUM_COLUMNS = 2;
 

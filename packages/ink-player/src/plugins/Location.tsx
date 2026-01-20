@@ -1,4 +1,4 @@
-import { createPlugin } from "../shared/plugins";
+import { createPlugin } from "@lamppost/ink-player";
 
 export default createPlugin(() => ({
     type: "location",

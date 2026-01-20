@@ -1,10 +1,12 @@
+import {
+    createPlugin,
+    type GameState,
+    ProcessedTextLine,
+    type Widget,
+} from "@lamppost/ink-player";
 import { Accordion } from "react-bootstrap";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-import { createPlugin } from "../shared/plugins";
-import { ProcessedTextLine } from "../shared/process-text";
-import type { GameState, Widget } from "../shared/types";
 
 const collectWidgets = ({
     gameState,

@@ -1,6 +1,5 @@
+import { createPlugin } from "@lamppost/ink-player";
 import { useCallback, useEffect, useRef } from "preact/hooks";
-
-import { createPlugin } from "../shared/plugins";
 
 interface CardSettings {
     images: Record<string, string | React.FunctionComponent<any>>;

@@ -16,7 +16,7 @@ export default defineConfig({
             addRules([
                 {
                     test: /\.ink$/,
-                    use: ["./src/engine/build/ink-loader.js"],
+                    use: ["@lamppost/ink-player/ink-loader"],
                 },
             ]);
         },
