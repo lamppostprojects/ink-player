@@ -1,6 +1,6 @@
+import { getPluginsByType } from "../shared/plugins";
 import { getSettings } from "../shared/settings";
 import type { GameState, Widget } from "../shared/types";
-import { logWidgets } from "../shared/widgets";
 
 const renderLogLine = (
     line: string | Widget | Array<string | Widget>,
@@ -16,7 +16,7 @@ const renderLogLine = (
         return `<p>${line}</p>`;
     }
 
-    const Widget = logWidgets.get(line.type);
+    const Widget = getPluginsByType("log").get(line.type);
     if (Widget) {
         return Widget({
             input: line.input,
@@ -41,7 +41,7 @@ const renderChoice = (
         return `<p><strong>&raquo; ${choice}</strong></p>`;
     }
 
-    const Widget = logWidgets.get(choice.type);
+    const Widget = getPluginsByType("log").get(choice.type);
     if (Widget) {
         return Widget({
             input: choice.input,
@@ -55,7 +55,7 @@ const renderChoice = (
 const renderState = (state: GameState) => {
     let text = "";
 
-    for (const log of logWidgets.values()) {
+    for (const log of getPluginsByType("log").values()) {
         text += log({
             currentState: state,
             location: "header",
@@ -68,7 +68,7 @@ const renderState = (state: GameState) => {
         text += `\n${renderChoice(state.choices[state.selectedChoice].choice)}`;
     }
 
-    for (const log of logWidgets.values()) {
+    for (const log of getPluginsByType("log").values()) {
         text += log({
             currentState: state,
             location: "footer",

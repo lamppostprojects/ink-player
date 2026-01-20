@@ -11,9 +11,9 @@ import { LoadModal } from "../saves/LoadModal";
 import { NewGameModal } from "../saves/NewGameModal";
 import { SaveModal } from "../saves/SaveModal";
 import { getUseStoryStore } from "../shared/game-state";
+import { getPluginsByType } from "../shared/plugins";
 import { getSettings } from "../shared/settings";
 import type { ScreenProps } from "../shared/types";
-import { navWidgets } from "../shared/widgets";
 
 function Header(props: ScreenProps) {
     const settings = getSettings();
@@ -81,7 +81,7 @@ function Header(props: ScreenProps) {
         setPage("game");
     }, [setPage, setShowNewGameModal]);
 
-    const widgets = Array.from(navWidgets.entries());
+    const widgets = Array.from(getPluginsByType("nav").entries());
 
     return (
         <>

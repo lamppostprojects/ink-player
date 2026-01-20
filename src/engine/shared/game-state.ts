@@ -2,9 +2,9 @@ import { memoize } from "es-toolkit";
 import type { Story } from "inkjs";
 import { create } from "zustand";
 
+import { getPluginsByType } from "./plugins";
 import { getSettings } from "./settings";
 import type { GameState, SavedGame, Widget } from "./types";
-import { handleStoryLoadWidgets, preloadWidgets } from "./widgets";
 
 export const getUseStoryStore = memoize(() =>
     create<{
@@ -67,8 +67,8 @@ export const getUseStoryStore = memoize(() =>
                 import("inkjs"),
 
                 // Preload the widgets
-                ...Array.from(preloadWidgets.values()).map((preloadWidget) =>
-                    preloadWidget?.(),
+                ...Array.from(getPluginsByType("preload").values()).map(
+                    (preload) => preload(),
                 ),
             ]);
             set({
@@ -87,7 +87,9 @@ export const getUseStoryStore = memoize(() =>
             story.onError = (error) => {
                 set({ error });
             };
-            for (const handleStoryLoad of handleStoryLoadWidgets.values()) {
+            for (const handleStoryLoad of getPluginsByType(
+                "handleStoryLoad",
+            ).values()) {
                 handleStoryLoad({ story });
             }
 
@@ -117,7 +119,9 @@ export const getUseStoryStore = memoize(() =>
             story.onError = (error) => {
                 set({ error });
             };
-            for (const handleStoryLoad of handleStoryLoadWidgets.values()) {
+            for (const handleStoryLoad of getPluginsByType(
+                "handleStoryLoad",
+            ).values()) {
                 handleStoryLoad({ story });
             }
 

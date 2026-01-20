@@ -1,7 +1,8 @@
-import { useStoryStore } from "./game-state";
+import { getUseStoryStore } from "./game-state";
 import { ProcessedTextLine } from "./process-text";
 
 export const useEvalFunction = (functionName: string, args: any[]) => {
+    const useStoryStore = getUseStoryStore();
     const story = useStoryStore((state) => state.story);
     if (!story) {
         return null;

@@ -3,8 +3,8 @@ import Toast from "react-bootstrap/esm/Toast";
 import ToastContainer from "react-bootstrap/esm/ToastContainer";
 
 import { getUseStoryStore } from "../shared/game-state";
+import { getPluginsByType } from "../shared/plugins";
 import type { ScreenProps } from "../shared/types";
-import { toastWidgets } from "../shared/widgets";
 
 function ToastItem({
     title,
@@ -63,7 +63,7 @@ export function Toasts({ setPage }: ScreenProps) {
             description: React.ReactNode;
         }[] = [];
         if (currentState) {
-            for (const toastWidget of toastWidgets.values()) {
+            for (const toastWidget of getPluginsByType("toast").values()) {
                 const toasts = toastWidget(currentState);
 
                 for (const toast of toasts) {

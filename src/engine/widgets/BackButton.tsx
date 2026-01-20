@@ -4,17 +4,12 @@ import Nav from "react-bootstrap/Nav";
 
 import { createPlugin } from "../shared/plugins";
 
-interface BackButtonSettings {
-    enabled: boolean;
-}
+type BackButtonSettings = Record<string, never>;
 
 export default createPlugin<BackButtonSettings>(
-    ({ settings, useStoryStore, useSavedGamesStore }) => ({
+    ({ useStoryStore, useSavedGamesStore }) => ({
         type: "backButton",
         nav({ page }) {
-            if (!settings.enabled) {
-                return null;
-            }
             if (page !== "game") {
                 return null;
             }

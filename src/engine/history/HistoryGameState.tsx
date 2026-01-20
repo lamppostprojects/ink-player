@@ -1,7 +1,7 @@
 import { Fragment } from "preact";
 
+import { getPluginsByType } from "../shared/plugins";
 import type { GameState } from "../shared/types";
-import { footerWidgets, headerWidgets } from "../shared/widgets";
 import HistoryChoices from "./HistoryChoices";
 import HistoryText from "./HistoryText";
 
@@ -12,7 +12,7 @@ export default function HistoryGameState({
 }) {
     const header = [];
 
-    for (const HeaderWidget of headerWidgets.values()) {
+    for (const HeaderWidget of getPluginsByType("header").values()) {
         header.push(
             <HeaderWidget
                 context="history"
@@ -24,7 +24,7 @@ export default function HistoryGameState({
 
     const footer = [];
 
-    for (const FooterWidget of footerWidgets.values()) {
+    for (const FooterWidget of getPluginsByType("footer").values()) {
         footer.push(
             <FooterWidget
                 context="history"

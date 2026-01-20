@@ -10,18 +10,12 @@ import Stack from "react-bootstrap/Stack";
 
 import { createPlugin } from "../shared/plugins";
 
-interface CommentSettings {
-    enabled: boolean;
-}
+type CommentSettings = Record<string, never>;
 
 export default createPlugin<CommentSettings>(
-    ({ settings, useStoryStore, useSavedGamesStore }) => ({
+    ({ useStoryStore, useSavedGamesStore }) => ({
         type: "comment",
         header({ context, currentState }) {
-            if (!settings.enabled) {
-                return null;
-            }
-
             if (context !== "history") {
                 return null;
             }
@@ -38,9 +32,6 @@ export default createPlugin<CommentSettings>(
             );
         },
         nav({ page }) {
-            if (!settings.enabled) {
-                return null;
-            }
             if (page !== "game") {
                 return null;
             }
@@ -137,9 +128,6 @@ export default createPlugin<CommentSettings>(
             );
         },
         log(props) {
-            if (!settings.enabled) {
-                return "";
-            }
             if (!("currentState" in props)) {
                 return "";
             }

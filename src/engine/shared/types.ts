@@ -2,6 +2,8 @@ import type { Story } from "inkjs";
 import type React from "preact/compat";
 import type { TransitionStatus } from "react-transition-state";
 
+import type { createPlugin } from "./plugins";
+
 export type SavedGame = {
     id: string;
     title: string;
@@ -45,7 +47,7 @@ export type Screen = {
         | ((props: ScreenProps) => React.ReactNode);
 };
 
-export type Settings = {
+type SharedSettings = {
     enableKeyboardInput?: boolean;
     enableDarkMode?: boolean | "toggle";
     enableGameScreen?: boolean;
@@ -60,13 +62,23 @@ export type Settings = {
     screens: Screen[];
 };
 
-export type WidgetToastFn = (currentState: GameState) => {
+export type IncomingSettings = SharedSettings & {
+    plugins?: Array<
+        ReturnType<ReturnType<typeof createPlugin>> | null | undefined
+    >;
+};
+
+export type Settings = SharedSettings & {
+    plugins: Array<PluginRegistry>;
+};
+
+type PluginToastFn = (currentState: GameState) => {
     id: string;
     title: React.ReactNode;
     description: React.ReactNode;
 }[];
 
-export type WidgetChoiceProps = {
+type PluginChoiceProps = {
     context: "game" | "history";
     input: Record<string, string>;
     output?: Record<string, string>;
@@ -81,62 +93,62 @@ export type WidgetChoiceProps = {
     disabled: boolean;
 };
 
-export type WidgetTextProps = {
+type PluginTextProps = {
     input: Record<string, string>;
     context: "game" | "history" | "screen";
 };
 
-export type WidgetLogProps =
+type PluginLogProps =
     | { currentState: GameState; location: "header" | "footer" }
     | {
           input: Record<string, string>;
           output?: Record<string, string>;
       };
 
-export type WidgetHeaderProps = {
+type PluginHeaderProps = {
     context: "game" | "history" | "screen";
     currentState: GameState;
     transitionStatus: TransitionStatus | undefined;
 };
 
-export type WidgetKnotProps = {
+type PluginKnotProps = {
     context: "game" | "history" | "screen";
     currentState: GameState;
     transitionStatus: TransitionStatus | undefined;
 };
 
-export type WidgetKeyProps = {
+type PluginKeyProps = {
     currentState: GameState;
 };
 
-export type WidgetProcessTextLineProps = {
+type PluginProcessTextLineProps = {
     line: string;
     context: "game" | "history" | "choice" | "history-choice" | "screen";
 };
 
-export type WidgetTextLineProps = {
+type PluginTextLineProps = {
     children: React.ReactNode;
     context: "game" | "history" | "choice" | "history-choice" | "screen";
 };
 
-export type WidgetHandleStoryLoadProps = {
+type PluginHandleStoryLoadProps = {
     story: Story;
 };
 
-export type WidgetRegistry = {
+export type PluginRegistry = {
     type: string;
-    log?: (props: WidgetLogProps) => string;
-    toast?: WidgetToastFn;
+    log?: (props: PluginLogProps) => string;
+    toast?: PluginToastFn;
     screen?: (props: ScreenProps) => React.ReactNode;
-    footer?: (props: WidgetKnotProps) => React.ReactNode;
-    text?: (props: WidgetTextProps) => React.ReactNode;
-    choice?: (props: WidgetChoiceProps) => React.ReactNode;
-    header?: (props: WidgetHeaderProps) => React.ReactNode;
-    knot?: (props: WidgetKnotProps) => React.ReactNode;
+    footer?: (props: PluginKnotProps) => React.ReactNode;
+    text?: (props: PluginTextProps) => React.ReactNode;
+    choice?: (props: PluginChoiceProps) => React.ReactNode;
+    header?: (props: PluginHeaderProps) => React.ReactNode;
+    knot?: (props: PluginKnotProps) => React.ReactNode;
     nav?: (props: ScreenProps) => React.ReactNode;
     preload?: () => Promise<any>;
-    key?: (props: WidgetKeyProps) => string | null;
-    processTextLine?: (props: WidgetProcessTextLineProps) => string;
-    textLine?: (props: WidgetTextLineProps) => React.ReactNode;
-    handleStoryLoad?: (props: WidgetHandleStoryLoadProps) => void;
+    key?: (props: PluginKeyProps) => string | null;
+    processTextLine?: (props: PluginProcessTextLineProps) => string;
+    textLine?: (props: PluginTextLineProps) => React.ReactNode;
+    handleStoryLoad?: (props: PluginHandleStoryLoadProps) => void;
 };

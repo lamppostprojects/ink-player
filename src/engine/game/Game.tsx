@@ -3,12 +3,7 @@ import Card from "react-bootstrap/Card";
 import { useTransitionMap } from "react-transition-state";
 
 import { getUseStoryStore } from "../shared/game-state";
-import {
-    footerWidgets,
-    headerWidgets as headerWidgetsMap,
-    keyWidgets,
-    knotWidgets as knotWidgetsMap,
-} from "../shared/widgets";
+import { getPluginsByType } from "../shared/plugins";
 import GameChoices from "./GameChoices";
 import GameText from "./GameText";
 
@@ -82,9 +77,12 @@ export function Game({ context }: { context?: "game" | "screen" }) {
     const headerWidgets = [];
     const knotWidgets = [];
     const footerWidgetsShown = [];
+    const keyWidgets = getPluginsByType("key");
 
     if (currentState) {
-        for (const [type, Widget] of Array.from(headerWidgetsMap.entries())) {
+        for (const [type, HeaderWidget] of getPluginsByType(
+            "header",
+        ).entries()) {
             const getKey = keyWidgets.get(type);
             const prevKey = previousState
                 ? getKey?.({ currentState: previousState })
@@ -93,7 +91,7 @@ export function Game({ context }: { context?: "game" | "screen" }) {
 
             if (currentTransitionState?.isMounted) {
                 headerWidgets.push(
-                    <Widget
+                    <HeaderWidget
                         key={currKey}
                         context={context ?? "game"}
                         currentState={currentState}
@@ -108,7 +106,7 @@ export function Game({ context }: { context?: "game" | "screen" }) {
 
             if (previousState && previousTransitionState?.isMounted) {
                 headerWidgets.push(
-                    <Widget
+                    <HeaderWidget
                         key={prevKey}
                         context={context ?? "game"}
                         currentState={previousState}
@@ -122,7 +120,7 @@ export function Game({ context }: { context?: "game" | "screen" }) {
             }
         }
 
-        for (const [type, Widget] of Array.from(knotWidgetsMap.entries())) {
+        for (const [type, KnotWidget] of getPluginsByType("knot").entries()) {
             const getKey = keyWidgets.get(type);
             const prevKey = previousState
                 ? getKey?.({ currentState: previousState })
@@ -131,7 +129,7 @@ export function Game({ context }: { context?: "game" | "screen" }) {
 
             if (currentTransitionState?.isMounted) {
                 knotWidgets.push(
-                    <Widget
+                    <KnotWidget
                         key={currKey}
                         context={context ?? "game"}
                         currentState={currentState}
@@ -146,7 +144,7 @@ export function Game({ context }: { context?: "game" | "screen" }) {
 
             if (previousState && previousTransitionState?.isMounted) {
                 knotWidgets.push(
-                    <Widget
+                    <KnotWidget
                         key={prevKey}
                         context={context ?? "game"}
                         currentState={previousState}
@@ -160,7 +158,9 @@ export function Game({ context }: { context?: "game" | "screen" }) {
             }
         }
 
-        for (const [type, Widget] of Array.from(footerWidgets.entries())) {
+        for (const [type, FooterWidget] of getPluginsByType(
+            "footer",
+        ).entries()) {
             const getKey = keyWidgets.get(type);
             const prevKey = previousState
                 ? getKey?.({ currentState: previousState })
@@ -169,7 +169,7 @@ export function Game({ context }: { context?: "game" | "screen" }) {
 
             if (currentTransitionState?.isMounted) {
                 footerWidgetsShown.push(
-                    <Widget
+                    <FooterWidget
                         key={currKey}
                         context={context ?? "game"}
                         currentState={currentState}
@@ -184,7 +184,7 @@ export function Game({ context }: { context?: "game" | "screen" }) {
 
             if (previousState && previousTransitionState?.isMounted) {
                 footerWidgetsShown.push(
-                    <Widget
+                    <FooterWidget
                         key={prevKey}
                         context={context ?? "game"}
                         currentState={previousState}

@@ -1,13 +1,8 @@
 import SlashCircleIcon from "bootstrap-icons/icons/slash-circle.svg?react";
 import Button from "react-bootstrap/Button";
 
+import { getPluginsByType } from "./plugins";
 import type { Widget } from "./types";
-import {
-    choiceWidgets,
-    processTextLineWidgets,
-    textLineWidgets,
-    textWidgets,
-} from "./widgets";
 
 const getProcessedTextArray = ({
     text,
@@ -19,7 +14,7 @@ const getProcessedTextArray = ({
     return text
         .map((line) => {
             if (typeof line !== "string") {
-                const Widget = textWidgets.get(line.type);
+                const Widget = getPluginsByType("text").get(line.type);
 
                 if (!Widget) {
                     return null;
@@ -45,7 +40,9 @@ const getProcessedTextArray = ({
 
             let processedText = line;
 
-            for (const processTextLine of processTextLineWidgets.values()) {
+            for (const processTextLine of getPluginsByType(
+                "processTextLine",
+            ).values()) {
                 processedText = processTextLine({
                     line: processedText,
                     context,
@@ -112,7 +109,7 @@ export const ProcessedTextLine = ({
 
         let contents = <Tag>{processedText}</Tag>;
 
-        for (const TextLine of textLineWidgets.values()) {
+        for (const TextLine of getPluginsByType("textLine").values()) {
             contents = <TextLine context={context}>{contents}</TextLine>;
         }
 
@@ -141,12 +138,12 @@ export const ProcessedTextLine = ({
     }
 
     if (context === "game" || context === "screen") {
-        const Widget = textWidgets.get(text.type);
+        const Widget = getPluginsByType("text").get(text.type);
         if (Widget) {
             return <Widget context={context} input={text.input} />;
         }
     } else if (context === "choice") {
-        const Widget = choiceWidgets.get(text.type);
+        const Widget = getPluginsByType("choice").get(text.type);
         if (Widget) {
             return (
                 <Widget
@@ -159,7 +156,7 @@ export const ProcessedTextLine = ({
             );
         }
     } else if (context === "history-choice") {
-        const Widget = choiceWidgets.get(text.type);
+        const Widget = getPluginsByType("choice").get(text.type);
         if (Widget) {
             return (
                 <Widget
