@@ -1,6 +1,7 @@
-import { createPlugin } from "@lamppost/ink-player";
 import { useEffect, useMemo, useState } from "preact/hooks";
 import BootstrapImage from "react-bootstrap/Image";
+
+import { createPlugin } from "../shared/plugins";
 
 const DEFAULT_DURATION = 1500;
 

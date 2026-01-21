@@ -1,4 +1,4 @@
-/// <reference types="@rsbuild/core/types" />
+/// <reference types="@rslib/core/types" />
 
 declare module "*.svg" {
     const content: string;

@@ -1,8 +1,9 @@
-import { createPlugin } from "@lamppost/ink-player";
 import { useState } from "preact/hooks";
 import Button from "react-bootstrap/Button";
 import BootstrapImage from "react-bootstrap/Image";
 import Modal from "react-bootstrap/Modal";
+
+import { createPlugin } from "../shared/plugins";
 
 interface ImageSettings {
     images: Record<string, { small: string; large?: string }>;

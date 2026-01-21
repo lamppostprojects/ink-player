@@ -1,8 +1,9 @@
-import { createPlugin } from "@lamppost/ink-player";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
+
+import { createPlugin } from "../shared/plugins";
 
 export default createPlugin(() => ({
     type: "text-input",

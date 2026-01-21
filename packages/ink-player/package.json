@@ -3,23 +3,29 @@
     "version": "1.0.0",
     "private": true,
     "type": "module",
+    "scripts": {
+        "build": "rslib build"
+    },
+    "files": [
+        "dist"
+    ],
     "exports": {
-        ".": "./src/index.ts",
-        "./styles.scss": "./src/app/styles.scss",
-        "./ink-loader": "./src/build/ink-loader.js",
-        "./plugins/achievements": "./src/plugins/Achievements.tsx",
-        "./plugins/back-button": "./src/plugins/BackButton.tsx",
-        "./plugins/background-music": "./src/plugins/BackgroundMusic.tsx",
-        "./plugins/card": "./src/plugins/Card.tsx",
-        "./plugins/comment": "./src/plugins/Comment.tsx",
-        "./plugins/dice-roll": "./src/plugins/DiceRoll.tsx",
-        "./plugins/footnotes": "./src/plugins/Footnotes.tsx",
-        "./plugins/glossary": "./src/plugins/Glossary.tsx",
-        "./plugins/header-image": "./src/plugins/HeaderImage.tsx",
-        "./plugins/image": "./src/plugins/Image.tsx",
-        "./plugins/location": "./src/plugins/Location.tsx",
-        "./plugins/portrait": "./src/plugins/Portrait.tsx",
-        "./plugins/text-input": "./src/plugins/TextInput.tsx"
+        ".": "./dist/index.js",
+        "./styles.css": "./dist/index.css",
+        "./ink-loader": "./dist/build/ink-loader.js",
+        "./plugins/achievements": "./dist/plugins/Achievements.js",
+        "./plugins/back-button": "./dist/plugins/BackButton.js",
+        "./plugins/background-music": "./dist/plugins/BackgroundMusic.js",
+        "./plugins/card": "./dist/plugins/Card.js",
+        "./plugins/comment": "./dist/plugins/Comment.js",
+        "./plugins/dice-roll": "./dist/plugins/DiceRoll.js",
+        "./plugins/footnotes": "./dist/plugins/Footnotes.js",
+        "./plugins/glossary": "./dist/plugins/Glossary.js",
+        "./plugins/header-image": "./dist/plugins/HeaderImage.js",
+        "./plugins/image": "./dist/plugins/Image.js",
+        "./plugins/location": "./dist/plugins/Location.js",
+        "./plugins/portrait": "./dist/plugins/Portrait.js",
+        "./plugins/text-input": "./dist/plugins/TextInput.js"
     },
     "dependencies": {
         "bootstrap": "catalog:",
@@ -35,6 +41,10 @@
     },
     "devDependencies": {
         "@biomejs/biome": "catalog:",
+        "@rsbuild/plugin-preact": "^1.5.2",
+        "@rsbuild/plugin-sass": "^1.4.0",
+        "@rsbuild/plugin-svgr": "^1.2.2",
+        "@rslib/core": "^0.19.3",
         "typescript": "catalog:"
     }
 }

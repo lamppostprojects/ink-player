@@ -1,4 +1,3 @@
-import { createPlugin } from "@lamppost/ink-player";
 import MuteIcon from "bootstrap-icons/icons/volume-mute.svg?react";
 import VolumeIcon from "bootstrap-icons/icons/volume-up.svg?react";
 import { useCallback, useEffect, useState } from "preact/hooks";
@@ -10,6 +9,8 @@ import Nav from "react-bootstrap/Nav";
 import Popover from "react-bootstrap/Popover";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+
+import { createPlugin } from "../shared/plugins";
 
 const FADE_DURATION = 1000;
 const FADE_STEPS = 100;
