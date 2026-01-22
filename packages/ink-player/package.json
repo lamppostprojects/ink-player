@@ -2,7 +2,9 @@
     "name": "@lamppost/ink-player",
     "version": "1.0.2",
     "type": "module",
-    "access": "public",
+    "publishConfig": {
+        "access": "public"
+    },
     "description": "A web player for running Ink stories created by Lamp Post Projects.",
     "author": "John Resig <jeresig@gmail.com>",
     "license": "MIT",
