@@ -1,12 +1,15 @@
 {
     "name": "@lamppost/ink-player",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "type": "module",
     "access": "public",
     "scripts": {
         "build": "rslib build"
     },
     "files": [
+        "package.json",
+        "README.md",
+        "LICENSE",
         "dist"
     ],
     "exports": {
