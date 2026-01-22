@@ -9,7 +9,7 @@ This is a web player for running [Ink](https://github.com/inkle/ink) stories cre
 
 Requirements: [Node.js](https://nodejs.org/) and [pnpm](https://pnpm.io/).
 
-* Run `pnpm create ink-player@latest`
+* Run `pnpm create @lamppost/create-ink-player`
 * Inside your terminal, go into the new project directory that you just created.
 * Run `pnpm dev` to see the result in your browser and confirm that things are running correctly.
 * Open up `story/game.ink` in the Inky editor and make modifications, go back to your game in the browser and see your changes live!

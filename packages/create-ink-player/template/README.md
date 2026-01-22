@@ -13,4 +13,4 @@ This is a web player for running [Ink](https://github.com/inkle/ink) stories cre
 
 ## Next Steps
 
-Please see [https://www.npmjs.com/package/@lamppost/ink-player](@lamppost/ink-player) for more details on how to configure the Lamp Post Ink Player
+Please see [@lamppost/ink-player](https://www.npmjs.com/package/@lamppost/ink-player) for more details on how to configure the Lamp Post Ink Player
