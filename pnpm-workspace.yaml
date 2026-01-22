@@ -1,6 +1,5 @@
 packages:
     - "packages/*"
-    - "story"
 
 catalog:
     "bootstrap": "^5.3.8"

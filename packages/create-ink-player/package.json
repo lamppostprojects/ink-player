@@ -1,0 +1,33 @@
+{
+    "name": "@lamppost/create-ink-player",
+    "version": "1.0.0",
+    "publishConfig": {
+        "access": "public"
+    },
+    "description": "A utility for helping to create Lamp Post Ink Player games.",
+    "author": "John Resig <jeresig@gmail.com>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jeresig/lamppost-player.git"
+    },
+    "homepage": "https://github.com/jeresig/lamppost-player",
+    "keywords": [
+        "ink",
+        "inkjs",
+        "interactive fiction",
+        "game"
+    ],
+    "main": "./index.js",
+    "bin": {
+        "create-ink-player": "./index.js"
+    },
+    "files": [
+        "index.js",
+        "template",
+        "package.json",
+        "README.md",
+        "LICENSE"
+    ],
+    "dependencies": {}
+}

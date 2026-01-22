@@ -12,13 +12,8 @@ type Group = {
 
 // TODO: Change this once it's in a plugin
 const historySettings: {
-    groupBy: (currentState: GameState) => { id: string; title: string };
-} = {
-    groupBy: (currentState: GameState) => ({
-        id: currentState.tags.Location,
-        title: currentState.tags.Location ?? "Unknown Location",
-    }),
-};
+    groupBy?: (currentState: GameState) => { id: string; title: string };
+} = {};
 
 export default function HistoryGrouped({
     gameState,
@@ -50,8 +45,8 @@ export default function HistoryGrouped({
         let currentGroup: Group | null = null;
 
         for (const currentState of gameState) {
-            const group = historySettings.groupBy(currentState);
-            if (currentGroup && group.id !== currentGroup.id) {
+            const group = historySettings.groupBy?.(currentState);
+            if (currentGroup && group && group.id !== currentGroup.id) {
                 if (currentGroup) {
                     groups.push(currentGroup);
                 }

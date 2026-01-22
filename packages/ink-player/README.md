@@ -11,7 +11,6 @@ Requirements: [Node.js](https://nodejs.org/) and [pnpm](https://pnpm.io/).
 
 * Run `pnpm create ink-player@latest`
 * Inside your terminal, go into the new project directory that you just created.
-* Run `pnpm install`.
 * Run `pnpm dev` to see the result in your browser and confirm that things are running correctly.
 * Open up `story/game.ink` in the Inky editor and make modifications, go back to your game in the browser and see your changes live!
 * Update the settings in `src/index.ts` to use your game name and update any other settings.
