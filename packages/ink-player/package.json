@@ -1,8 +1,22 @@
 {
     "name": "@lamppost/ink-player",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "type": "module",
     "access": "public",
+    "description": "A web player for running Ink stories created by Lamp Post Projects.",
+    "author": "John Resig <jeresig@gmail.com>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jeresig/lamppost-player.git"
+    },
+    "homepage": "https://github.com/jeresig/lamppost-player",
+    "keywords": [
+        "ink",
+        "inkjs",
+        "interactive fiction",
+        "game"
+    ],
     "scripts": {
         "build": "rslib build"
     },
