@@ -1,5 +1,11 @@
 # @lamppost/ink-player
 
+## 2.0.1
+
+### Patch Changes
+
+- 04e64a6: Fix up pre-publish build step.
+
 ## 2.0.0
 
 ### Major Changes
