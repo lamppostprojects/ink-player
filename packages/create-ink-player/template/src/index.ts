@@ -72,12 +72,12 @@ init({
         {
             id: "game",
             title: "Story",
-            component: "Game",
+            component: "game",
         },
         {
             id: "history",
             title: "History",
-            component: "History",
+            component: "history",
         },
     ],
 
