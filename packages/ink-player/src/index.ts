@@ -13,3 +13,4 @@ export type {
     Widget,
 } from "./shared/types";
 export { useEvalFunction } from "./shared/use-eval-function";
+export { downloadHTMLLog } from "./game/download-log";

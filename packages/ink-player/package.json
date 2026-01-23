@@ -41,6 +41,7 @@
         "./plugins/footnotes": "./dist/plugins/Footnotes.js",
         "./plugins/glossary": "./dist/plugins/Glossary.js",
         "./plugins/header-image": "./dist/plugins/HeaderImage.js",
+        "./plugins/history": "./dist/plugins/history/History.js",
         "./plugins/image": "./dist/plugins/Image.js",
         "./plugins/location": "./dist/plugins/Location.js",
         "./plugins/portrait": "./dist/plugins/Portrait.js",

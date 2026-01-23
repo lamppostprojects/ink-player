@@ -18,7 +18,41 @@ Requirements: [Node.js](https://nodejs.org/) and [pnpm](https://pnpm.io/).
 * Add any custom CSS styling inside the `src/styles.scss` file.
 * Run `pnpm build` to create the final HTML/JS/CSS/Image files needed to display the game. The files will be output to the `dist/` directory. You can then bundle them or upload them to the location of your choice.
 
-## Custom Features
+## Page Configuration
+
+You can configure which pages are shown in the sidebar and in what order they are displayed. These are displayed in the sidebar and in the header (on mobile).
+
+There is one built-in required page: "game". It must have the id of "game" but can have custom a title.
+
+You can reorder the pages however you like, the first listed page will be shown to the user by default.
+
+You can also add custom pages by providing a component. The component will be rendered in a tab, and can be any valid React component.
+
+The component is provided with the following props:
+
+* `setPage`: A function to navigate to a different page
+* `loading`: A boolean indicating if the game is loading
+
+All of this is configured in the `src/index.ts` file in the screens array:
+
+```
+import {About} from "./about";
+...
+screens: [
+    {
+        id: "about",
+        title: "About",
+        component: About,
+    },
+    {
+        id: "game",
+        title: "Game",
+        component: "game",
+    },
+],
+```
+
+## Custom Ink Features
 
 The Lamp Post Ink Player includes a number of custom tags and markup that be used to show special features exclusive to this player.
 
@@ -42,21 +76,6 @@ By default the display will use the built-in Bootstrap light theme. You can over
 
 Additionally, you can set `enableDarkMode: true` to use whatever the user's preferred theme is (which is configured via their operating system). The user will also be presented with a way to configure the theme in the page header. If the user chooses an option here it will override any specified `defaultTheme`.
 
-### Page Configuration
-
-You can configure which pages are shown in the sidebar and in what order they are displayed. These are displayed in the sidebar and in the header (on mobile).
-
-There are two built-in screens: "Game" and "History". Those must have the id of "game" and "history", respectively, but can have custom titles. The only required screen is "Game".
-
-You can reorder the screens however you like, the first listed screen will be shown to the user by default.
-
-You can also add custom screens by providing a component. The component will be rendered in a tab, and can be any valid React component.
-
-The component is provided with the following props:
-
-* `setPage`: A function to navigate to a different screen
-* `loading`: A boolean indicating if the game is loading
-
 ## Plugins
 
 Plugins extend the functionality of the Ink player by providing additional functionality. You can add them in by importing the plugin into your settings file and adding it to the plugins list.
@@ -69,6 +88,40 @@ import locationPlugin from "@lamppost/ink-player/plugins/location"
 plugins: [
     ...
     locationPlugin({}),
+    ...
+]
+```
+
+### History
+
+Adds a page to show a game log for the player's entire playthrough. Includes an optional way for users to download their game log as an HTML file for sharing.
+
+Options:
+
+* `groupBy`: Type: `(currentState: GameState) => { id: string; title: string }`. The system will cluster the log by `id` and give each cluster their assigned title. It will be visible in a collapsible accordion.
+* `hideDownloadButton`: Set to `true` if you don't want the user to be able to download their game log.
+
+To enable this, in `src/index.ts` you would do:
+
+```
+import historyPlugin from "@lamppost/ink-player/plugins/history"
+...
+screens: [
+    {
+        id: "game",
+        title: "Game",
+        component: "game",
+    },
+    {
+        id: "history",
+        title: "History",
+        component: "history",
+    },
+],
+...
+plugins: [
+    ...
+    historyPlugin({}),
     ...
 ]
 ```

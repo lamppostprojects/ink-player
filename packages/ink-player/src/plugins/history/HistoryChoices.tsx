@@ -1,5 +1,5 @@
-import { ProcessedTextLine } from "../shared/process-text";
-import type { GameState } from "../shared/types";
+import { ProcessedTextLine } from "../../shared/process-text";
+import type { GameState } from "../../shared/types";
 
 export default function HistoryChoices({
     currentState,

@@ -7,7 +7,6 @@ import Tab from "react-bootstrap/Tab";
 import { Helmet } from "react-helmet-async";
 
 import { Game } from "../game/Game";
-import History from "../history/History";
 import { getPluginsByType } from "../shared/plugins";
 import { getSettings } from "../shared/settings";
 import type { ScreenProps } from "../shared/types";
@@ -17,10 +16,8 @@ const getPageComponent = ({
 }: {
     component: string | ((props: ScreenProps) => React.ReactNode);
 }) => {
-    if (component === "Game") {
+    if (component === "game") {
         return Game;
-    } else if (component === "History") {
-        return History;
     } else if (typeof component === "string") {
         const screenWidgets = getPluginsByType("screen");
         return screenWidgets.get(component);

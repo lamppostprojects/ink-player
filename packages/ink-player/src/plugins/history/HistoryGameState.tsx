@@ -1,7 +1,7 @@
 import { Fragment } from "preact";
 
-import { getPluginsByType } from "../shared/plugins";
-import type { GameState } from "../shared/types";
+import { getPluginsByType } from "../../shared/plugins";
+import type { GameState } from "../../shared/types";
 import HistoryChoices from "./HistoryChoices";
 import HistoryText from "./HistoryText";
 

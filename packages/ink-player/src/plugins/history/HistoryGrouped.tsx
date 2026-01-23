@@ -1,8 +1,9 @@
 import { useMemo, useState } from "preact/hooks";
 import Accordion from "react-bootstrap/Accordion";
 
-import type { GameState } from "../shared/types";
+import type { GameState } from "../../shared/types";
 import HistoryGameState from "./HistoryGameState";
+import type { HistorySettings } from "./types";
 
 type Group = {
     id: string;
@@ -10,19 +11,16 @@ type Group = {
     states: GameState[];
 };
 
-// TODO: Change this once it's in a plugin
-const historySettings: {
-    groupBy?: (currentState: GameState) => { id: string; title: string };
-} = {};
-
 export default function HistoryGrouped({
     gameState,
+    settings,
 }: {
+    settings: HistorySettings;
     gameState: GameState[];
 }) {
     const [expanded, setExpanded] = useState<string[]>([]);
 
-    if (!historySettings?.groupBy) {
+    if (!settings?.groupBy) {
         return gameState.map((currentState) => {
             return (
                 <HistoryGameState
@@ -45,7 +43,7 @@ export default function HistoryGrouped({
         let currentGroup: Group | null = null;
 
         for (const currentState of gameState) {
-            const group = historySettings.groupBy?.(currentState);
+            const group = settings.groupBy?.(currentState);
             if (currentGroup && group && group.id !== currentGroup.id) {
                 if (currentGroup) {
                     groups.push(currentGroup);
@@ -66,7 +64,7 @@ export default function HistoryGrouped({
         }
 
         return groups;
-    }, [gameState, historySettings]);
+    }, [gameState, settings]);
 
     return (
         <Accordion

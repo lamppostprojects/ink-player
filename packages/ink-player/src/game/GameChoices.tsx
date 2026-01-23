@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Placeholder from "react-bootstrap/Placeholder";
 import type { TransitionStatus } from "react-transition-state";
 
-import { downloadHTMLLog } from "../history/download-log";
+import { downloadHTMLLog } from "./download-log";
 import { LoadModal } from "../saves/LoadModal";
 import { getUseStoryStore } from "../shared/game-state";
 import { ProcessedTextLine } from "../shared/process-text";
