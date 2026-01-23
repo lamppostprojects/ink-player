@@ -1,6 +1,6 @@
 {
     "name": "@lamppost/create-ink-player",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "publishConfig": {
         "access": "public"
     },
@@ -9,9 +9,9 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/jeresig/lamppost-player.git"
+        "url": "https://github.com/lamppostprojects/ink-player.git"
     },
-    "homepage": "https://github.com/jeresig/lamppost-player",
+    "homepage": "https://github.com/lamppostprojects/ink-player",
     "keywords": [
         "ink",
         "inkjs",
