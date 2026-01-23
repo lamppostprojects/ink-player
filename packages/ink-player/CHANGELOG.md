@@ -1,5 +1,11 @@
 # @lamppost/ink-player
 
+## 2.0.2
+
+### Patch Changes
+
+- 620a3be: Fix up build issue.
+
 ## 2.0.1
 
 ### Patch Changes
