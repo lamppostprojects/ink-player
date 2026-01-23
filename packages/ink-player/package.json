@@ -20,7 +20,8 @@
         "game"
     ],
     "scripts": {
-        "build": "rslib build"
+        "build": "rslib build",
+        "prepublishOnly": "pnpm build"
     },
     "files": [
         "package.json",
