@@ -37,6 +37,7 @@
         "./plugins/background-music": "./dist/plugins/BackgroundMusic.js",
         "./plugins/card": "./dist/plugins/Card.js",
         "./plugins/comment": "./dist/plugins/Comment.js",
+        "./plugins/dark-mode": "./dist/plugins/DarkMode.js",
         "./plugins/dice-roll": "./dist/plugins/DiceRoll.js",
         "./plugins/footnotes": "./dist/plugins/Footnotes.js",
         "./plugins/glossary": "./dist/plugins/Glossary.js",

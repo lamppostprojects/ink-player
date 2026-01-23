@@ -48,7 +48,6 @@ export type Page = {
 
 type SharedSettings = {
     enableKeyboardInput?: boolean;
-    enableDarkMode?: boolean | "toggle";
     enableGameScreen?: boolean;
     defaultTheme?: string;
     loadStory: () => Promise<any>;

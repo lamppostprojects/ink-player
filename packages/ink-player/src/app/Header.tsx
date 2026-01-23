@@ -1,7 +1,5 @@
-import MoonIcon from "bootstrap-icons/icons/moon.svg?react";
 import SaveIcon from "bootstrap-icons/icons/save.svg?react";
-import SunIcon from "bootstrap-icons/icons/sun.svg?react";
-import { useCallback, useEffect, useState } from "preact/hooks";
+import { useCallback, useState } from "preact/hooks";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -20,11 +18,6 @@ function Header(props: PageProps) {
     const { pages } = settings;
     const [showSaveModal, setShowSaveModal] = useState(false);
     const [showLoadModal, setShowLoadModal] = useState(false);
-    const [theme, setTheme] = useState(
-        document.documentElement.getAttribute("data-bs-theme") ||
-            settings.defaultTheme ||
-            "light",
-    );
     const [expanded, setExpanded] = useState(false);
     const [showNewGameModal, setShowNewGameModal] = useState(false);
     const useStoryStore = getUseStoryStore();
@@ -56,16 +49,6 @@ function Header(props: PageProps) {
             setShowNewGameModal(true);
         }
     }, [startNewGame, gameIsWorthSaving]);
-
-    const toggleTheme = useCallback(() => {
-        setExpanded(false);
-        setTheme(theme === "light" ? "dark" : "light");
-    }, [theme]);
-
-    useEffect(() => {
-        document.documentElement.setAttribute("data-bs-theme", theme);
-        window.localStorage.setItem(`${gameName}-theme`, theme);
-    }, [theme]);
 
     const handleSaveModalClose = useCallback(() => {
         setShowSaveModal(false);
@@ -120,22 +103,8 @@ function Header(props: PageProps) {
                                     </Nav.Link>
                                 </Nav.Item>
                             ))}
-                            {settings.enableDarkMode && (
-                                <Nav.Item>
-                                    <Nav.Link onClick={toggleTheme}>
-                                        {theme === "dark" ? (
-                                            <SunIcon className="bi bi-sun" />
-                                        ) : (
-                                            <MoonIcon className="bi bi-moon" />
-                                        )}{" "}
-                                        {theme === "dark"
-                                            ? "Light Mode"
-                                            : "Dark Mode"}
-                                    </Nav.Link>
-                                </Nav.Item>
-                            )}
                             {widgets.map(([type, Widget]) => (
-                                <Nav.Item key={type}>
+                                <Nav.Item key={type} onClick={() => setExpanded(false)}>
                                     <Widget {...props} />
                                 </Nav.Item>
                             ))}

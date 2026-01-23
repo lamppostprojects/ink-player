@@ -52,6 +52,10 @@ pages: [
 ],
 ```
 
+## Themes
+
+By default the display will use the built-in Bootstrap light theme. You can override this by setting `defaultTheme: "dark"` in the `src/index.ts` file.
+
 ## Custom Ink Features
 
 The Lamp Post Ink Player includes a number of custom tags and markup that be used to show special features exclusive to this player.
@@ -70,12 +74,6 @@ To make a tag sticky, in `src/index.ts`:
 stickyTags: ["Location"],
 ```
 
-### Themes & Dark Mode
-
-By default the display will use the built-in Bootstrap light theme. You can override this by setting `defaultTheme: "dark"` in the `src/index.ts` file.
-
-Additionally, you can set `enableDarkMode: true` to use whatever the user's preferred theme is (which is configured via their operating system). The user will also be presented with a way to configure the theme in the page header. If the user chooses an option here it will override any specified `defaultTheme`.
-
 ## Plugins
 
 Plugins extend the functionality of the Ink player by providing additional functionality. You can add them in by importing the plugin into your settings file and adding it to the plugins list.
@@ -88,6 +86,22 @@ import locationPlugin from "@lamppost/ink-player/plugins/location"
 plugins: [
     ...
     locationPlugin({}),
+    ...
+]
+```
+
+### Dark Mode
+
+If you want the theme to change based upon the user's preferred theme is (which is configured via their operating system) you can include the dark mode plugin. The user will also be presented with a way to configure the theme in the page header. If the user chooses an option here it will override any specified `defaultTheme`.
+
+To enable dark mode, in `src/index.ts` you would do:
+
+```
+import darkModePlugin from "@lamppost/ink-player/plugins/dark-mode"
+...
+plugins: [
+    ...
+    darkModePlugin({}),
     ...
 ]
 ```
