@@ -1,6 +1,8 @@
 import { init } from "@lamppost/ink-player";
 import locationPlugin from "@lamppost/ink-player/plugins/location";
 import textInputPlugin from "@lamppost/ink-player/plugins/text-input";
+import historyPlugin from "@lamppost/ink-player/plugins/history";
+import darkModePlugin from "@lamppost/ink-player/plugins/dark-mode";
 
 import "@lamppost/ink-player/styles.css";
 import "./styles.scss";
@@ -26,14 +28,6 @@ init({
      * in the header. If not provided, the gameName will be used.
      */
     // shortGameName: "LampPost Player",
-
-    /**
-     * Whether to enable dark mode. If not provided, dark mode will not be
-     * enabled. If enabled, it will turn on the toggle in the header,
-     * load the user's preference from their computer, and store the result
-     * in the browser's local storage.
-     */
-    // enableDarkMode: false,
 
     /**
      * The default theme to use. If not provided, the default theme will be
@@ -67,9 +61,9 @@ init({
     // stickyTags: ["Portrait", "Location", "BackgroundMusic"],
 
     /**
-     * The screens to display in the game. The only required screen is "Game".
+     * The pages to display in the game. The only required page is "Game".
      */
-    screens: [
+    pages: [
         {
             id: "home",
             title: "Home",
@@ -96,5 +90,10 @@ init({
      *   import locationPlugin from "@lamppost/ink-player/plugins/location";
      *   plugins: [textInputPlugin({}), locationPlugin({})],
      */
-    plugins: [textInputPlugin({}), locationPlugin({})],
+    plugins: [
+        textInputPlugin({}),
+        locationPlugin({}),
+        historyPlugin({}),
+        darkModePlugin({}),
+    ],
 });

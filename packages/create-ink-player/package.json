@@ -18,7 +18,12 @@
         "interactive fiction",
         "game"
     ],
+    "type": "module",
     "main": "./index.js",
+    "scripts": {
+        "update-template": "./update-template.js",
+        "changeset": "pnpm -w changeset"
+    },
     "bin": {
         "create-ink-player": "./index.js"
     },

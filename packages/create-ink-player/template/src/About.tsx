@@ -1,16 +1,16 @@
-import type { ScreenProps } from "@lamppost/ink-player";
+import type { PageProps } from "@lamppost/ink-player";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Spinner from "react-bootstrap/Spinner";
 
 /**
  * The component is provided with the following props:
- * - setPage: A function to navigate to a different screen
+ * - setPage: A function to navigate to a different page
  * - loading: A boolean indicating if the game is loading
  *
- * Use setPage("game") to navigate to the game screen.
+ * Use setPage("game") to navigate to the game page.
  */
-export function About({ setPage, loading }: ScreenProps) {
+export function About({ setPage, loading }: PageProps) {
     return (
         <Card>
             {/*
