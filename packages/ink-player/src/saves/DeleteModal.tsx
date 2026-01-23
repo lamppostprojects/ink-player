@@ -1,5 +1,5 @@
-import Button from "react-bootstrap/button";
-import Modal from "react-bootstrap/modal";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 import { getUseSavedGamesStore } from "../shared/saved-games";
 import type { SavedGame } from "../shared/types";

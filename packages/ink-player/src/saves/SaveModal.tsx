@@ -1,9 +1,9 @@
 import DownloadIcon from "bootstrap-icons/icons/download.svg?react";
 import SaveIcon from "bootstrap-icons/icons/save.svg?react";
 import { useRef } from "preact/hooks";
-import Button from "react-bootstrap/button";
+import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Modal from "react-bootstrap/modal";
+import Modal from "react-bootstrap/Modal";
 
 import { getUseStoryStore } from "../shared/game-state";
 import { getUseSavedGamesStore } from "../shared/saved-games";

@@ -21,6 +21,7 @@
     ],
     "scripts": {
         "build": "rslib build",
+        "changeset": "pnpm -w changeset",
         "prepublishOnly": "pnpm build"
     },
     "files": [
