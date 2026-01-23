@@ -31,20 +31,19 @@ export type GameState = {
     storyData: string;
 };
 
-export type ScreenProps = {
+export type PageProps = {
     page: string;
     setPage: (page: string) => void;
     loading: boolean;
 };
 
-export type Screen = {
+export type Page = {
     id: string;
     title: string;
     component:
-        | "History"
-        | "Game"
+        | "game"
         | string
-        | ((props: ScreenProps) => React.ReactNode);
+        | ((props: PageProps) => React.ReactNode);
 };
 
 type SharedSettings = {
@@ -59,7 +58,7 @@ type SharedSettings = {
     shortGameName?: string;
     favicon?: string;
     widgets?: Record<string, Record<string, any>>;
-    screens: Screen[];
+    pages: Page[];
 };
 
 export type IncomingSettings = SharedSettings & {
@@ -139,13 +138,13 @@ export type PluginRegistry = {
     type: string;
     log?: (props: PluginLogProps) => string;
     toast?: PluginToastFn;
-    screen?: (props: ScreenProps) => React.ReactNode;
+    page?: (props: PageProps) => React.ReactNode;
     footer?: (props: PluginKnotProps) => React.ReactNode;
     text?: (props: PluginTextProps) => React.ReactNode;
     choice?: (props: PluginChoiceProps) => React.ReactNode;
     header?: (props: PluginHeaderProps) => React.ReactNode;
     knot?: (props: PluginKnotProps) => React.ReactNode;
-    nav?: (props: ScreenProps) => React.ReactNode;
+    nav?: (props: PageProps) => React.ReactNode;
     preload?: () => Promise<any>;
     key?: (props: PluginKeyProps) => string | null;
     processTextLine?: (props: PluginProcessTextLineProps) => string;

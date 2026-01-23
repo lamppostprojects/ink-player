@@ -11,11 +11,11 @@ import { Toasts } from "./Toasts";
 
 const App = () => {
     const settings = getSettings();
-    const { screens } = settings;
+    const { pages } = settings;
     const [page, setQueryPage] = useQueryState("page", {
         scroll: true,
         history: "push",
-        defaultValue: screens[0].id,
+        defaultValue: pages[0].id,
     });
     const useStoryStore = getUseStoryStore();
     const loadStoryData = useStoryStore((state) => state.loadStoryData);
@@ -43,7 +43,7 @@ const App = () => {
             const mostRecentSavedGame = getMostRecentSavedGame();
             if (mostRecentSavedGame) {
                 loadSavedGame(mostRecentSavedGame);
-                if (page === screens[0].id) {
+                if (page === pages[0].id) {
                     setPage("game");
                 }
             } else {

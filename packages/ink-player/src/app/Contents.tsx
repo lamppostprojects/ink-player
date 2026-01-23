@@ -9,27 +9,27 @@ import { Helmet } from "react-helmet-async";
 import { Game } from "../game/Game";
 import { getPluginsByType } from "../shared/plugins";
 import { getSettings } from "../shared/settings";
-import type { ScreenProps } from "../shared/types";
+import type { PageProps } from "../shared/types";
 
 const getPageComponent = ({
     component,
 }: {
-    component: string | ((props: ScreenProps) => React.ReactNode);
+    component: string | ((props: PageProps) => React.ReactNode);
 }) => {
     if (component === "game") {
         return Game;
     } else if (typeof component === "string") {
-        const screenWidgets = getPluginsByType("screen");
-        return screenWidgets.get(component);
+        const pageWidgets = getPluginsByType("page");
+        return pageWidgets.get(component);
     } else if (typeof component === "function") {
         return component;
     }
     return null;
 };
 
-const Contents = (props: ScreenProps) => {
-    const { page, setPage, loading } = props;
-    const { screens, enableGameScreen } = getSettings();
+const Contents = (props: PageProps) => {
+    const { page: currentPage, setPage, loading } = props;
+    const { pages, enableGameScreen } = getSettings();
 
     const handlePageChange = useCallback(
         (page: string) => {
@@ -41,7 +41,7 @@ const Contents = (props: ScreenProps) => {
         [setPage],
     );
 
-    const pageTitle = screens.find((screen) => screen.id === page)?.title;
+    const pageTitle = pages.find((page) => page.id === currentPage)?.title;
 
     return (
         <Container style={{ position: "relative" }}>
@@ -60,19 +60,19 @@ const Contents = (props: ScreenProps) => {
                         }}
                     >
                         <Nav variant="pills" className="flex-column">
-                            {screens.map((screen) => (
+                            {pages.map((page) => (
                                 <Nav.Item
-                                    key={screen.id}
+                                    key={page.id}
                                     style={{ textAlign: "right" }}
                                 >
                                     <Nav.Link
-                                        eventKey={screen.id}
-                                        href={`?page=${screen.id}`}
-                                        active={page === screen.id}
-                                        onClick={handlePageChange(screen.id)}
+                                        eventKey={page.id}
+                                        href={`?page=${page.id}`}
+                                        active={currentPage === page.id}
+                                        onClick={handlePageChange(page.id)}
                                         disabled={loading}
                                     >
-                                        {screen.title}
+                                        {page.title}
                                     </Nav.Link>
                                 </Nav.Item>
                             ))}
@@ -80,14 +80,14 @@ const Contents = (props: ScreenProps) => {
                     </Col>
                     <Col sm={12}>
                         <Tab.Content>
-                            {screens.map((screen) => (
+                            {pages.map((page) => (
                                 <Tab.Pane
-                                    key={screen.id}
-                                    eventKey={screen.id}
-                                    active={page === screen.id}
+                                    key={page.id}
+                                    eventKey={page.id}
+                                    active={currentPage === page.id}
                                 >
                                     {getPageComponent({
-                                        component: screen.component,
+                                        component: page.component,
                                     })?.(props)}
                                 </Tab.Pane>
                             ))}

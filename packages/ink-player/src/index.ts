@@ -8,8 +8,8 @@ export type {
     GameState,
     IncomingSettings,
     PluginRegistry,
-    Screen,
-    ScreenProps,
+    Page,
+    PageProps,
     Widget,
 } from "./shared/types";
 export { useEvalFunction } from "./shared/use-eval-function";

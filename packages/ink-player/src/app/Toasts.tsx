@@ -4,7 +4,7 @@ import ToastContainer from "react-bootstrap/esm/ToastContainer";
 
 import { getUseStoryStore } from "../shared/game-state";
 import { getPluginsByType } from "../shared/plugins";
-import type { ScreenProps } from "../shared/types";
+import type { PageProps } from "../shared/types";
 
 function ToastItem({
     title,
@@ -52,7 +52,7 @@ function ToastItem({
     );
 }
 
-export function Toasts({ setPage }: ScreenProps) {
+export function Toasts({ setPage }: PageProps) {
     const useStoryStore = getUseStoryStore();
     const currentState = useStoryStore((state) => state.currentState);
     const allToasts = useMemo(() => {

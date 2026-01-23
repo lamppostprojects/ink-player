@@ -12,7 +12,7 @@ import type { HistorySettings } from "./types";
 export default createPlugin<HistorySettings>(({ settings, useStoryStore }) => {
     return {
         type: "history",
-        screen() {
+        page() {
             const gameState = useStoryStore((state) => state.gameState);
 
             useEffect(() => {

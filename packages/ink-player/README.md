@@ -14,7 +14,7 @@ Requirements: [Node.js](https://nodejs.org/) and [pnpm](https://pnpm.io/).
 * Run `pnpm dev` to see the result in your browser and confirm that things are running correctly.
 * Open up `story/game.ink` in the Inky editor and make modifications, go back to your game in the browser and see your changes live!
 * Update the settings in `src/index.ts` to use your game name and update any other settings.
-* Update the About page in `src/About.tsx` to include some information about your game (or remove that screen entirely by updating `src/index.ts`).
+* Update the About page in `src/About.tsx` to include some information about your game (or remove that page entirely by updating `src/index.ts`).
 * Add any custom CSS styling inside the `src/styles.scss` file.
 * Run `pnpm build` to create the final HTML/JS/CSS/Image files needed to display the game. The files will be output to the `dist/` directory. You can then bundle them or upload them to the location of your choice.
 
@@ -33,12 +33,12 @@ The component is provided with the following props:
 * `setPage`: A function to navigate to a different page
 * `loading`: A boolean indicating if the game is loading
 
-All of this is configured in the `src/index.ts` file in the screens array:
+All of this is configured in the `src/index.ts` file in the pages array:
 
 ```
 import {About} from "./about";
 ...
-screens: [
+pages: [
     {
         id: "about",
         title: "About",
@@ -106,7 +106,7 @@ To enable this, in `src/index.ts` you would do:
 ```
 import historyPlugin from "@lamppost/ink-player/plugins/history"
 ...
-screens: [
+pages: [
     {
         id: "game",
         title: "Game",
@@ -392,7 +392,7 @@ The properties for configuring an achievement are as follows:
 Additionally in `src/index.ts` you'll want to add an Achievements page:
 
 ```
-screens: [
+pages: [
     ...
     {
         id: "achievements",

@@ -137,7 +137,7 @@ export default createPlugin<AchievementsSettings>(
 
         return {
             type: "achievements",
-            screen() {
+            page() {
                 const playerAchievements = useAchievementStore(
                     (state) => state.achievements,
                 );

@@ -13,11 +13,11 @@ import { SaveModal } from "../saves/SaveModal";
 import { getUseStoryStore } from "../shared/game-state";
 import { getPluginsByType } from "../shared/plugins";
 import { getSettings } from "../shared/settings";
-import type { ScreenProps } from "../shared/types";
+import type { PageProps } from "../shared/types";
 
-function Header(props: ScreenProps) {
+function Header(props: PageProps) {
     const settings = getSettings();
-    const { screens } = settings;
+    const { pages } = settings;
     const [showSaveModal, setShowSaveModal] = useState(false);
     const [showLoadModal, setShowLoadModal] = useState(false);
     const [theme, setTheme] = useState(
@@ -32,9 +32,9 @@ function Header(props: ScreenProps) {
     const gameState = useStoryStore((state) => state.gameState);
 
     const { shortGameName, gameName } = settings;
-    const { page, setPage } = props;
+    const { page: currentPage, setPage } = props;
     const gameIsWorthSaving = gameState && gameState.length > 1;
-    const homeScreen = screens[0].id;
+    const homePage = pages[0].id;
 
     const handlePageChange = useCallback(
         (page: string) => {
@@ -94,8 +94,8 @@ function Header(props: ScreenProps) {
             >
                 <Container>
                     <Navbar.Brand
-                        href={`?page=${homeScreen}`}
-                        onClick={handlePageChange(homeScreen)}
+                        href={`?page=${homePage}`}
+                        onClick={handlePageChange(homePage)}
                     >
                         {shortGameName || gameName}
                     </Navbar.Brand>
@@ -108,15 +108,15 @@ function Header(props: ScreenProps) {
                         className="justify-content-end"
                     >
                         <Nav>
-                            {screens.map((screen) => (
-                                <Nav.Item key={screen.id} className="d-lg-none">
+                            {pages.map((page) => (
+                                <Nav.Item key={page.id} className="d-lg-none">
                                     <Nav.Link
-                                        eventKey={screen.id}
-                                        href={`?page=${screen.id}`}
-                                        active={page === screen.id}
-                                        onClick={handlePageChange(screen.id)}
+                                        eventKey={page.id}
+                                        href={`?page=${page.id}`}
+                                        active={currentPage === page.id}
+                                        onClick={handlePageChange(page.id)}
                                     >
-                                        {screen.title}
+                                        {page.title}
                                     </Nav.Link>
                                 </Nav.Item>
                             ))}
