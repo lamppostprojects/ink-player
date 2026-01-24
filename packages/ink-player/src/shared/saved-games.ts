@@ -123,23 +123,6 @@ export const getUseSavedGamesStore = memoize(() =>
                     };
                 },
                 migrate(persistedState: any, version) {
-                    if (!version || version < 5) {
-                        return {
-                            ...persistedState,
-                            savedGames: persistedState.savedGames.map(
-                                (savedGame: any) => ({
-                                    ...savedGame,
-                                    gameState: savedGame.gameState.map(
-                                        (state: any) => ({
-                                            ...state,
-                                            storyData: savedGame.storyData,
-                                        }),
-                                    ),
-                                }),
-                            ),
-                        };
-                    }
-
                     // Make it so that choices now have access to their tags
                     if (!version || version < 2) {
                         return {

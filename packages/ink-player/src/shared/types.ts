@@ -10,6 +10,7 @@ export type SavedGame = {
     steps: number;
     date: string;
     gameState: GameState[];
+    storyData: string;
 };
 
 export type Widget = {

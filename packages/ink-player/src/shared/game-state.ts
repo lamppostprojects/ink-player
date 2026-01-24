@@ -114,7 +114,7 @@ export const getUseStoryStore = memoize(() =>
             if (!storyJSON || !Story) {
                 return;
             }
-            const { gameState } = savedGame;
+            const { gameState, storyData } = savedGame;
             const story = new Story(storyJSON);
             story.onError = (error) => {
                 set({ error });
@@ -182,7 +182,9 @@ export const getUseStoryStore = memoize(() =>
                 story.state.LoadJson(
                     typeof currentState.storyData === "string"
                         ? currentState.storyData
-                        : JSON.stringify(currentState.storyData),
+                        : currentState.storyData
+                          ? JSON.stringify(currentState.storyData)
+                          : storyData,
                 );
                 set({
                     id: crypto.randomUUID(),
@@ -205,6 +207,7 @@ export const getUseStoryStore = memoize(() =>
                 steps: Math.max(gameState.length - 1, 1),
                 date: new Date().toLocaleString(),
                 gameState,
+                storyData: story.state.toJson(),
             };
         },
         updateCurrentState: (currentState: GameState) => {
