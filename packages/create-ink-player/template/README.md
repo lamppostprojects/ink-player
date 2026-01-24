@@ -10,6 +10,7 @@ This is a web player for running [Ink](https://github.com/inkle/ink) stories cre
 * Update the About page in `src/About.tsx` to include some information about your game (or remove that page entirely by updating `src/index.ts`).
 * Add any custom CSS styling inside the `src/styles.scss` file.
 * Run `pnpm build` to create the final HTML/JS/CSS/Image files needed to display the game. The files will be output to the `dist/` directory. You can then bundle them or upload them to the location of your choice.
+* To update your game to the latest version of the ink player you can run `pnpm update-ink-player`.
 
 ## Next Steps
 

@@ -1,8 +1,8 @@
 import { init } from "@lamppost/ink-player";
+import darkModePlugin from "@lamppost/ink-player/plugins/dark-mode";
+import historyPlugin from "@lamppost/ink-player/plugins/history";
 import locationPlugin from "@lamppost/ink-player/plugins/location";
 import textInputPlugin from "@lamppost/ink-player/plugins/text-input";
-import historyPlugin from "@lamppost/ink-player/plugins/history";
-import darkModePlugin from "@lamppost/ink-player/plugins/dark-mode";
 
 import "@lamppost/ink-player/styles.css";
 import "./styles.scss";

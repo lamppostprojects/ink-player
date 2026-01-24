@@ -3,6 +3,9 @@
 *.local
 *.log*
 
+# Test environment
+test-env/
+
 # Dist
 node_modules
 dist/

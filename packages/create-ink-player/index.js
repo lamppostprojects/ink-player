@@ -4,8 +4,8 @@ import {
     cpSync,
     existsSync,
     mkdirSync,
-    renameSync,
     readFileSync,
+    renameSync,
     rmSync,
     writeFileSync,
 } from "node:fs";
@@ -18,11 +18,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 async function main() {
+    const incomingName = process.argv[2];
+
     // Ask for the directory name
     const rl = readline.createInterface({ input, output });
 
-    let directoryName = "";
-    while (true) {
+    let directoryName = incomingName || "";
+    while (directoryName.length === 0) {
         const answer = await rl.question(
             "What directory name would you like to use? ",
         );
@@ -54,8 +56,8 @@ async function main() {
     }
 
     // Ask for the game name
-    let gameName = "";
-    while (true) {
+    let gameName = incomingName || "";
+    while (gameName.length === 0) {
         const answer = await rl.question("What is the name of your game? ");
         const trimmed = answer.trim();
 
@@ -92,7 +94,7 @@ async function main() {
     // Update package.json
     const packageJsonPath = join(targetDir, "package.json");
     const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
-    packageJson.name = gameName;
+    packageJson.name = directoryName;
     writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`);
 
     // Update the gameName in the src/index.ts file
@@ -110,6 +112,19 @@ async function main() {
         gameName,
     );
     writeFileSync(readmeMdPath, readmeMd);
+
+    if (incomingName) {
+        console.log("Skipping installation and update of ink-player...");
+        console.log(`\nTo get started:`);
+        console.log(`  cd ${directoryName}`);
+        console.log(`  pnpm install`);
+        console.log(`  pnpm update-ink-player`);
+        console.log(`  pnpm dev`);
+        console.log(
+            `\nThis will start the development server and open the game in your browser. You can now start working on your game.`,
+        );
+        process.exit(0);
+    }
 
     console.log("Installing dependencies...");
 
