@@ -5,8 +5,8 @@ import Card from "react-bootstrap/Card";
 import Stack from "react-bootstrap/Stack";
 
 import { downloadHTMLLog } from "../../game/download-log";
-import HistoryGrouped from "./HistoryGrouped";
 import { createPlugin } from "../../shared/plugins";
+import HistoryGrouped from "./HistoryGrouped";
 import type { HistorySettings } from "./types";
 
 export default createPlugin<HistorySettings>(({ settings, useStoryStore }) => {

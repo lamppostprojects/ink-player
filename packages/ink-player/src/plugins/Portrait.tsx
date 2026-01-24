@@ -14,7 +14,8 @@ export default createPlugin<PortraitSettings>(({ settings }) => ({
     knot({ currentState, transitionStatus }) {
         const [showPortraitModal, setShowPortraitModal] = useState(false);
         const portraits = settings.images;
-        const portrait = currentState.tags.Portrait as keyof typeof portraits;
+        const portrait: keyof typeof portraits =
+            currentState.tags.Portrait?.[0];
         const portraitSrc = portraits?.[portrait]?.small;
 
         if (!portraitSrc) {
@@ -80,6 +81,6 @@ export default createPlugin<PortraitSettings>(({ settings }) => ({
         );
     },
     key({ currentState }) {
-        return currentState.tags.Portrait || null;
+        return currentState.tags.Portrait?.[0] || null;
     },
 }));

@@ -5,13 +5,13 @@ import Button from "react-bootstrap/Button";
 import Placeholder from "react-bootstrap/Placeholder";
 import type { TransitionStatus } from "react-transition-state";
 
-import { downloadHTMLLog } from "./download-log";
 import { LoadModal } from "../saves/LoadModal";
 import { getUseStoryStore } from "../shared/game-state";
 import { ProcessedTextLine } from "../shared/process-text";
 import { getUseSavedGamesStore } from "../shared/saved-games";
 import { getSettings } from "../shared/settings";
 import type { GameState } from "../shared/types";
+import { downloadHTMLLog } from "./download-log";
 
 function GameChoices({
     disabled,

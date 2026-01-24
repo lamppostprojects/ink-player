@@ -12,17 +12,16 @@ export default createPlugin<HeaderImageSettings>(({ settings }) => ({
         if (context === "history") {
             return null;
         }
-        const imageSrc =
-            settings.images?.[
-                currentState.tags.Image as keyof typeof settings.images
-            ];
+        const currentImage: keyof typeof settings.images =
+            currentState.tags.Image?.[0];
+        const imageSrc = settings.images?.[currentImage];
         if (!imageSrc) {
             return null;
         }
         return (
             <Card.Img
                 src={imageSrc}
-                alt={currentState.tags.Image}
+                alt={currentImage}
                 variant="top"
                 className={`transitioned ${transitionStatus || ""}`}
             />
@@ -40,6 +39,6 @@ export default createPlugin<HeaderImageSettings>(({ settings }) => ({
         );
     },
     key({ currentState }) {
-        return currentState.tags.Image || null;
+        return currentState.tags.Image?.[0] || null;
     },
 }));

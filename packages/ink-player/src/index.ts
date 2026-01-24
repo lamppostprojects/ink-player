@@ -1,3 +1,4 @@
+export { downloadHTMLLog } from "./game/download-log";
 export { getUseStoryStore } from "./shared/game-state";
 export { init } from "./shared/init";
 export { createPlugin, getPluginsByType } from "./shared/plugins";
@@ -7,10 +8,9 @@ export { getSettings } from "./shared/settings";
 export type {
     GameState,
     IncomingSettings,
-    PluginRegistry,
     Page,
     PageProps,
+    PluginRegistry,
     Widget,
 } from "./shared/types";
 export { useEvalFunction } from "./shared/use-eval-function";
-export { downloadHTMLLog } from "./game/download-log";

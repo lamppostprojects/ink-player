@@ -4,7 +4,7 @@ import { create } from "zustand";
 
 import { getPluginsByType } from "./plugins";
 import { getSettings } from "./settings";
-import type { GameState, SavedGame, Widget } from "./types";
+import type { GameState, SavedGame, Tag, Widget } from "./types";
 
 export const getUseStoryStore = memoize(() =>
     create<{
@@ -377,7 +377,7 @@ const getStoryState = ({
 
     const settings = getSettings();
     const lines: Array<string | Widget | Array<string | Widget>> = [];
-    const tags: Record<string, string> = {};
+    const tags: Record<string, Tag> = {};
 
     if (currentState && settings.stickyTags) {
         for (const tag of settings.stickyTags) {
@@ -401,22 +401,26 @@ const getStoryState = ({
                 const [key, value] = tag.split(":").map((t) => t.trim());
                 if (value === "None") {
                     delete tags[key];
+                } else if (tags[key]) {
+                    tags[key].push(value);
                 } else {
-                    tags[key] = value;
+                    tags[key] = [value];
                 }
             }
         }
     }
 
     const choices = story.currentChoices.map((choice) => {
-        const tags: Record<string, string> = {};
+        const tags: Record<string, Tag> = {};
         if (choice.tags) {
             for (const tag of choice.tags) {
                 const [key, value] = tag.split(":").map((t) => t.trim());
                 if (value === "None") {
                     delete tags[key];
+                } else if (tags[key]) {
+                    tags[key].push(value);
                 } else {
-                    tags[key] = value;
+                    tags[key] = [value];
                 }
             }
         }

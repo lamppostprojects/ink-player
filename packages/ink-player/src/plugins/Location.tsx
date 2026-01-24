@@ -7,7 +7,7 @@ export default createPlugin(() => ({
             return null;
         }
 
-        const location = currentState.tags.Location;
+        const location = currentState.tags.Location?.[0];
 
         if (!location) {
             return null;
@@ -39,6 +39,6 @@ export default createPlugin(() => ({
         );
     },
     key({ currentState }) {
-        return currentState.tags.Location || null;
+        return currentState.tags.Location?.[0] || null;
     },
 }));

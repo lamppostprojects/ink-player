@@ -134,11 +134,9 @@ export default createPlugin<BackgroundMusicSettings>(
                 }
 
                 const audioFiles = settings.audioFiles;
-                const audioFile =
-                    audioFiles[
-                        currentState.tags
-                            .BackgroundMusic as keyof typeof audioFiles
-                    ];
+                const currentBackgroundMusic: keyof typeof audioFiles =
+                    currentState.tags.BackgroundMusic?.[0];
+                const audioFile = audioFiles[currentBackgroundMusic];
 
                 const play = useAudioStore((state) => state.play);
                 const stop = useAudioStore((state) => state.stop);
@@ -251,7 +249,7 @@ export default createPlugin<BackgroundMusicSettings>(
                 );
             },
             key({ currentState }) {
-                return currentState.tags.BackgroundMusic || null;
+                return currentState.tags.BackgroundMusic?.[0] || null;
             },
         };
     },

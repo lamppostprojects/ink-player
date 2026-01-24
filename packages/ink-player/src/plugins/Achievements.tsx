@@ -1,6 +1,6 @@
 import CheckCircleFillIcon from "bootstrap-icons/icons/check-circle-fill.svg?react";
 import LockFillIcon from "bootstrap-icons/icons/lock-fill.svg?react";
-import { useCallback, useState } from "preact/hooks";
+import { useCallback, useEffect, useState } from "preact/hooks";
 import Card from "react-bootstrap/Card";
 import Stack from "react-bootstrap/Stack";
 import { create } from "zustand";
@@ -189,13 +189,22 @@ export default createPlugin<AchievementsSettings>(
                 const addAchievement = useAchievementStore(
                     (state) => state.addAchievement,
                 );
-                const id = currentState.tags
-                    .Achievement as keyof typeof settings.achievements;
-                const achievement = settings.achievements?.[id];
 
-                if (achievement) {
-                    addAchievement(id);
-                }
+                const achievements:
+                    | Array<keyof typeof settings.achievements>
+                    | undefined = currentState.tags.Achievement;
+
+                useEffect(() => {
+                    if (!achievements) {
+                        return;
+                    }
+                    for (const id of achievements) {
+                        const achievement = settings.achievements?.[id];
+                        if (achievement) {
+                            addAchievement(id);
+                        }
+                    }
+                }, [achievements]);
 
                 return null;
             },
@@ -203,32 +212,37 @@ export default createPlugin<AchievementsSettings>(
                 const playerAchievements = useAchievementStore(
                     (state) => state.achievements,
                 );
-                const id = currentState.tags
-                    .Achievement as keyof typeof settings.achievements;
-                const achievement = settings.achievements?.[id];
 
-                if (!achievement || playerAchievements.includes(id)) {
-                    return [];
-                }
+                const achievementIds:
+                    | Array<keyof typeof settings.achievements>
+                    | undefined = currentState.tags.Achievement;
 
-                return [
-                    {
-                        id,
-                        icon: achievement.icon,
-                        page: "achievements",
-                        title: `Achievement Unlocked!`,
-                        description: (
-                            <Achievement
-                                key={id}
-                                icon={achievement.icon}
-                                title={achievement.title}
-                                description={achievement.description}
-                                completed={true}
-                                hidden={false}
-                            />
-                        ),
-                    },
-                ];
+                const achievements: Array<Achievement> =
+                    achievementIds
+                        ?.map((id) => {
+                            return playerAchievements.includes(id)
+                                ? undefined
+                                : settings.achievements?.[id];
+                        })
+                        .filter((achievement) => achievement !== undefined) ||
+                    [];
+
+                return achievements.map((achievement) => ({
+                    id: achievement.title,
+                    icon: achievement.icon,
+                    page: "achievements",
+                    title: `Achievement Unlocked!`,
+                    description: (
+                        <Achievement
+                            key={achievement.title}
+                            icon={achievement.icon}
+                            title={achievement.title}
+                            description={achievement.description}
+                            completed={true}
+                            hidden={false}
+                        />
+                    ),
+                }));
             },
             async preload() {
                 return Promise.all(

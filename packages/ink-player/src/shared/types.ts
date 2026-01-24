@@ -19,13 +19,15 @@ export type Widget = {
     output?: Record<string, string>;
 };
 
+export type Tag = Array<string>;
+
 export type GameState = {
     id: string;
     lines: Array<string | Widget | Array<string | Widget>>;
-    tags: Record<string, string>;
+    tags: Record<string, Tag>;
     choices: Array<{
         choice: string | Widget | Array<string | Widget>;
-        tags: Record<string, string>;
+        tags: Record<string, Tag>;
     }>;
     selectedChoice?: number;
     widgets: Record<string, any>;

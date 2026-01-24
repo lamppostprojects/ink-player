@@ -1,8 +1,9 @@
-import Nav from "react-bootstrap/Nav";
-import { createPlugin } from "../shared/plugins";
-import { useCallback, useEffect, useState } from "preact/hooks";
 import MoonIcon from "bootstrap-icons/icons/moon.svg?react";
 import SunIcon from "bootstrap-icons/icons/sun.svg?react";
+import { useCallback, useEffect, useState } from "preact/hooks";
+import Nav from "react-bootstrap/Nav";
+
+import { createPlugin } from "../shared/plugins";
 
 interface DarkModeSettings {
     defaultTheme?: string;
