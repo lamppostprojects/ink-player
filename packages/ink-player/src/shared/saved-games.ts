@@ -114,10 +114,11 @@ export const getUseSavedGamesStore = memoize(() =>
                     return {
                         savedGames: state.savedGames.map((savedGame) => ({
                             ...savedGame,
-                            gameState: savedGame.gameState.map((state) => ({
-                                ...state,
-                                storyData: undefined,
-                            })),
+                            gameState: savedGame.gameState.map(
+                                ({ storyData, ...state }) => ({
+                                    ...state,
+                                }),
+                            ),
                         })),
                     };
                 },

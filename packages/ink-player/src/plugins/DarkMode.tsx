@@ -25,13 +25,13 @@ export default createPlugin<DarkModeSettings>(({ gameSettings }) => {
     }
     document.documentElement.setAttribute("data-bs-theme", defaultTheme);
 
-    return ({
+    return {
         type: "dark-mode",
         nav() {
             const [theme, setTheme] = useState(
                 document.documentElement.getAttribute("data-bs-theme") ||
-                gameSettings.defaultTheme ||
-                "light",
+                    gameSettings.defaultTheme ||
+                    "light",
             );
             const toggleTheme = useCallback(() => {
                 //setExpanded(false);
@@ -40,19 +40,22 @@ export default createPlugin<DarkModeSettings>(({ gameSettings }) => {
 
             useEffect(() => {
                 document.documentElement.setAttribute("data-bs-theme", theme);
-                window.localStorage.setItem(`${gameSettings.gameName}-theme`, theme);
+                window.localStorage.setItem(
+                    `${gameSettings.gameName}-theme`,
+                    theme,
+                );
             }, [theme]);
 
-            return (<Nav.Link onClick={toggleTheme}>
-                {theme === "dark" ? (
-                    <SunIcon className="bi bi-sun" />
-                ) : (
-                    <MoonIcon className="bi bi-moon" />
-                )}{" "}
-                {theme === "dark"
-                    ? "Light Mode"
-                    : "Dark Mode"}
-            </Nav.Link>);
+            return (
+                <Nav.Link onClick={toggleTheme}>
+                    {theme === "dark" ? (
+                        <SunIcon className="bi bi-sun" />
+                    ) : (
+                        <MoonIcon className="bi bi-moon" />
+                    )}{" "}
+                    {theme === "dark" ? "Light Mode" : "Dark Mode"}
+                </Nav.Link>
+            );
         },
-    })
+    };
 });

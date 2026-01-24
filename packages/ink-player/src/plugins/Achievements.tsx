@@ -19,10 +19,7 @@ interface Achievement {
 }
 
 interface AchievementsSettings {
-    achievements: Record<
-        string,
-        Achievement
-    >;
+    achievements: Record<string, Achievement>;
 }
 
 export default createPlugin<AchievementsSettings>(

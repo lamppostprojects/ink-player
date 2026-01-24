@@ -12,7 +12,7 @@ import type { HistorySettings } from "./types";
 export default createPlugin<HistorySettings>(({ settings, useStoryStore }) => {
     return {
         type: "history",
-        page({page}) {
+        page({ page }) {
             const gameState = useStoryStore((state) => state.gameState);
 
             useEffect(() => {
@@ -28,30 +28,37 @@ export default createPlugin<HistorySettings>(({ settings, useStoryStore }) => {
                             <h1>History</h1>
                             {!settings.hideDownloadButton && (
                                 <Button
-                                size="sm"
-                                type="button"
-                                variant="tertiary"
-                                className="ms-auto"
-                                onClick={() => downloadHTMLLog(gameState)}
-                            >
-                                <DownloadIcon className="bi bi-download" /> Download
-                                HTML Log
-                            </Button>
+                                    size="sm"
+                                    type="button"
+                                    variant="tertiary"
+                                    className="ms-auto"
+                                    onClick={() => downloadHTMLLog(gameState)}
+                                >
+                                    <DownloadIcon className="bi bi-download" />{" "}
+                                    Download HTML Log
+                                </Button>
                             )}
                         </Stack>
                         <hr />
-                        <HistoryGrouped gameState={gameState} settings={settings} />
+                        <HistoryGrouped
+                            gameState={gameState}
+                            settings={settings}
+                        />
                         {!settings.hideDownloadButton && (
-                            <Stack direction="horizontal" gap={3} className="mt-3">
-                            <Button
-                                size="sm"
-                                type="button"
-                                variant="tertiary"
-                                className="ms-auto"
-                                onClick={() => downloadHTMLLog(gameState)}
+                            <Stack
+                                direction="horizontal"
+                                gap={3}
+                                className="mt-3"
                             >
-                                <DownloadIcon className="bi bi-download" /> Download
-                                    HTML Log
+                                <Button
+                                    size="sm"
+                                    type="button"
+                                    variant="tertiary"
+                                    className="ms-auto"
+                                    onClick={() => downloadHTMLLog(gameState)}
+                                >
+                                    <DownloadIcon className="bi bi-download" />{" "}
+                                    Download HTML Log
                                 </Button>
                             </Stack>
                         )}

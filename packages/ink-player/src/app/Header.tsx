@@ -104,7 +104,10 @@ function Header(props: PageProps) {
                                 </Nav.Item>
                             ))}
                             {widgets.map(([type, Widget]) => (
-                                <Nav.Item key={type} onClick={() => setExpanded(false)}>
+                                <Nav.Item
+                                    key={type}
+                                    onClick={() => setExpanded(false)}
+                                >
                                     <Widget {...props} />
                                 </Nav.Item>
                             ))}

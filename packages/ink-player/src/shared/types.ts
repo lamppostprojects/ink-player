@@ -40,10 +40,7 @@ export type PageProps = {
 export type Page = {
     id: string;
     title: string;
-    component:
-        | "game"
-        | string
-        | ((props: PageProps) => React.ReactNode);
+    component: "game" | string | ((props: PageProps) => React.ReactNode);
 };
 
 type SharedSettings = {
