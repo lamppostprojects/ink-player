@@ -1,5 +1,11 @@
 # @lamppost/create-ink-player
 
+## 1.0.8
+
+### Patch Changes
+
+- 0d49e7d: Fix up rsbuild prefix and auto-update ink-player post-install.
+
 ## 1.0.7
 
 ### Patch Changes
