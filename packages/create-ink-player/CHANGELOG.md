@@ -1,5 +1,11 @@
 # @lamppost/create-ink-player
 
+## 1.0.6
+
+### Patch Changes
+
+- 3e1dcad: Add a simple way to update the ink player.
+
 ## 1.0.5
 
 ### Patch Changes
