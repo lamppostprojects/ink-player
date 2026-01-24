@@ -6,7 +6,7 @@ import { pluginSvgr } from "@rsbuild/plugin-svgr";
 
 export default defineConfig({
     output: {
-        assetPrefix: "./",
+        assetPrefix: "auto",
     },
     dev: {
         hmr: false,

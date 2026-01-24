@@ -124,6 +124,16 @@ async function main() {
         process.exit(1);
     }
 
+    // Run pnpm update-ink-player
+    try {
+        execSync("pnpm update-ink-player", {
+            cwd: targetDir,
+            stdio: "inherit",
+        });
+    } catch (error) {
+        console.error("Error updating ink-player:", error.message);
+    }
+
     console.log(`\n${gameName} setup complete!`);
     console.log(`\nTo get started:`);
     console.log(`  cd ${directoryName}`);
