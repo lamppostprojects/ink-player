@@ -1,5 +1,11 @@
 # @lamppost/create-ink-player
 
+## 1.0.10
+
+### Patch Changes
+
+- 8402ffb: Update template to v2.1.0.
+
 ## 1.0.9
 
 ### Patch Changes
