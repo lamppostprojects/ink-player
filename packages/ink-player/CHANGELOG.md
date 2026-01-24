@@ -1,5 +1,11 @@
 # @lamppost/ink-player
 
+## 2.0.4
+
+### Patch Changes
+
+- 51e9cbd: Only scroll history if on the history page.
+
 ## 2.0.3
 
 ### Patch Changes
