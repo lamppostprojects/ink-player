@@ -1,0 +1,13 @@
+pre-commit:
+    parallel: true
+    jobs:
+        - name: lint
+          run: pnpm lint
+
+        - name: tsc
+          root: packages/ink-player
+          run: pnpm tsc
+
+        - name: build
+          root: packages/ink-player
+          run: pnpm build
