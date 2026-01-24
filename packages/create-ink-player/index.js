@@ -4,6 +4,7 @@ import {
     cpSync,
     existsSync,
     mkdirSync,
+    renameSync,
     readFileSync,
     rmSync,
     writeFileSync,
@@ -79,9 +80,9 @@ async function main() {
     console.log("Copying template files...");
     cpSync(templateDir, targetDir, { recursive: true });
 
-    // Copy over .gitignore file
-    const gitignorePath = join(templateDir, ".gitignore");
-    cpSync(gitignorePath, join(targetDir, ".gitignore"));
+    // Rename _gitignore to .gitignore file
+    const gitignorePath = join(targetDir, "_gitignore");
+    renameSync(gitignorePath, join(targetDir, ".gitignore"));
 
     // Delete the node_modules directory, if it exists
     if (existsSync(join(targetDir, "node_modules"))) {

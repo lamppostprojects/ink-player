@@ -10,16 +10,18 @@ import { createPlugin } from "../shared/plugins";
 
 const NUM_COLUMNS = 2;
 
+interface Achievement {
+    icon: string | React.ElementType;
+    title: string;
+    description: string;
+    hidden?: boolean;
+    showHiddenButtonText?: string;
+}
+
 interface AchievementsSettings {
     achievements: Record<
         string,
-        {
-            icon: string;
-            title: string;
-            description: string;
-            hidden?: boolean;
-            showHiddenButtonText?: string;
-        }
+        Achievement
     >;
 }
 
@@ -50,14 +52,7 @@ export default createPlugin<AchievementsSettings>(
             completed,
             hidden,
             showHiddenButtonText,
-        }: {
-            icon: string;
-            title: string;
-            description: string;
-            completed: boolean;
-            hidden: boolean;
-            showHiddenButtonText?: string;
-        }) {
+        }: Achievement & { completed: boolean }) {
             const [showSpoiler, setShowSpoiler] = useState(false);
 
             const handleClick = useCallback(() => {
