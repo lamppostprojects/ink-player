@@ -47,6 +47,9 @@ importers:
 
   .:
     devDependencies:
+      '@biomejs/biome':
+        specifier: 'catalog:'
+        version: 2.2.4
       '@changesets/cli':
         specifier: ^2.29.8
         version: 2.29.8
