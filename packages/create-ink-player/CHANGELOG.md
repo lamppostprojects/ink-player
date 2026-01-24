@@ -1,5 +1,11 @@
 # @lamppost/create-ink-player
 
+## 1.0.7
+
+### Patch Changes
+
+- bc2a5e1: Fix up .gitignore copying.
+
 ## 1.0.6
 
 ### Patch Changes
