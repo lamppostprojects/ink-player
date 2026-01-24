@@ -2,6 +2,7 @@ pre-commit:
     parallel: true
     jobs:
         - name: lint
+          glob: "*.{js,ts,tsx,json,yml,yaml,md,scss,css}"
           run: pnpm lint
 
         - name: tsc
@@ -11,3 +12,7 @@ pre-commit:
         - name: build
           root: packages/ink-player
           run: pnpm build
+
+        - name: changeset
+          glob: "packages/**/*"
+          run: pnpm changeset status --since=main 2>&1 | grep -q "error" && exit 1 || exit 0
