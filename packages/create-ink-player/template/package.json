@@ -10,7 +10,7 @@
         "update-ink-player": "pnpm -w update @lamppost/ink-player"
     },
     "dependencies": {
-        "@lamppost/ink-player": "^2.0.2",
+        "@lamppost/ink-player": "^2.1.0",
         "preact": "^10.27.1",
         "react-bootstrap": "^2.10.10"
     },
