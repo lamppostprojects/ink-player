@@ -1,5 +1,11 @@
 # @lamppost/ink-player
 
+## 2.0.7
+
+### Patch Changes
+
+- 81967d0: Use full storyData always.
+
 ## 2.0.6
 
 ### Patch Changes
