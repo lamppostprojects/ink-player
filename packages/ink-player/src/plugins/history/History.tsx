@@ -12,12 +12,14 @@ import type { HistorySettings } from "./types";
 export default createPlugin<HistorySettings>(({ settings, useStoryStore }) => {
     return {
         type: "history",
-        page() {
+        page({page}) {
             const gameState = useStoryStore((state) => state.gameState);
 
             useEffect(() => {
-                window.scrollTo(0, document.body.scrollHeight);
-            }, []);
+                if (page === "history") {
+                    window.scrollTo(0, document.body.scrollHeight);
+                }
+            }, [page]);
 
             return (
                 <Card className="mb-3">
