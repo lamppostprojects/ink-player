@@ -1,5 +1,11 @@
 # @lamppost/ink-player
 
+## 2.0.3
+
+### Patch Changes
+
+- bc2a5e1: Fix up achievements types.
+
 ## 2.0.2
 
 ### Patch Changes
