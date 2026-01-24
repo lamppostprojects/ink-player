@@ -1,5 +1,11 @@
 # @lamppost/ink-player
 
+## 2.0.5
+
+### Patch Changes
+
+- 7dba314: No longer story storyData in localStorage.
+
 ## 2.0.4
 
 ### Patch Changes
