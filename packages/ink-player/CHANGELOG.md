@@ -1,5 +1,11 @@
 # @lamppost/ink-player
 
+## 2.0.6
+
+### Patch Changes
+
+- ba6be75: Another attempt at removing the storyData.
+
 ## 2.0.5
 
 ### Patch Changes
