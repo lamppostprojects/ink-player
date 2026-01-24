@@ -28,7 +28,7 @@ export type GameState = {
     }>;
     selectedChoice?: number;
     widgets: Record<string, any>;
-    storyData: string;
+    storyData?: string;
 };
 
 export type PageProps = {
