@@ -1,5 +1,11 @@
 # @lamppost/create-ink-player
 
+## 1.0.9
+
+### Patch Changes
+
+- 8eb93c6: Add in tools for simpler testing.
+
 ## 1.0.8
 
 ### Patch Changes
