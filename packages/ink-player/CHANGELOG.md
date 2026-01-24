@@ -1,5 +1,11 @@
 # @lamppost/ink-player
 
+## 2.1.0
+
+### Minor Changes
+
+- b169554: Handle all tags as arrays, fix up achievements rendering.
+
 ## 2.0.7
 
 ### Patch Changes
