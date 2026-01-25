@@ -89,7 +89,7 @@ export const getUseSavedGamesStore = memoize(() =>
             }),
             {
                 name: `${getSettings().gameName}-savedGames`,
-                version: 5,
+                version: 6,
                 storage: createJSONStorage(() => ({
                     getItem: (name) => localStorage.getItem(name),
                     setItem: (name, value) => {
@@ -123,6 +123,26 @@ export const getUseSavedGamesStore = memoize(() =>
                     };
                 },
                 migrate(persistedState: any, version) {
+                    if (!version || version < 6) {
+                        return {
+                            ...persistedState,
+                            savedGames: persistedState.savedGames.map(
+                                (savedGame: any) => ({
+                                    ...savedGame,
+                                    gameState: savedGame.gameState.map(
+                                        ({ tags, ...state }: any) => ({
+                                            ...state,
+                                            tags:
+                                                typeof tags === "string"
+                                                    ? [tags]
+                                                    : tags,
+                                        }),
+                                    ),
+                                }),
+                            ),
+                        };
+                    }
+
                     // Make it so that choices now have access to their tags
                     if (!version || version < 2) {
                         return {
