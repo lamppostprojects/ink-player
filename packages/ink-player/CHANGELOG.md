@@ -1,5 +1,11 @@
 # @lamppost/ink-player
 
+## 2.1.1
+
+### Patch Changes
+
+- 4f9e40b: Handle non-array tags from saved data.
+
 ## 2.1.0
 
 ### Minor Changes
