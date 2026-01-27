@@ -1,5 +1,15 @@
 # @lamppost/ink-player
 
+## 2.1.2
+
+### Patch Changes
+
+- [`c05f32f`](https://github.com/lamppostprojects/ink-player/commit/c05f32fbb187a086cd53d868c150fd8a776cf369) Thanks [@jeresig](https://github.com/jeresig)! - Fix setting the sticky tags when there are multiple.
+
+- [`9730053`](https://github.com/lamppostprojects/ink-player/commit/9730053acd222362bbbb39045649cc40fe64f83b) Thanks [@jeresig](https://github.com/jeresig)! - Fix up width of text input.
+
+- [`bb5334a`](https://github.com/lamppostprojects/ink-player/commit/bb5334ab38fe05fa73c3259ce72d4d92652a92f1) Thanks [@jeresig](https://github.com/jeresig)! - Fix up restoring game state for local dev.
+
 ## 2.1.1
 
 ### Patch Changes
