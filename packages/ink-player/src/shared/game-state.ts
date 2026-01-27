@@ -378,11 +378,12 @@ const getStoryState = ({
     const settings = getSettings();
     const lines: Array<string | Widget | Array<string | Widget>> = [];
     const tags: Record<string, Tag> = {};
+    const stickyTags: Record<string, Tag> = {};
 
     if (currentState && settings.stickyTags) {
         for (const tag of settings.stickyTags) {
             if (currentState.tags[tag]) {
-                tags[tag] = currentState.tags[tag];
+                stickyTags[tag] = currentState.tags[tag];
             }
         }
     }
@@ -400,13 +401,21 @@ const getStoryState = ({
             for (const tag of story.currentTags) {
                 const [key, value] = tag.split(":").map((t) => t.trim());
                 if (value === "None") {
-                    delete tags[key];
+                    delete stickyTags[key];
                 } else if (tags[key]) {
                     tags[key].push(value);
                 } else {
                     tags[key] = [value];
                 }
             }
+        }
+    }
+
+    // Set the sticky tags from the current state but after the tags have
+    // been parsed from the story.
+    for (const [key, value] of Object.entries(stickyTags)) {
+        if (!tags[key]) {
+            tags[key] = value;
         }
     }
 
