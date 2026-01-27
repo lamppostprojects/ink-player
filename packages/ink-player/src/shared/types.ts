@@ -11,6 +11,7 @@ export type SavedGame = {
     date: string;
     gameState: GameState[];
     storyData: string;
+    previousStoryData: string | null;
 };
 
 export type Widget = {

@@ -11,6 +11,8 @@ export const getUseStoryStore = memoize(() =>
         id: string;
         story: Story | null;
         storyJSON: { inkVersion: number } | null;
+        storyData: string | null;
+        previousStoryData: string | null;
         Story: typeof Story | null;
         error: string | null;
         _initializing: boolean;
@@ -46,6 +48,8 @@ export const getUseStoryStore = memoize(() =>
         id: "",
         story: null,
         storyJSON: null,
+        storyData: null,
+        previousStoryData: null,
         Story: null,
         error: null,
         _initializing: false,
@@ -72,6 +76,8 @@ export const getUseStoryStore = memoize(() =>
                 ),
             ]);
             set({
+                storyData: null,
+                previousStoryData: null,
                 storyJSON,
                 Story,
                 id: crypto.randomUUID(),
@@ -102,6 +108,8 @@ export const getUseStoryStore = memoize(() =>
                 set({
                     id: crypto.randomUUID(),
                     story,
+                    storyData: story.state.toJson(),
+                    previousStoryData: null,
                     gameState: [newState],
                     currentState: newState,
                     previousState: null,
@@ -114,7 +122,7 @@ export const getUseStoryStore = memoize(() =>
             if (!storyJSON || !Story) {
                 return;
             }
-            const { gameState, storyData } = savedGame;
+            const { gameState, storyData, previousStoryData } = savedGame;
             const story = new Story(storyJSON);
             story.onError = (error) => {
                 set({ error });
@@ -130,13 +138,9 @@ export const getUseStoryStore = memoize(() =>
 
             if (
                 previousState?.selectedChoice !== undefined &&
-                previousState.storyData
+                previousStoryData
             ) {
-                story.state.LoadJson(
-                    typeof previousState.storyData === "string"
-                        ? previousState.storyData
-                        : JSON.stringify(previousState.storyData),
-                );
+                story.state.LoadJson(previousStoryData);
 
                 set({
                     id: crypto.randomUUID(),
@@ -145,6 +149,8 @@ export const getUseStoryStore = memoize(() =>
                     currentState: previousState,
                     previousState: null,
                     error: null,
+                    storyData: previousStoryData,
+                    previousStoryData: null,
                 });
 
                 const selectedChoice =
@@ -179,13 +185,7 @@ export const getUseStoryStore = memoize(() =>
                     window.location.href.split("#")[0],
                 );
 
-                story.state.LoadJson(
-                    typeof currentState.storyData === "string"
-                        ? currentState.storyData
-                        : currentState.storyData
-                          ? JSON.stringify(currentState.storyData)
-                          : storyData,
-                );
+                story.state.LoadJson(storyData);
                 set({
                     id: crypto.randomUUID(),
                     story,
@@ -193,12 +193,20 @@ export const getUseStoryStore = memoize(() =>
                     currentState,
                     previousState,
                     error: null,
+                    storyData,
+                    previousStoryData,
                 });
             }
         },
         getSaveState: ({ title, id }: { title: string; id?: string }) => {
-            const { story, currentState, gameState } = get();
-            if (!story || !currentState) {
+            const {
+                story,
+                storyData,
+                previousStoryData,
+                currentState,
+                gameState,
+            } = get();
+            if (!story || !currentState || !storyData) {
                 return null;
             }
             return {
@@ -207,7 +215,8 @@ export const getUseStoryStore = memoize(() =>
                 steps: Math.max(gameState.length - 1, 1),
                 date: new Date().toLocaleString(),
                 gameState,
-                storyData: story.state.toJson(),
+                storyData,
+                previousStoryData,
             };
         },
         updateCurrentState: (currentState: GameState) => {
@@ -226,7 +235,7 @@ export const getUseStoryStore = memoize(() =>
             output?: Record<string, string>;
             variables?: Record<string, string>;
         }) => {
-            const { story, currentState, gameState } = get();
+            const { story, storyData, currentState, gameState } = get();
             if (!story || !currentState) {
                 return null;
             }
@@ -260,6 +269,8 @@ export const getUseStoryStore = memoize(() =>
                     gameState: newGameState,
                     currentState: newState,
                     previousState: currentState,
+                    storyData: story.state.toJson(),
+                    previousStoryData: storyData,
                 });
                 return {
                     gameState: newGameState,
@@ -270,24 +281,27 @@ export const getUseStoryStore = memoize(() =>
             return null;
         },
         back: () => {
-            const { story, currentState, gameState } = get();
+            const { story, currentState, gameState, previousStoryData } = get();
             const previousState = gameState[gameState.length - 2] ?? null;
 
-            if (!story || !currentState || !previousState) {
+            if (
+                !story ||
+                !currentState ||
+                !previousState ||
+                !previousStoryData
+            ) {
                 return;
             }
 
-            story.state.LoadJson(
-                typeof previousState.storyData === "string"
-                    ? previousState.storyData
-                    : JSON.stringify(previousState.storyData),
-            );
+            story.state.LoadJson(previousStoryData);
 
             // Remove the hash from the URL
             history.replaceState(null, "", window.location.href.split("#")[0]);
 
             set({
                 gameState: gameState.slice(0, -1),
+                storyData: previousStoryData,
+                previousStoryData: null,
                 currentState: { ...previousState },
                 previousState: { ...currentState },
             });

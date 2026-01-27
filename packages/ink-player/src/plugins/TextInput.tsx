@@ -70,9 +70,12 @@ export default createPlugin(() => ({
                             onChange={handleChange}
                             autoComplete="off"
                             disabled={disabled}
-                            style={{ width: "100%" }}
                         />
-                        <Button type="submit" disabled={!value || disabled}>
+                        <Button
+                            type="submit"
+                            disabled={!value || disabled}
+                            style={{ flex: 0 }}
+                        >
                             {submitLabel || "Submit"}
                         </Button>
                     </Stack>

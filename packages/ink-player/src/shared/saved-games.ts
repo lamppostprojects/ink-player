@@ -107,21 +107,6 @@ export const getUseSavedGamesStore = memoize(() =>
                     },
                     removeItem: (name) => localStorage.removeItem(name),
                 })),
-                partialize(state) {
-                    // We only want to save to saved game state, but not the
-                    // story data because it's too large to store in the
-                    // browser's storage.
-                    return {
-                        savedGames: state.savedGames.map((savedGame) => ({
-                            ...savedGame,
-                            gameState: savedGame.gameState.map(
-                                ({ storyData, ...state }) => ({
-                                    ...state,
-                                }),
-                            ),
-                        })),
-                    };
-                },
                 migrate(persistedState: any, version) {
                     if (!version || version < 6) {
                         return {
