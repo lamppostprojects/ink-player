@@ -453,14 +453,11 @@ const getStoryState = ({
         };
     });
 
-    const storyData = JSON.parse(story.state.toJson());
-
     return {
         id: crypto.randomUUID(),
         lines,
         tags,
         choices,
-        storyData,
         widgets: {},
     } satisfies GameState;
 };
