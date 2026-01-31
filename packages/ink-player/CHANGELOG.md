@@ -1,5 +1,11 @@
 # @lamppost/ink-player
 
+## 2.1.3
+
+### Patch Changes
+
+- [`3e80d00`](https://github.com/lamppostprojects/ink-player/commit/3e80d0009f4c7f042ee93938d094f48a2e215aa4) Thanks [@jeresig](https://github.com/jeresig)! - Remove storyData from GameState.
+
 ## 2.1.2
 
 ### Patch Changes
