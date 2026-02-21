@@ -128,6 +128,14 @@ export default createPlugin<BackgroundMusicSettings>(
 
         return {
             type: "backgroundMusic",
+            export() {
+                return useAudioStore.getState().audioElements;
+            },
+            import(data) {
+                useAudioStore.setState({
+                    audioElements: data as Map<string, HTMLAudioElement>,
+                });
+            },
             header({ context, currentState, transitionStatus }) {
                 if (context === "history") {
                     return null;

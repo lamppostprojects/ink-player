@@ -89,6 +89,14 @@ export default createPlugin<FootnotesSettings>(({ gameSettings }) => {
 
     return {
         type: "footnote",
+        export() {
+            return useFootnotesStore.getState().open;
+        },
+        import(data) {
+            useFootnotesStore.setState({
+                open: data as boolean,
+            });
+        },
         text({ input, context }) {
             if (context === "history") {
                 return null;

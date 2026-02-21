@@ -6,8 +6,9 @@ import Modal from "react-bootstrap/Modal";
 import Stack from "react-bootstrap/Stack";
 
 import { getUseStoryStore } from "../shared/game-state";
+import { getPluginsByType } from "../shared/plugins";
 import { getUseSavedGamesStore } from "../shared/saved-games";
-import type { SavedGame } from "../shared/types";
+import type { ExportedGame, SavedGame } from "../shared/types";
 import { DeleteModal } from "./DeleteModal";
 
 export function LoadModal({
@@ -50,8 +51,18 @@ export function LoadModal({
             }
             const reader = new FileReader();
             reader.onload = () => {
-                const json = JSON.parse(reader.result as string);
-                loadSavedGame(json);
+                const exportedGame: ExportedGame = JSON.parse(
+                    reader.result as string,
+                );
+                for (const [type, importFn] of getPluginsByType(
+                    "import",
+                ).entries()) {
+                    const data = exportedGame.plugins[type];
+                    if (data) {
+                        importFn(data);
+                    }
+                }
+                loadSavedGame(exportedGame.savedGame);
                 handleClose();
             };
             reader.readAsText(file);

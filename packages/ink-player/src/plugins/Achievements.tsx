@@ -129,6 +129,14 @@ export default createPlugin<AchievementsSettings>(
 
         return {
             type: "achievements",
+            export() {
+                return useAchievementStore.getState().achievements;
+            },
+            import(data) {
+                useAchievementStore.setState({
+                    achievements: data as string[],
+                });
+            },
             page() {
                 const playerAchievements = useAchievementStore(
                     (state) => state.achievements,

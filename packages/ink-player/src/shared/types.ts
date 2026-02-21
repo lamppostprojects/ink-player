@@ -14,6 +14,11 @@ export type SavedGame = {
     previousStoryData: string | null;
 };
 
+export type ExportedGame = {
+    savedGame: SavedGame;
+    plugins: Record<string, unknown>;
+};
+
 export type Widget = {
     type: string;
     input: Record<string, string>;
@@ -135,6 +140,8 @@ type PluginHandleStoryLoadProps = {
 
 export type PluginRegistry = {
     type: string;
+    export?: () => unknown;
+    import?: (data: unknown) => void;
     log?: (props: PluginLogProps) => string;
     toast?: PluginToastFn;
     page?: (props: PageProps) => React.ReactNode;

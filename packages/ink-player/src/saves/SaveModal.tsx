@@ -6,8 +6,10 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 
 import { getUseStoryStore } from "../shared/game-state";
+import { getPluginsByType } from "../shared/plugins";
 import { getUseSavedGamesStore } from "../shared/saved-games";
 import { getSettings } from "../shared/settings";
+import type { ExportedGame } from "../shared/types";
 
 export function SaveModal({
     show,
@@ -56,7 +58,14 @@ export function SaveModal({
         if (!saveState) {
             return;
         }
-        const blob = new Blob([JSON.stringify(saveState)], {
+        const exportedGame: ExportedGame = {
+            savedGame: saveState,
+            plugins: {},
+        };
+        for (const [type, exportFn] of getPluginsByType("export").entries()) {
+            exportedGame.plugins[type] = exportFn();
+        }
+        const blob = new Blob([JSON.stringify(exportedGame)], {
             type: "application/json",
         });
         const url = URL.createObjectURL(blob);

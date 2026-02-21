@@ -1,7 +1,9 @@
 import MoonIcon from "bootstrap-icons/icons/moon.svg?react";
 import SunIcon from "bootstrap-icons/icons/sun.svg?react";
-import { useCallback, useEffect, useState } from "preact/hooks";
+import { useCallback } from "preact/hooks";
 import Nav from "react-bootstrap/Nav";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 import { createPlugin } from "../shared/plugins";
 
@@ -10,41 +12,59 @@ interface DarkModeSettings {
 }
 
 export default createPlugin<DarkModeSettings>(({ gameSettings }) => {
-    let defaultTheme = "light";
-    const userSetTheme = window.localStorage.getItem(
-        `${gameSettings.gameName}-theme`,
+    const useDarkModeStore = create<{
+        theme: string;
+        setTheme: (theme: string) => void;
+    }>()(
+        persist(
+            (set, get) => {
+                let theme = "light";
+                const userTheme = get()?.theme;
+                if (userTheme) {
+                    theme = userTheme;
+                } else if (gameSettings.defaultTheme) {
+                    theme = gameSettings.defaultTheme;
+                } else {
+                    theme = window.matchMedia?.("(prefers-color-scheme: dark)")
+                        .matches
+                        ? "dark"
+                        : "light";
+                }
+
+                return {
+                    theme,
+                    setTheme: (theme: string) => set({ theme }),
+                };
+            },
+            {
+                name: `${gameSettings.gameName}-dark-mode`,
+            },
+        ),
     );
-    if (userSetTheme) {
-        defaultTheme = userSetTheme;
-    } else if (gameSettings.defaultTheme) {
-        defaultTheme = gameSettings.defaultTheme;
-    } else {
-        defaultTheme = window.matchMedia?.("(prefers-color-scheme: dark)")
-            .matches
-            ? "dark"
-            : "light";
-    }
-    document.documentElement.setAttribute("data-bs-theme", defaultTheme);
+
+    document.documentElement.setAttribute(
+        "data-bs-theme",
+        useDarkModeStore.getState().theme,
+    );
+
+    useDarkModeStore.subscribe((state) => {
+        document.documentElement.setAttribute("data-bs-theme", state.theme);
+    });
 
     return {
         type: "dark-mode",
+        export() {
+            return useDarkModeStore.getState().theme;
+        },
+        import(data) {
+            useDarkModeStore.setState({ theme: data as string });
+        },
         nav() {
-            const [theme, setTheme] = useState(
-                document.documentElement.getAttribute("data-bs-theme") ||
-                    gameSettings.defaultTheme ||
-                    "light",
-            );
+            const theme = useDarkModeStore((state) => state.theme);
+            const setTheme = useDarkModeStore((state) => state.setTheme);
             const toggleTheme = useCallback(() => {
                 //setExpanded(false);
                 setTheme(theme === "light" ? "dark" : "light");
-            }, [theme]);
-
-            useEffect(() => {
-                document.documentElement.setAttribute("data-bs-theme", theme);
-                window.localStorage.setItem(
-                    `${gameSettings.gameName}-theme`,
-                    theme,
-                );
             }, [theme]);
 
             return (
