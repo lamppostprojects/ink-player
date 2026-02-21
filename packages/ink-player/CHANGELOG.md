@@ -1,5 +1,15 @@
 # @lamppost/ink-player
 
+## 2.2.0
+
+### Minor Changes
+
+- [`87e2999`](https://github.com/lamppostprojects/ink-player/commit/87e29994538636607b89541137ff35d9539e50eb) Thanks [@jeresig](https://github.com/jeresig)! - Add in custom Theme support.
+
+### Patch Changes
+
+- [`4e0b811`](https://github.com/lamppostprojects/ink-player/commit/4e0b811944e746bf7350caebcd3a78657bb3bc23) Thanks [@jeresig](https://github.com/jeresig)! - Persist plugin state when exporting/impo
+
 ## 2.1.3
 
 ### Patch Changes
