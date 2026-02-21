@@ -1,5 +1,13 @@
 # @lamppost/create-ink-player
 
+## 1.0.12
+
+### Patch Changes
+
+- [`7ccdd82`](https://github.com/lamppostprojects/ink-player/commit/7ccdd82f209e8c3f9ab2ca7c1c369b6f7d6554d6) Thanks [@jeresig](https://github.com/jeresig)! - Ensure that update-template can update the lockfile in CI
+
+- [`7ff989a`](https://github.com/lamppostprojects/ink-player/commit/7ff989ad944dd2c82a57f246f9e5f30adec2b6e1) Thanks [@github-actions[bot]](https://github.com/github-actions%5Bbot%5D)! - Update template to latest ink-player version.
+
 ## 1.0.11
 
 ### Patch Changes
