@@ -50,7 +50,7 @@ console.log("Updated template/package.json");
 // Run pnpm install --ignore-workspace in the template directory
 console.log("Running pnpm install --ignore-workspace in template directory...");
 try {
-    execSync("pnpm install --ignore-workspace", {
+    execSync("pnpm install --ignore-workspace --no-frozen-lockfile", {
         cwd: templateDir,
         stdio: "inherit",
     });
