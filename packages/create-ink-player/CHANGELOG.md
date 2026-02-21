@@ -1,5 +1,13 @@
 # @lamppost/create-ink-player
 
+## 1.0.11
+
+### Patch Changes
+
+- [`32a088d`](https://github.com/lamppostprojects/ink-player/commit/32a088dd679adb23547a7a56a0c012a113d9665b) Thanks [@jeresig](https://github.com/jeresig)! - Update to ink-player v2.1.3.
+
+- [`ccc573a`](https://github.com/lamppostprojects/ink-player/commit/ccc573a2742c54b498dc0c85e835a33c376076a4) Thanks [@jeresig](https://github.com/jeresig)! - Add bootstrap-icons as a default install for the template, fix update-ink-player.
+
 ## 1.0.10
 
 ### Patch Changes
