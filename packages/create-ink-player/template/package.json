@@ -7,10 +7,11 @@
         "build": "rsbuild build",
         "dev": "rsbuild dev --open",
         "preview": "rsbuild preview",
-        "update-ink-player": "pnpm -w update @lamppost/ink-player"
+        "update-ink-player": "pnpm update @lamppost/ink-player"
     },
     "dependencies": {
         "@lamppost/ink-player": "^2.1.0",
+        "bootstrap-icons": "^1.13.1",
         "preact": "^10.27.1",
         "react-bootstrap": "^2.10.10"
     },
