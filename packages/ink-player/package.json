@@ -48,7 +48,8 @@
         "./plugins/image": "./dist/plugins/Image.js",
         "./plugins/location": "./dist/plugins/Location.js",
         "./plugins/portrait": "./dist/plugins/Portrait.js",
-        "./plugins/text-input": "./dist/plugins/TextInput.js"
+        "./plugins/text-input": "./dist/plugins/TextInput.js",
+        "./plugins/theme": "./dist/plugins/Theme.js"
     },
     "dependencies": {
         "bootstrap": "catalog:",

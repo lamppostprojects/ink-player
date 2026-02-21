@@ -55,7 +55,7 @@ pages: [
 
 ## Themes
 
-By default the display will use the built-in Bootstrap light theme. You can override this by setting `defaultTheme: "dark"` in the `src/index.ts` file.
+By default the display will use the built-in Bootstrap light theme. You can override this by using the Dark Mode plugin in the `src/index.ts` file.
 
 ## Custom Ink Features
 
@@ -455,6 +455,41 @@ plugins: [
                 "4": Dice4,
             },
         },
+    }),
+    ...
+]
+```
+
+### Themes
+
+In addition to the dark mode/light mode themes you can introduce an additional theme that can work together with them to change the display based upon some in-game state.
+
+By default you can override this by adding a `# Theme:MyTheme` in your game (you can name the theme whatever you want) and the plugin will add a new `data-theme="MyTheme"` attribute to the `<html>` element.
+
+Thus in your `src/styles.scss` you can configure the styling of the game by doing something like the following (having a base theme for light mode and a different one for dark mode):
+
+```
+[data-theme="MyTheme"] {
+    background: red;
+}
+
+[data-bs-theme="dark"][data-theme="MyTheme"] {
+    background: darkred;
+}
+```
+
+To setup the theme plugin in `src/index.ts`:
+
+```
+import themePlugin from "@lamppost/ink-player/plugins/theme";
+...
+plugins: [
+    ...
+    themePlugin({
+        // Optional, set a default theme to display
+        defaultTheme: "MyTheme",
+        // Optional, configure which tag name to look for in the Ink code
+        tag: "Theme",
     }),
     ...
 ]
