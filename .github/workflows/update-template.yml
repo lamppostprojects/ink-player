@@ -1,0 +1,66 @@
+name: Update Template
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  CI: true
+
+jobs:
+  update-template:
+    # Skip runs triggered by this workflow's own commits
+    if: "!contains(github.event.head_commit.message, 'chore: update create-ink-player template')"
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run update-template
+        run: node packages/create-ink-player/update-template.js
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if [ -n "$(git status --porcelain packages/create-ink-player/template)" ]; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create changeset
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          CHANGESET_NAME="update-template-$(date +%s)"
+          cat > ".changeset/${CHANGESET_NAME}.md" << 'CHANGESET'
+          ---
+          "@lamppost/create-ink-player": patch
+          ---
+
+          Update template to latest ink-player version.
+          CHANGESET
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add packages/create-ink-player/template .changeset
+          git commit -m "chore: update create-ink-player template"
+          git push
