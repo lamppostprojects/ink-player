@@ -1,5 +1,11 @@
 # @lamppost/ink-player
 
+## 2.2.3
+
+### Patch Changes
+
+- [`c7c9085`](https://github.com/lamppostprojects/ink-player/commit/c7c9085532759b5b694d04c866b5f1da5fc4aa3a) Thanks [@jeresig](https://github.com/jeresig)! - Decrease showDelay.
+
 ## 2.2.2
 
 ### Patch Changes
