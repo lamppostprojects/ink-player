@@ -44,6 +44,7 @@ export default createPlugin<BackgroundMusicSettings>(
             getAudioElement: (src: string) => HTMLAudioElement;
             play: (src: string) => Promise<void>;
             stop: (src: string) => void;
+            stopAll: () => void;
         }>()(
             persist(
                 (set, get) => ({
@@ -100,6 +101,11 @@ export default createPlugin<BackgroundMusicSettings>(
                         const { getAudioElement, activeAudioElements } = get();
 
                         const audioElement = getAudioElement(src);
+
+                        if (!activeAudioElements.has(audioElement)) {
+                            return;
+                        }
+
                         activeAudioElements.delete(audioElement);
                         set({ activeAudioElements });
 
@@ -115,6 +121,13 @@ export default createPlugin<BackgroundMusicSettings>(
                                 audioElement.volume = 0;
                             }
                         }, interval);
+                    },
+                    stopAll: () => {
+                        const { audioElements, stop } = get();
+                        const srcs = audioElements.keys();
+                        for (const src of srcs) {
+                            stop(src);
+                        }
                     },
                 }),
                 {
@@ -135,6 +148,10 @@ export default createPlugin<BackgroundMusicSettings>(
                 useAudioStore.setState({
                     audioElements: data as Map<string, HTMLAudioElement>,
                 });
+            },
+            handleStoryLoad() {
+                const stopAll = useAudioStore((state) => state.stopAll);
+                stopAll();
             },
             header({ context, currentState, transitionStatus }) {
                 if (context === "history") {
