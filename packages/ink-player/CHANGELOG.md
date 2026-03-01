@@ -1,5 +1,15 @@
 # @lamppost/ink-player
 
+## 2.2.1
+
+### Patch Changes
+
+- [`c29350e`](https://github.com/lamppostprojects/ink-player/commit/c29350e2598cbd9d75f5d7132d829b113eaea7b6) Thanks [@jeresig](https://github.com/jeresig)! - Make achievement display configurable, add a delay when opening.
+
+- [`f91369a`](https://github.com/lamppostprojects/ink-player/commit/f91369a24b34033cf6ebf238815ee76a17b4ebdc) Thanks [@jeresig](https://github.com/jeresig)! - Support widgets rendered by useEvalFunction
+
+- [`df59fef`](https://github.com/lamppostprojects/ink-player/commit/df59fef31bad6a38e51662614bcf6543a77f4975) Thanks [@jeresig](https://github.com/jeresig)! - Stop all playing audio when starting a new game or loading a saved game.
+
 ## 2.2.0
 
 ### Minor Changes
