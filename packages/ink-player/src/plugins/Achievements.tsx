@@ -7,6 +7,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 import { createPlugin } from "../shared/plugins";
+import type { Toast } from "../shared/types";
 
 const NUM_COLUMNS = 2;
 
@@ -20,6 +21,9 @@ interface Achievement {
 
 interface AchievementsSettings {
     achievements: Record<string, Achievement>;
+    showDelay?: number;
+    hideDelay?: number;
+    autoHide?: boolean;
 }
 
 export default createPlugin<AchievementsSettings>(
@@ -235,22 +239,27 @@ export default createPlugin<AchievementsSettings>(
                         .filter((achievement) => achievement !== undefined) ||
                     [];
 
-                return achievements.map((achievement) => ({
-                    id: achievement.title,
-                    icon: achievement.icon,
-                    page: "achievements",
-                    title: `Achievement Unlocked!`,
-                    description: (
-                        <Achievement
-                            key={achievement.title}
-                            icon={achievement.icon}
-                            title={achievement.title}
-                            description={achievement.description}
-                            completed={true}
-                            hidden={false}
-                        />
-                    ),
-                }));
+                return achievements.map(
+                    (achievement) =>
+                        ({
+                            id: achievement.title,
+                            page: "achievements",
+                            title: `Achievement Unlocked!`,
+                            description: (
+                                <Achievement
+                                    key={achievement.title}
+                                    icon={achievement.icon}
+                                    title={achievement.title}
+                                    description={achievement.description}
+                                    completed={true}
+                                    hidden={false}
+                                />
+                            ),
+                            showDelay: settings.showDelay,
+                            hideDelay: settings.hideDelay,
+                            autoHide: settings.autoHide,
+                        }) as Toast,
+                );
             },
             async preload() {
                 return Promise.all(

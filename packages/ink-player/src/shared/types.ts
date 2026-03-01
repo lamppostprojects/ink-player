@@ -75,11 +75,17 @@ export type Settings = SharedSettings & {
     plugins: Array<PluginRegistry>;
 };
 
-type PluginToastFn = (currentState: GameState) => {
+export type Toast = {
     id: string;
     title: React.ReactNode;
     description: React.ReactNode;
-}[];
+    showDelay?: number;
+    hideDelay?: number;
+    autoHide?: boolean;
+    page?: string;
+};
+
+type PluginToastFn = (currentState: GameState) => Array<Toast>;
 
 type PluginChoiceProps = {
     context: "game" | "history";
