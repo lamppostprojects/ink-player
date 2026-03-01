@@ -14,8 +14,8 @@ importers:
   .:
     dependencies:
       '@lamppost/ink-player':
-        specifier: ^2.2.0
-        version: 2.2.0(@popperjs/core@2.11.8)(@types/react@19.2.9)(react-dom@19.2.3(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
+        specifier: ^2.2.1
+        version: 2.2.1(@popperjs/core@2.11.8)(@types/react@19.2.9)(react-dom@19.2.3(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       bootstrap-icons:
         specifier: ^1.13.1
         version: 1.13.1
@@ -146,8 +146,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@lamppost/ink-player@2.2.0':
-    resolution: {integrity: sha512-K/BtOQx57eSpZ2WTxBYn82K0rZN7UABGp7BQdMdb3g/NXq9U42/weXxAFwRrBR9M5nBR6ajUOdaR+zD7BJAk1A==}
+  '@lamppost/ink-player@2.2.1':
+    resolution: {integrity: sha512-jkpQBSotQ5NxNXC2Fr2Z7QwdDl/V+LgbCNqBkom4QuxnYT7RWEG+yuG84t9Q46V68Mm5XOx9NRYjoA4D/qx3mw==}
 
   '@module-federation/error-codes@0.22.0':
     resolution: {integrity: sha512-xF9SjnEy7vTdx+xekjPCV5cIHOGCkdn3pIxo9vU7gEZMIw0SvAEdsy6Uh17xaCpm8V0FWvR0SZoK9Ik6jGOaug==}
@@ -1315,7 +1315,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@lamppost/ink-player@2.2.0(@popperjs/core@2.11.8)(@types/react@19.2.9)(react-dom@19.2.3(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)':
+  '@lamppost/ink-player@2.2.1(@popperjs/core@2.11.8)(@types/react@19.2.9)(react-dom@19.2.3(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)':
     dependencies:
       bootstrap: 5.3.8(@popperjs/core@2.11.8)
       bootstrap-icons: 1.13.1
