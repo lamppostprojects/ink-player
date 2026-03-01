@@ -150,8 +150,7 @@ export default createPlugin<BackgroundMusicSettings>(
                 });
             },
             handleStoryLoad() {
-                const stopAll = useAudioStore((state) => state.stopAll);
-                stopAll();
+                useAudioStore.getState().stopAll();
             },
             header({ context, currentState, transitionStatus }) {
                 if (context === "history") {
