@@ -6,7 +6,7 @@ import { getUseStoryStore } from "../shared/game-state";
 import { getPluginsByType } from "../shared/plugins";
 import type { PageProps, Toast as ToastType } from "../shared/types";
 
-const TOAST_SHOW_DELAY = 5000;
+const TOAST_SHOW_DELAY = 2000;
 const TOAST_HIDE_DELAY = 7000;
 
 function ToastItem({

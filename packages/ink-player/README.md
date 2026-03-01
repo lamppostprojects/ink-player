@@ -420,7 +420,7 @@ pages: [
 
 Overall achievement display can also be configured with these options:
 
-* `showDelay`: How long, in milliseconds, to delay the opening of an achievement (default: 5000).
+* `showDelay`: How long, in milliseconds, to delay the opening of an achievement (default: 2000).
 * `autoHide`: Should the achievement automatically close after a period of time? (default: true)
 * `hideDelay`: How long, in milliseconds, before the achievement automatically closes (default: 7000).
 
