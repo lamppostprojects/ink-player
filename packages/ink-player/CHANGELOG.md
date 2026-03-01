@@ -1,5 +1,11 @@
 # @lamppost/ink-player
 
+## 2.2.2
+
+### Patch Changes
+
+- [`02858cf`](https://github.com/lamppostprojects/ink-player/commit/02858cfed8cc8d88defb5a3b24fb7d219305539f) Thanks [@jeresig](https://github.com/jeresig)! - Access audio store directly.
+
 ## 2.2.1
 
 ### Patch Changes
