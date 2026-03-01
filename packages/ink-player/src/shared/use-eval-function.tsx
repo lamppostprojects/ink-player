@@ -1,4 +1,5 @@
 import { getUseStoryStore } from "./game-state";
+import { parseWidget } from "./parse-widget";
 import { ProcessedTextLine } from "./process-text";
 
 export const useEvalFunction = (functionName: string, args: any[]) => {
@@ -12,9 +13,16 @@ export const useEvalFunction = (functionName: string, args: any[]) => {
         console.error(error);
         return null;
     }
-    const lines = (output as string).split("\n").map((line, index) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: ...
-        <ProcessedTextLine key={`line-${index}`} text={line} context="game" />
-    ));
+    const lines = (output as string).split("\n").map((line, index) => {
+        const result = parseWidget(line);
+        return (
+            <ProcessedTextLine
+                // biome-ignore lint/suspicious/noArrayIndexKey: ...
+                key={`line-${index}`}
+                text={result}
+                context="game"
+            />
+        );
+    });
     return <div>{lines}</div>;
 };
