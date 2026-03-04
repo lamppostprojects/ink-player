@@ -74,7 +74,10 @@ export const getUseSavedGamesStore = memoize(() =>
                         addSavedGame,
                         deleteSavedGame,
                     } = get();
-                    if (!canSaveInLocalStorage()) {
+                    if (
+                        !canSaveInLocalStorage() ||
+                        getSettings().autosave === false
+                    ) {
                         return;
                     }
                     const saveState = getSaveState({

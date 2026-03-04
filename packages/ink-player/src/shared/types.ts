@@ -61,6 +61,7 @@ type SharedSettings = {
     gameName: string;
     shortGameName?: string;
     favicon?: string;
+    autosave?: boolean;
     widgets?: Record<string, Record<string, any>>;
     pages: Page[];
 };

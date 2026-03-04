@@ -75,6 +75,16 @@ To make a tag sticky, in `src/index.ts`:
 stickyTags: ["Location"],
 ```
 
+### Saving
+
+The Ink Player provides the ability to both save games to the browser's local storage and also supports saving games in a downloadable form (for environments that don't support local storage well, like Safari on Itch).
+
+Additionally, the user's progress will be autosaved. This can be turned off by adding this setting:
+
+```
+autosave: false,
+```
+
 ## Plugins
 
 Plugins extend the functionality of the Ink player by providing additional functionality. You can add them in by importing the plugin into your settings file and adding it to the plugins list.
