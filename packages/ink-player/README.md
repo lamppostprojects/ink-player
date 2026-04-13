@@ -167,7 +167,7 @@ In `src/index.ts`:
 
 ```
 import Foyer from "./assets/images/foyer.jpg";
-import headerImagePlugin from "@lamppost/ink-player/plugins/header"
+import headerImagePlugin from "@lamppost/ink-player/plugins/header-image"
 ...
 stickyTags: ["Image"],
 plugins: [

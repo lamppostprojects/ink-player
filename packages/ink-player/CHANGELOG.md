@@ -1,5 +1,11 @@
 # @lamppost/ink-player
 
+## 2.2.4
+
+### Patch Changes
+
+- [`f5be278`](https://github.com/lamppostprojects/ink-player/commit/f5be278d5f63478f8ad1886bf0dff1cead8b18ad) Thanks [@jeresig](https://github.com/jeresig)! - Make autosave configurable.
+
 ## 2.2.3
 
 ### Patch Changes
