@@ -1,5 +1,11 @@
 # @lamppost/create-ink-player
 
+## 1.0.17
+
+### Patch Changes
+
+- [`0a38c7b`](https://github.com/lamppostprojects/ink-player/commit/0a38c7b2b9c8c287577e8b056c5d5f39f3b6d1ea) Thanks [@github-actions[bot]](https://github.com/github-actions%5Bbot%5D)! - Update template to latest ink-player version.
+
 ## 1.0.16
 
 ### Patch Changes
