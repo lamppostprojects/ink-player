@@ -19,14 +19,13 @@ const isInCrossOriginIframe = () => {
 };
 
 /**
- * Safari and Firefox do not allow storing to localStorage when
- * inside a cross-origin iframe.
+ * Safari does not allow storing to localStorage when inside a cross-origin
+ * iframe.
  */
 const disallowsCrossOriginSaves = () => {
     return (
         (navigator.userAgent.includes("Safari") &&
-            !navigator.userAgent.includes("Chrome")) ||
-        navigator.userAgent.includes("Firefox")
+            !navigator.userAgent.includes("Chrome"))
     );
 };
 
