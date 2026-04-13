@@ -1,5 +1,15 @@
 # @lamppost/ink-player
 
+## 2.3.0
+
+### Minor Changes
+
+- [`bad5c2c`](https://github.com/lamppostprojects/ink-player/commit/bad5c2c1ce9335ba70950d02882dde4671a12185) Thanks [@jeresig](https://github.com/jeresig)! - Fix formatting.
+
+### Patch Changes
+
+- [`0b7c307`](https://github.com/lamppostprojects/ink-player/commit/0b7c307cdbd3d35b3552235ccb46233bc0953e59) Thanks [@jeresig](https://github.com/jeresig)! - Enable cross-origin saves for Firefox, change language when loading a saved file.
+
 ## 2.2.4
 
 ### Patch Changes
