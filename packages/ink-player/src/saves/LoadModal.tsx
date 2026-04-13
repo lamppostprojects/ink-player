@@ -20,8 +20,8 @@ export function LoadModal({
 }) {
     const useSavedGamesStore = getUseSavedGamesStore();
     const savedGames = useSavedGamesStore((state) => state.savedGames);
-        const canSaveInLocalStorage = useSavedGamesStore(
-        (state) => state.canSaveInLocalStorage(),
+    const canSaveInLocalStorage = useSavedGamesStore((state) =>
+        state.canSaveInLocalStorage(),
     );
     const useStoryStore = getUseStoryStore();
     const loadSavedGame = useStoryStore((state) => state.loadSavedGame);
@@ -82,20 +82,19 @@ export function LoadModal({
             </Modal.Header>
             <Modal.Body>
                 <Stack direction="vertical" gap={2}>
-                    {!hasInBrowserSaves && (
-                        canSaveInLocalStorage ? (
+                    {!hasInBrowserSaves &&
+                        (canSaveInLocalStorage ? (
                             <p>
-                                You don't currently have any saves in your browser.
-                                Once you save your game, it will show up here.
-                                Alternatively, you may load a file to restore your
-                                saved game.
+                                You don't currently have any saves in your
+                                browser. Once you save your game, it will show
+                                up here. Alternatively, you may load a file to
+                                restore your saved game.
                             </p>
                         ) : (
                             <p>
                                 You may load a file to restore your saved game.
                             </p>
-                        )
-                    )}
+                        ))}
                     {hasInBrowserSaves &&
                         reversedSavedGames.map((game) => (
                             <Card key={`save-card-${game.id}`}>

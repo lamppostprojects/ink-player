@@ -24,8 +24,8 @@ const isInCrossOriginIframe = () => {
  */
 const disallowsCrossOriginSaves = () => {
     return (
-        (navigator.userAgent.includes("Safari") &&
-            !navigator.userAgent.includes("Chrome"))
+        navigator.userAgent.includes("Safari") &&
+        !navigator.userAgent.includes("Chrome")
     );
 };
 
